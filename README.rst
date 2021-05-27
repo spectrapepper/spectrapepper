@@ -1,6 +1,13 @@
-# SpectraPepper
+=============
+SpectraPepper
+=============
 
-[![image](https://img.shields.io/pypi/v/spectrapepper.svg)](https://pypi.python.org/pypi/spectrapepper) [![Conda Version](https://img.shields.io/conda/vn/conda-forge/spectrapepper.svg)](https://anaconda.org/conda-forge/spectrapepper)
+.. image:: https://img.shields.io/pypi/v/spectrapepper.svg
+        :target: https://pypi.python.org/pypi/spectrapepper
+
+.. image:: https://img.shields.io/conda/vn/conda-forge/spectrapepper.svg
+        :target: https://anaconda.org/conda-forge/spectrapepper
+
 
 Introduction
 ============
