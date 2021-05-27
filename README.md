@@ -1,8 +1,7 @@
-# spectrapepper
+# SpectraPepper
 
 [![image](https://img.shields.io/pypi/v/spectrapepper.svg)](https://pypi.python.org/pypi/spectrapepper) [![Conda Version](https://img.shields.io/conda/vn/conda-forge/spectrapepper.svg)](https://anaconda.org/conda-forge/spectrapepper)
 
-============
 Introduction
 ============
 
@@ -12,7 +11,34 @@ methodologies, including data acquisition, pre-processing, processing, and analy
 statistic methods are intended to facilitate, namely combinatorial analysis and machine learning, allowing also
 fast and automated traditional methods.
 
-**A Python package to simplify and accelerate analysis of spectroscopy data**
+Features
+________
+The following is a short list of some of the main procedures that **SpectraPepper** package enables.
+
+* Automatic and user-defined baseline removal.
+* Several normalization methods.
+* Noise filters, trimming, and other pre-processing tools.
+* Combinatorial analysis tools, including Spearman, Pearson, and n-dimensional correlation coefficients.
+* Tools for Machine Learning applications, such as data merging, randomization, and decision map.
+* Easy export of data to text files to use visualization software, such as Origin.
+
+
+
+Quickstart
+__________
+
+1. Install this library using ``pip``::
+
+      pip install spectrapepper
+
+2. Install this library using ``conda-forge``::
+
+      conda install -c conda-forge spectrapepper
+
+3. Test it by printing the logo!::
+
+      import spectrapepper as spep
+      spep.logo()
 
 
 -   Free software: MIT license
