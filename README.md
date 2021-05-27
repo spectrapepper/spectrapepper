@@ -27,8 +27,9 @@ The following is a short list of some of the main procedures that **SpectraPeppe
 Quickstart
 __________
 
-1. Install this library using ``pip``::
+1. Install this library using ``pip``:
 
+      ..code::python
       pip install spectrapepper
 
 2. Install this library using ``conda-forge``::
