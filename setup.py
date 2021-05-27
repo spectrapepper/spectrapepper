@@ -53,6 +53,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/enricgrau/spectrapepper',
-    version='0.0.4',
+    version='0.0.6',
     zip_safe=False,
 )

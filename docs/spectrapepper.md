@@ -1,4 +1,0 @@
- 
-# spectrapepper module
-
-::: spectrapepper.spectrapepper
