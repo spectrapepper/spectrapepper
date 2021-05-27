@@ -19,7 +19,8 @@ statistic methods are intended to facilitate, namely combinatorial analysis and 
 fast and automated traditional methods.
 
 Features
-________
+--------
+
 The following is a short list of some of the main procedures that **SpectraPepper** package enables.
 
 * Automatic and user-defined baseline removal.
@@ -48,14 +49,10 @@ Quickstart
         spep.logo()
 
 
+Credits
+-------
+
 -   Free software: MIT license
 -   Documentation: https://enricgrau.github.io/spectrapepper
-    
-
-## Features
-
--   TODO
-
-## Credits
 
 This package was created with [Cookiecutter](https://github.com/cookiecutter/cookiecutter) and the [giswqs/pypackage](https://github.com/giswqs/pypackage) project template.
