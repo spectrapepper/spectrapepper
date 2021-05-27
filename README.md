@@ -29,8 +29,8 @@ __________
 
 1. Install this library using ``pip``:
 
-      .. code::python
-      pip install spectrapepper
+.. code::python
+    pip install spectrapepper
 
 2. Install this library using ``conda-forge``::
 
