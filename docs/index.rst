@@ -7,6 +7,7 @@
    :maxdepth: 2
    :caption: Contents:
 
+
 Introduction
 ============
 
@@ -49,7 +50,7 @@ Functions
 =========
 
 
-.. automodule:: my_functions
+.. automodule:: ../spectrapepper/functions
    :members:
 
 
