@@ -64,7 +64,4 @@ Quickstart
 Credits
 -------
 
--   Free software: MIT license
--   Documentation: https://enricgrau.github.io/spectrapepper
-
 This package was created with `Cookiecutter <https://github.com/audreyr/cookiecutter>`__ and the `giswqs/pypackage <https://github.com/giswqs/pypackage>`__ project template.
