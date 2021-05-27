@@ -6,7 +6,19 @@ SpectraPepper
         :target: https://pypi.python.org/pypi/spectrapepper
 
 .. image:: https://img.shields.io/conda/vn/conda-forge/spectrapepper.svg
-        :target: https://anaconda.org/conda-forge/spectrapepper
+        :target: https://anaconda.org/conda-forge/spectrapepper  
+
+.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
+        :target: https://opensource.org/licenses/MIT
+
+**A Python package to simplify and accelerate analysis of spectroscopy data.**
+
+* GitHub repo: https://github.com/enricgrau/spectrapepper
+* Documentation: https://enricgrau.github.io/spectrapepper
+* PyPI: https://pypi.python.org/pypi/spectrapepper
+* Conda-forge: https://anaconda.org/conda-forge/spectrapepper  
+* Free software: MIT license
+
 
 
 Introduction
