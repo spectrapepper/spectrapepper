@@ -22,38 +22,23 @@ The following is a short list of some of the main procedures that **SpectraPeppe
 * Tools for Machine Learning applications, such as data merging, randomization, and decision map.
 * Easy export of data to text files to use visualization software, such as Origin.
 
-Installation
-------------
-
-To use **geemap**, you must first `sign up <https://earthengine.google.com/signup/>`__ for a `Google Earth Engine <https://earthengine.google.com/>`__ account.
-
-.. image:: https://i.imgur.com/ng0FzUT.png
-        :target: https://earthengine.google.com
-
-**geemap** is available on `PyPI <https://pypi.org/project/geemap/>`__. To install **geemap**, run this command in your terminal:
-
-.. code:: python
-
-  pip install geemap
 
 
 Quickstart
-__________
+----------
 
-1. Install this library using ``pip``
+1. Install this library using ``pip``::
 
-.. code::
-
-    pip install spectrapepper
+        pip install spectrapepper
 
 2. Install this library using ``conda-forge``::
 
-    conda install -c conda-forge spectrapepper
+        conda install -c conda-forge spectrapepper
 
 3. Test it by printing the logo!::
 
-      import spectrapepper as spep
-      spep.logo()
+        import spectrapepper as spep
+        spep.logo()
 
 
 -   Free software: MIT license
