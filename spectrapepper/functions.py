@@ -15,9 +15,9 @@ from scipy import interpolate
 from scipy.stats import stats
 from scipy.signal import butter,filtfilt
 from scipy.optimize import minimize
-import scipy.interpolate as si
+# import scipy.interpolate as si
 from scipy.interpolate import splev, splrep
-from scipy.sparse.csgraph import _validation  
+# from scipy.sparse.csgraph import _validation  
 from scipy.sparse.linalg import spsolve
 import itertools
 from itertools import combinations
@@ -70,8 +70,7 @@ def load(file, fromline = 0):
     :param file: Url of data file. Must not have headers and separated by 'spaces' (LabSpec).
     
     :type fromline: int
-    :param fromline: Line of file from which to start loading data. The 
-    default is 0.
+    :param fromline: Line of file from which to start loading data. The default is 0.
     
     :returns: List of the data.
     :rtype: list[float]
@@ -108,8 +107,7 @@ def loadheader(file, line, split=False):
     :param line: Line number. Counts from 1.    
     
     :type split: boolean
-    :param split: True to make a list of strings, separated by space. The 
-    default is False.
+    :param split: True to make a list of strings, separated by space. The default is False.
 
     :returns: Array with the desierd line.
     :rtype: string
@@ -190,7 +188,7 @@ def butter_lowpass_filter(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
     y = list(data) # so it does not change the input list
     normal_cutoff = cutoff / (nyq*fs)
     b, a = butter(order, normal_cutoff, btype='low', analog=False)
-    dim = np.array(y)
+    # dim = np.array(y)
     if len(np.array(y).shape) > 1:
         for i in range(len(y)):
             y[i] = filtfilt(b, a, y[i])
@@ -715,7 +713,9 @@ def evalgrau(data):
         fit = (A.T * A).I * A.T * b # evaluate fir
         rss = 0 # residual sum of squares
         tss = 0 # total sum of squares
-        for i in range(len(data[0])): # calculate mse for all the points
+        
+        n_o_p = len(data[0])        
+        for i in range(len(n_o_p)): # calculate mse for all the points
             rss += (zs[i] - (xs[i]*fit[0] + ys[i]*fit[1] + fit[2]))**2 # residual sum
             tss += (zs[i] - np.mean(zs))**2 # total error
         R2.append(round(float(1-rss/tss),2)) # R2    
@@ -845,8 +845,8 @@ def mdscore(x_points,y_points,target):
     d = [] # distances
     p = [] # predictions
     
-    x_s = [[] for i in range(g_n)]
-    y_s = [[] for i in range(g_n)]
+    x_s = [[] for all in range(g_n)]
+    y_s = [[] for all in range(g_n)]
     
     for i in range(g_n):
         for j in range(len(tar)):
@@ -1195,7 +1195,7 @@ def regression(target, variable, cov=0, exp=0):
     target = list(target)
     master = list(variable)
     cov = int(cov)
-    exp = int(exp) # for non-linear fittings in the future
+    # exp = int(exp) # for non-linear fittings in the future
     
     if cov == 1:
         master.append(target) # array of arrays
@@ -1399,7 +1399,7 @@ def shuffle(arrays, delratio=0):
             features = np.delete(features,row , 0)  
     ###
     
-    new_list = [[] for i in all_list]
+    new_list = [[] for all in all_list]
     lengths = []
 
     for i in range(len(all_list)):
@@ -1430,7 +1430,7 @@ def mergedata(data):
     :rtype: list[float]
     """
     data = list(data) # list of lists
-    master = [[] for i in data[0]]
+    master = [[] for all in data[0]]
     for i in range(len(data[0])):
         for j in range(len(data)):
             master[i].extend(data[j][i])
@@ -1762,17 +1762,17 @@ def pearson(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Pear
     fig = plt.figure(tight_layout=True,figsize=figsize)
     
     y = [i+0.5 for i  in range(n)]
-    ticker = mpl.ticker.FixedLocator(y)
-    formatter = mpl.ticker.FixedFormatter(labels)
+    ticks = mpl.ticker.FixedLocator(y)
+    formatt = mpl.ticker.FixedFormatter(labels)
     
     ax = fig.add_subplot(gs[0, 0])
     pcm = ax.pcolormesh(pears, cmap=cm, vmin=-1, vmax=1)
     fig.colorbar(pcm, ax=ax)
     ax.set_title(title, fontsize=titlefs)
-    ax.xaxis.set_major_locator(ticker)
-    ax.yaxis.set_major_locator(ticker)
-    ax.xaxis.set_major_formatter(formatter)
-    ax.yaxis.set_major_formatter(formatter)
+    ax.xaxis.set_major_locator(ticks)
+    ax.yaxis.set_major_locator(ticks)
+    ax.xaxis.set_major_formatter(formatt)
+    ax.yaxis.set_major_formatter(formatt)
     plt.xticks(rotation = '90')
     plt.show()
     
@@ -1839,17 +1839,17 @@ def spearman(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Spe
     fig = plt.figure(tight_layout=True,figsize=figsize)
     
     y = [i+0.5 for i  in range(n)]
-    ticker = mpl.ticker.FixedLocator(y)
-    formatter = mpl.ticker.FixedFormatter(labels)
+    ticks = mpl.ticker.FixedLocator(y)
+    formatt = mpl.ticker.FixedFormatter(labels)
     
     ax = fig.add_subplot(gs[0, 0])
     pcm = ax.pcolormesh(spear, cmap=cm, vmin=-1, vmax=1)
     fig.colorbar(pcm, ax=ax)
     ax.set_title(title, fontsize=titlefs)
-    ax.xaxis.set_major_locator(ticker)
-    ax.yaxis.set_major_locator(ticker)
-    ax.xaxis.set_major_formatter(formatter)
-    ax.yaxis.set_major_formatter(formatter)
+    ax.xaxis.set_major_locator(ticks)
+    ax.yaxis.set_major_locator(ticks)
+    ax.xaxis.set_major_formatter(formatt)
+    ax.yaxis.set_major_formatter(formatt)
     plt.xticks(rotation = '90')
     plt.show()
 

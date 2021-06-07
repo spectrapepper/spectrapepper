@@ -1,962 +1,242 @@
+
+
 <!DOCTYPE html>
+<html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#2D2D2D" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>SpectraPepper :: Introduction</title>
+  <title>&lt;no title&gt; &mdash; Spectrapepper  documentation</title>
   
 
-  <link rel="icon" type="image/png" sizes="32x32" href="_static/img/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="_static/img/favicon-16x16.png">
-        <link rel="index" title="Index"
-              href="genindex.html"/>
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
-  <link rel="stylesheet" href="_static/css/insegel.css"/>
+  
+  
 
-  <script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:'',
-        VERSION:'',
-        LANGUAGE:'None',
-        COLLAPSE_INDEX:false,
-        FILE_SUFFIX:'.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-    };
-  </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+  
+  
 
-  <script src="https://email.tl.fortawesome.com/c/eJxNjUEOgyAQAF8jR7Kw6wIHDh7sP1Cw2mgxgmn6-3JsMqc5zEQfE8dkxOY1KKMUOI3ACFKRJpSW2AAp7ontYIaxI6i7XPJVwyeVfCQ550Os3jLrGSNOLgbdAy6s0PBk2TFNjEbsfq31LB0OnX407pJa5v2faRadwSW63mn5KuLyR9j2tgx3zecanl-55R_-jjPs"></script>
+  
 
-</head>
-
-<body>
-  <div id="insegel-container">
-    <header>
-      <div id="logo-container">
-          
-          <a href="#"><img src="_static/img/logo.svg"></a>
-          
-
-      </div>
-      <div id="project-container">
-        <h1>SpectraPepper Documentation</h1>
-      </div>
-    </header>
-
-    <div id="content-container">
-
-      <div id="main-content-container">
-        <div id="main-content-header">
-          <h1>Introduction</h1>
-        </div>
-        <div id="main-content">
-          
-  <div class="toctree-wrapper compound">
-</div>
-<div class="section" id="introduction">
-<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p><strong>SpectraPepper</strong> is a Python package that makes advanced analysis of spectroscopic data easy and accessible
-through straightforward, simple, and intuitive code. This library contains functions for every stage of spectroscopic
-methodologies, including data acquisition, pre-processing, processing, and analysis. In particular, advanced and high
-statistic methods are intended to facilitate, namely combinatorial analysis and machine learning, allowing also
-fast and automated traditional methods.</p>
-<div class="section" id="features">
-<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
-<p>The following is a short list of some of the main procedures that <strong>SpectraPepper</strong> package enables.</p>
-<ul class="simple">
-<li>Automatic and user-defined baseline removal.</li>
-<li>Several normalization methods.</li>
-<li>Noise filters, trimming, and other pre-processing tools.</li>
-<li>Combinatorial analysis tools, including Spearman, Pearson, and n-dimensional correlation coefficients.</li>
-<li>Tools for Machine Learning applications, such as data merging, randomization, and decision map.</li>
-<li>Easy export of data to text files to use visualization software, such as Origin.</li>
-</ul>
-</div>
-<div class="section" id="quickstart">
-<h2>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic">
-<li><p class="first">Install this library using <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">spectrapepper</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Install this library using <code class="docutils literal notranslate"><span class="pre">conda-forge</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">spectrapepper</span>
-</pre></div>
-</div>
-</li>
-<li><p class="first">Test it by printing the logo!:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
-<span class="n">spep</span><span class="o">.</span><span class="n">logo</span><span class="p">()</span>
-</pre></div>
-</div>
-</li>
-</ol>
-</div>
-</div>
-<div class="section" id="module-functions">
-<span id="functions"></span><h1>Functions<a class="headerlink" href="#module-functions" title="Permalink to this headline">¶</a></h1>
-<p>Main module that contains all the functions, since this package is
-function-based for simplicity. Keep in mind that some of this functions are
-only ment to be used inside this file, however they all might be useful in
-other code.</p>
-<dl class="function">
-<dt id="functions.areacalculator">
-<code class="descclassname">functions.</code><code class="descname">areacalculator</code><span class="sig-paren">(</span><em>x_data</em>, <em>limits</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.areacalculator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Area calculator using the data (x_data) and the limits in position, not
-values.</p>
-<dl class="docutils">
-<dt>x_data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>limits <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-<dl class="docutils">
-<dt>areas <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.avg">
-<code class="descclassname">functions.</code><code class="descname">avg</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.avg" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-<dl class="docutils">
-<dt>avg_data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.baseline_als">
-<code class="descclassname">functions.</code><code class="descname">baseline_als</code><span class="sig-paren">(</span><em>y</em>, <em>lam=100</em>, <em>p=0.001</em>, <em>niter=10</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.baseline_als" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculation of the baseline using Asymmetric Least Squares Smoothing. This
-script only makes the calculation but it does not remove it. Original idea of
-this algorythm by P. Eilers and H. Boelens (2005), and available details at:
-<a class="reference external" href="https://stackoverflow.com/a/29185844/2898619">https://stackoverflow.com/a/29185844/2898619</a></p>
-<dl class="docutils">
-<dt>y <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>lam <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Also known as lambda, smoothness. The default is 100.</dd>
-<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Asymetry. The default is 0.001.</dd>
-<dt>niter <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Niter. The default is 10.</dd>
-</dl>
-<dl class="docutils">
-<dt>z <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.bincombs">
-<code class="descclassname">functions.</code><code class="descname">bincombs</code><span class="sig-paren">(</span><em>n</em>, <em>s_min</em>, <em>s_max</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.bincombs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns all possible unique combinations.</p>
-<dl class="docutils">
-<dt>n <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>s_min <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>s_max <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-<dl class="docutils">
-<dt>iters <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.bspline">
-<code class="descclassname">functions.</code><code class="descname">bspline</code><span class="sig-paren">(</span><em>cv</em>, <em>n=100</em>, <em>degree=3</em>, <em>periodic=False</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.bspline" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes the baseline using b-spline. Find usful details and guidelines in
-<a class="reference external" href="https://stackoverflow.com/a/34807513/2898619">https://stackoverflow.com/a/34807513/2898619</a></p>
-<dl class="docutils">
-<dt>cv <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>list of spectras.</dd>
-<dt>n <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>number of samples to return. The default is 100.</dd>
-<dt>degree <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>curve (polynomial) degree. The default is 3.</dd>
-<dt>periodic <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>rue if curve is closed, False if curve is open. The default is False.</dd>
-</dl>
-<dl class="docutils">
-<dt>TYPE</dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.butter_lowpass_filter">
-<code class="descclassname">functions.</code><code class="descname">butter_lowpass_filter</code><span class="sig-paren">(</span><em>data</em>, <em>cutoff=0.25</em>, <em>fs=30</em>, <em>order=2</em>, <em>nyq=22.5</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.butter_lowpass_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Butter low pass filter for a single or spectra or a list of them.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>cutoff <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Desired cutoff frequency of the filter. The default is 0.25.</dd>
-<dt>fs <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Sample rate in Hz . The default is 30.</dd>
-<dt>order <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Sin wave can be approx represented as quadratic. The default is 2.</dd>
-<dt>nyq <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Nyquist frequency, 0.75*fs is a good value to start. The default is 0.75*30.</dd>
-</dl>
-<dl class="docutils">
-<dt>y <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.classify">
-<code class="descclassname">functions.</code><code class="descname">classify</code><span class="sig-paren">(</span><em>data</em>, <em>gnumber=3</em>, <em>glimits=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.classify" title="Permalink to this definition">¶</a></dt>
-<dd><p>Classifyies targets according to either defined limits or number of groups.
-The latter depends on the defined parameters.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Vector with values.</dd>
-<dt>gnumber <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd>DESCRIPTION. The default is 3 and is the default technique.</dd>
-<dt>glimits <span class="classifier-delimiter">:</span> <span class="classifier">list, optional</span></dt>
-<dd>Defined group limits. The default is [].</dd>
-</dl>
-<dl class="docutils">
-<dt>class_targets <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Vector with the classificaion from 0 to N.</dd>
-<dt>group_names <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>A list with strings with the name of the groups, useful for plotting.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.cmscore">
-<code class="descclassname">functions.</code><code class="descname">cmscore</code><span class="sig-paren">(</span><em>x_points</em>, <em>y_points</em>, <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.cmscore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the distance between points and the center of mass (CM) of
-clusters and sets the predictoin to the closest CM. This score may be
-higher or lower than the algorithm score.</p>
-<dl class="docutils">
-<dt>x_points <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>Coordinates of x-axis.</dd>
-<dt>y_points <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>Coordinates of y-axis.</dd>
-<dt>target <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>Targets of each point.</dd>
-</dl>
-<dl class="docutils">
-<dt>score <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Score by comparing CM distances.</dd>
-<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>Prediction using CM distances.</dd>
-<dt>a <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>X-axis coordinates of ths CMs.</dd>
-<dt>b <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>Y-axis coordinates of the Cms.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.colormap">
-<code class="descclassname">functions.</code><code class="descname">colormap</code><span class="sig-paren">(</span><em>c</em>, <em>name='my_name'</em>, <em>n=100</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.colormap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Just to simplify a bit the creatin of colormaps.</p>
-<dl class="docutils">
-<dt>c <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>List of colors thaat you ant on the colormap</dd>
-<dt>name <span class="classifier-delimiter">:</span> <span class="classifier">string, optional</span></dt>
-<dd>Name of the colormap. The default is ‘my_name’.</dd>
-<dt>n <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Divisions. The default is 100.</dd>
-</dl>
-<dl class="docutils">
-<dt>cmap <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Colormap in Matplotlib format.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.confusionmatrix">
-<code class="descclassname">functions.</code><code class="descname">confusionmatrix</code><span class="sig-paren">(</span><em>tt</em>, <em>tp</em>, <em>gn</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.confusionmatrix" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>tt <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>tp <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>gn <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-<dl class="docutils">
-<dt>m <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.cortopos">
-<code class="descclassname">functions.</code><code class="descname">cortopos</code><span class="sig-paren">(</span><em>vals</em>, <em>ax</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.cortopos" title="Permalink to this definition">¶</a></dt>
-<dd><p>To translate values to a position in an axis, basically searching for
-the position of  avalue. Normally they dont fit perfectly, so it is useful
-to use this tool that aproximates to the closest.</p>
-<dl class="docutils">
-<dt>vals <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>List of values to be searched and translated.</dd>
-<dt>ax <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Axis.</dd>
-</dl>
-<dl class="docutils">
-<dt>pos <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Postions.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.decbound">
-<code class="descclassname">functions.</code><code class="descname">decbound</code><span class="sig-paren">(</span><em>xx</em>, <em>yy</em>, <em>xlims</em>, <em>ylims</em>, <em>divs=0.01</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.decbound" title="Permalink to this definition">¶</a></dt>
-<dd><p>DESICION BOUNDAEY</p>
-<dl class="docutils">
-<dt>xx <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>yy <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>xlims <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>ylims <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>divs <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 0.01.</dd>
-</dl>
-<dl class="docutils">
-<dt>pmap <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.decdensity">
-<code class="descclassname">functions.</code><code class="descname">decdensity</code><span class="sig-paren">(</span><em>lims</em>, <em>x_points</em>, <em>y_points</em>, <em>groups</em>, <em>divs=0.5</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.decdensity" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>lims <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>x_points <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>y_points <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>groups <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>divs <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 0.5.</dd>
-</dl>
-<dl class="docutils">
-<dt>master <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.gaussian_fit">
-<code class="descclassname">functions.</code><code class="descname">gaussian_fit</code><span class="sig-paren">(</span><em>data_x</em>, <em>ax</em>, <em>sigma=4.4</em>, <em>it=100</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.gaussian_fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit a Gaussian distributed curve for a single spectra. Good guidelines
-for similar structures can be found at <a class="reference external" href="http://emilygraceripka.com/blog/16">http://emilygraceripka.com/blog/16</a>.</p>
-<dl class="docutils">
-<dt>data_x <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>single spectra.</dd>
-<dt>ax <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>x-axis.</dd>
-<dt>sigma <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>sigma parameter of distribution. The default is 4.4.</dd>
-<dt>it <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>number of itereations. The default is 100.</dd>
-</dl>
-<dl class="docutils">
-<dt>fit <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.grau">
-<code class="descclassname">functions.</code><code class="descname">grau</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.grau" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function evaluates the MSE in 3 dimensions (x,y,z) for a set of
-data vectors.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>A list of lists (no typo) of variables to compare.</dd>
-</dl>
-<dl class="docutils">
-<dt>merged <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>A list with each combination and the R2 score obtained.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.groupscores">
-<code class="descclassname">functions.</code><code class="descname">groupscores</code><span class="sig-paren">(</span><em>all_targets</em>, <em>used_targets</em>, <em>predicted_targets</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.groupscores" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the individual scores for a ML algorythm (i.e.: LDA, PCA, etc).</p>
-<dl class="docutils">
-<dt>all_targets <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>List of all real targets (making sure all groups are here).</dd>
-<dt>used_targets <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Targets to score on.</dd>
-<dt>predicted_targets <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Prediction of used_targets.</dd>
-</dl>
-<dl class="docutils">
-<dt>g_scores <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>List of scores.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.interpolation">
-<code class="descclassname">functions.</code><code class="descname">interpolation</code><span class="sig-paren">(</span><em>files_names</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.interpolation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an array with the first item being the interpolated
-data and the second item being the axis.</p>
-<dl class="docutils">
-<dt>files_names <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>List of locations of the data to interpolate (should change).</dd>
-</dl>
-<dl class="docutils">
-<dt>master_y <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Interpolated data.</dd>
-<dt>x_new <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>New axis.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.isaxis">
-<code class="descclassname">functions.</code><code class="descname">isaxis</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.isaxis" title="Permalink to this definition">¶</a></dt>
-<dd><p>Detects if there is an axis in the data.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>Data containing spectras an possible axis.</dd>
-</dl>
-<dl class="docutils">
-<dt>is_axis <span class="classifier-delimiter">:</span> <span class="classifier">bool</span></dt>
-<dd>True if there is axis.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.load_data">
-<code class="descclassname">functions.</code><code class="descname">load_data</code><span class="sig-paren">(</span><em>file</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.load_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load data from a standard text file obtaned from LabSpec and other
-spectroscopy instruments. When single measurement these come in columns with
-the first one being the x-axis. When it is a mapping, the first row is the
-x-axis and the following are the measruements. Sometimes the first 2 columns
-will be the coordinates. No headers, yet.</p>
-<dl class="docutils">
-<dt>file <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Location of data file.</dd>
-</dl>
-<dl class="docutils">
-<dt>new_data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Lodaded data.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.logo">
-<code class="descclassname">functions.</code><code class="descname">logo</code><span class="sig-paren">(</span><em>lay=90</em>, <em>leng=100</em>, <em>a=1</em>, <em>b=0.8</em>, <em>r1=80</em>, <em>r2=120</em>, <em>lw=2</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.logo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Prints the logo of spectrapepper</p>
-<dl class="docutils">
-<dt>lay <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 90.</dd>
-<dt>leng <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 100.</dd>
-<dt>a <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 1.</dd>
-<dt>b <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 0.8.</dd>
-<dt>r1 <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 80.</dd>
-<dt>r2 <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 120.</dd>
-<dt>lw <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 2.</dd>
-</dl>
-<dl class="docutils">
-<dt>list</dt>
-<dd>Prints the logo with matplotlib.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.lorentzian_fit">
-<code class="descclassname">functions.</code><code class="descname">lorentzian_fit</code><span class="sig-paren">(</span><em>data_x</em>, <em>ax</em>, <em>wid=4</em>, <em>it=100</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.lorentzian_fit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fit a Lorentz distributed curve for a single spectra. Good guidelines
-for similar structures can be found at <a class="reference external" href="http://emilygraceripka.com/blog/16">http://emilygraceripka.com/blog/16</a>.</p>
-<dl class="docutils">
-<dt>data_x <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>single spectra.</dd>
-<dt>ax <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>x-axis.</dd>
-<dt>wid <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>fitted curve width. The default is 4.</dd>
-<dt>it <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>number of itereations. The default is 100.</dd>
-</dl>
-<dl class="docutils">
-<dt>fit <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.mdscore">
-<code class="descclassname">functions.</code><code class="descname">mdscore</code><span class="sig-paren">(</span><em>x_points</em>, <em>y_points</em>, <em>target</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.mdscore" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the distance between points and the median center (MD) of
-clusters and sets the predictoin to the closest MD. This score may be
-higher or lower than the algorithm score.</p>
-<dl class="docutils">
-<dt>x_points <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>y_points <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>target <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-<dl class="docutils">
-<dt>score <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>p <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>a <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>b <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.mergedata">
-<code class="descclassname">functions.</code><code class="descname">mergedata</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.mergedata" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merges data, it can merge large vectors. Usuful to merge features
-before performing ML algorythms.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>List of arrays.</dd>
-</dl>
-<dl class="docutils">
-<dt>master <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>List with the merged data.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.no_baseline">
-<code class="descclassname">functions.</code><code class="descname">no_baseline</code><span class="sig-paren">(</span><em>data</em>, <em>lam=100000</em>, <em>p=0.001</em>, <em>niter=10</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.no_baseline" title="Permalink to this definition">¶</a></dt>
-<dd><p>This takes baseline_als and removes it from the spectra.</p>
-<p>Keyword arguments:
-data – single spectra
-lam – also known as lambda, smoothness
-p – asymetry
-niter – niter</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.normsum">
-<code class="descclassname">functions.</code><code class="descname">normsum</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.normsum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Normalizes the sum under the curve to 1, for single or multiple spectras.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Single spectra or a list of them.</dd>
-</dl>
-<dl class="docutils">
-<dt>y <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Processed data.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.normtoglobalmax">
-<code class="descclassname">functions.</code><code class="descname">normtoglobalmax</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.normtoglobalmax" title="Permalink to this definition">¶</a></dt>
-<dd><p>Normalizes a list of spectras to the global max.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>List of spectras.</dd>
-</dl>
-<dl class="docutils">
-<dt>y <span class="classifier-delimiter">:</span> <span class="classifier">List</span></dt>
-<dd>Data normalized to the global max.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.normtomax">
-<code class="descclassname">functions.</code><code class="descname">normtomax</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.normtomax" title="Permalink to this definition">¶</a></dt>
-<dd><p>Normalizes spectras to the maximum value of each, in other words, the
-maximum value of each spectras is set to 1.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-<dl class="docutils">
-<dt>y <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.normtopeak">
-<code class="descclassname">functions.</code><code class="descname">normtopeak</code><span class="sig-paren">(</span><em>data</em>, <em>x_axis</em>, <em>peak</em>, <em>shift=10</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.normtopeak" title="Permalink to this definition">¶</a></dt>
-<dd><p>Normalizes the spectras to a particular peak.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>x_axis <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>peak <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>shift <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 10.</dd>
-</dl>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.normtovalue">
-<code class="descclassname">functions.</code><code class="descname">normtovalue</code><span class="sig-paren">(</span><em>data</em>, <em>val</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.normtovalue" title="Permalink to this definition">¶</a></dt>
-<dd><p>Normalizes the spectras to a set value, in other words, the define value
-will be reescaled to 1 in all the spectras.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>val <span class="classifier-delimiter">:</span> <span class="classifier">float</span></dt>
-<dd>Value to normalize to.</dd>
-</dl>
-<dl class="docutils">
-<dt>y <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.peakfinder">
-<code class="descclassname">functions.</code><code class="descname">peakfinder</code><span class="sig-paren">(</span><em>data</em>, <em>l=10</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.peakfinder" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>l <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 10.</dd>
-</dl>
-<dl class="docutils">
-<dt>is_max <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.peakfit">
-<code class="descclassname">functions.</code><code class="descname">peakfit</code><span class="sig-paren">(</span><em>data</em>, <em>ax</em>, <em>pos</em>, <em>look=20</em>, <em>shift=5</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.peakfit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Feats peak as an optimization problem.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>ax <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>pos <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>look <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 20.</dd>
-<dt>shift <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 5.</dd>
-</dl>
-<dl class="docutils">
-<dt>TYPE</dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.plotgrau">
-<code class="descclassname">functions.</code><code class="descname">plotgrau</code><span class="sig-paren">(</span><em>data</em>, <em>labels</em>, <em>cm='seismic'</em>, <em>fons=20</em>, <em>figs=(25</em>, <em>15)</em>, <em>tfs=25</em>, <em>ti='Grau (Beta)'</em>, <em>marker='s'</em>, <em>marks=100</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.plotgrau" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performs Grau correlation and plots it.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>labels <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>cm <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is “seismic”.</dd>
-<dt>fons <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 20.</dd>
-<dt>figs <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is (25,15).</dd>
-<dt>tfs <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 25.</dd>
-<dt>ti <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is “Grau (Beta)”.</dd>
-<dt>marker <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is “s”.</dd>
-<dt>marks <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 100.</dd>
-</dl>
-<p>Plot.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.plotpearson">
-<code class="descclassname">functions.</code><code class="descname">plotpearson</code><span class="sig-paren">(</span><em>data</em>, <em>labels</em>, <em>cm='seismic'</em>, <em>fons=20</em>, <em>figs=(20</em>, <em>17)</em>, <em>tfs=25</em>, <em>ti='Pearson'</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.plotpearson" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates Pearon matrix and returns it in the form of a plot.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>labels <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>cm <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Color map as for matplolib. The default is “seismic”.</dd>
-<dt>fons <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Plot font size. The default is 20.</dd>
-<dt>figs <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Plot size. The default is (20,17).</dd>
-<dt>tfs <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Title font size. The default is 25.</dd>
-<dt>ti <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Plot title/name. The default is “pearson”.</dd>
-</dl>
-<p>Plot.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.plotspearman">
-<code class="descclassname">functions.</code><code class="descname">plotspearman</code><span class="sig-paren">(</span><em>data</em>, <em>labels</em>, <em>cm='seismic'</em>, <em>fons=20</em>, <em>figs=(20</em>, <em>17)</em>, <em>tfs=25</em>, <em>ti='Spearman'</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.plotspearman" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates Pearon matrix and returns it in the form of a plot.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>labels <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>cm <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Color map as for matplolib. The default is “seismic”.</dd>
-<dt>fons <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Plot font size. The default is 20.</dd>
-<dt>figs <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Plot size. The default is (20,17).</dd>
-<dt>tfs <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Title font size. The default is 25.</dd>
-<dt>ti <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Plot title/name. The default is “spearman”.</dd>
-</dl>
-<p>Plot.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.regression">
-<code class="descclassname">functions.</code><code class="descname">regression</code><span class="sig-paren">(</span><em>target</em>, <em>variable</em>, <em>cov=0</em>, <em>exp=0</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.regression" title="Permalink to this definition">¶</a></dt>
-<dd><p>Performs an N dimentional regression.</p>
-<dl class="docutils">
-<dt>target <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Y-axis values.</dd>
-<dt>variable <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>X-axis values.</dd>
-<dt>cov <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>If 1 is regression with covariance, like spearman. The default is 0.</dd>
-<dt>exp <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>For exponent regressions. Not working yet. The default is 0.</dd>
-</dl>
-<dl class="docutils">
-<dt>prediction <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Prediction of the fitting.</dd>
-<dt>fit <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>Parameters of the regression.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.sdev">
-<code class="descclassname">functions.</code><code class="descname">sdev</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.sdev" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-<dl class="docutils">
-<dt>curve_std <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.shiftref">
-<code class="descclassname">functions.</code><code class="descname">shiftref</code><span class="sig-paren">(</span><em>data</em>, <em>peak_ref=520</em>, <em>mode=1</em>, <em>it=100</em>, <em>plot=True</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.shiftref" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shifts the x-axis according to a shift calcualted prior.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-<dt>peak_ref <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 520.</dd>
-<dt>mode <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 1.</dd>
-<dt>it <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is 100.</dd>
-<dt>plot <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is True.</dd>
-</dl>
-<dl class="docutils">
-<dt>peakshift <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>DESCRIPTION.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.shuffle">
-<code class="descclassname">functions.</code><code class="descname">shuffle</code><span class="sig-paren">(</span><em>arrays</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.shuffle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merges and shuffles data adn the separates it so it is shuffles together.</p>
-<dl class="docutils">
-<dt>arrays <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>List of arrays of data.</dd>
-</dl>
-<dl class="docutils">
-<dt>new_list <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>List of the shuffled arrays.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.subtractref">
-<code class="descclassname">functions.</code><code class="descname">subtractref</code><span class="sig-paren">(</span><em>data, ref, alpha=0.9, sample=0, plot=True, plot_lim=[50, 200], mcr=False</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.subtractref" title="Permalink to this definition">¶</a></dt>
-<dd><p>Subtracts a reference spectra (i.e.: air) from the measurements. If</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>List of spectras, with x-axis.</dd>
-<dt>ref <span class="classifier-delimiter">:</span> <span class="classifier">TYPE</span></dt>
-<dd>air (reference) data, with x-axis.</dd>
-<dt>alpha <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Manual multiplier. The default is 0.9.</dd>
-<dt>sample <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>Sample spectra to work with. The default is 0.</dd>
-<dt>plot <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is True.</dd>
-<dt>plot_lim <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is [50,200].</dd>
-<dt>mcr <span class="classifier-delimiter">:</span> <span class="classifier">TYPE, optional</span></dt>
-<dd>DESCRIPTION. The default is False.</dd>
-</dl>
-<p>Returns
-——-gfkl
-data : TYPE</p>
-<blockquote>
-<div>Data with the subtracetd reference.</div></blockquote>
-</dd></dl>
-
-<dl class="function">
-<dt id="functions.trim">
-<code class="descclassname">functions.</code><code class="descname">trim</code><span class="sig-paren">(</span><em>data</em>, <em>start=0</em>, <em>finish=0</em><span class="sig-paren">)</span><a class="headerlink" href="#functions.trim" title="Permalink to this definition">¶</a></dt>
-<dd><p>Deletes columns in a list from start to finish.</p>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>Data to be trimmed.</dd>
-<dt>start <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd>Poistion of the starting point. The default is 0.</dd>
-<dt>finish <span class="classifier-delimiter">:</span> <span class="classifier">int, optional</span></dt>
-<dd>Position of the ending point. The default is 0.</dd>
-</dl>
-<dl class="docutils">
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">list</span></dt>
-<dd>Trimed data.</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="section" id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
-<p>Indices and tables</p>
-<ul class="simple">
-<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
-<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
-<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
-</ul>
-</div>
-
-
-        </div>
-      </div>
-
-      <div id="side-menu-container">
-
-        <div id="search" role="search">
-        <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-            <input type="text" name="q" placeholder="Search..." />
-            <input type="hidden" name="check_keywords" value="yes" />
-            <input type="hidden" name="area" value="default" />
-        </form>
-</div>
-
-        <div id="side-menu" role="navigation">
-
-          
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
   
     
-  
-  
-    <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Introduction</a><ul>
-<li><a class="reference internal" href="#features">Features</a></li>
-<li><a class="reference internal" href="#quickstart">Quickstart</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-functions">Functions</a></li>
-<li><a class="reference internal" href="#examples">Examples</a></li>
-</ul>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SpectraPepper" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> Spectrapepper
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
 </div>
-  
 
-
+          
         </div>
 
         
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">SpectraPepper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
+</ul>
 
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Spectrapepper</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>&lt;no title&gt;</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">SpectraPepper</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#introduction">Introduction</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#example-1-normalization-methods">Example 1: Normalization methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#examples-2-spectral-pre-processing">Examples 2: Spectral pre-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#example-3-pearson-spearman-and-grau-analyses">Example 3: Pearson, Spearman, and Grau analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#example-4-machine-learning-preparation">Example 4: Machine learning preparation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributions.html#report-bugs">Report Bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributions.html#fix-bugs">Fix Bugs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributions.html#implement-features">Implement Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributions.html#write-documentation">Write Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributions.html#submit-feedback">Submit Feedback</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributions.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributions.html#pull-request-guidelines">Pull Request Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributions.html#deploying">Deploying</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>Indices and tables</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+</ul>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="introduction.html" class="btn btn-neutral float-right" title="SpectraPepper" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Enric Tomas Grau-Luque.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
       </div>
 
-    </div>
+    </section>
 
-<footer>
-    <div id="footer-info">
-        <ul id="build-details">
-            
-                <li class="footer-element">
-                    
-                        <a href="_sources/index.rst.txt" rel="nofollow"> source</a>
-                    
-                </li>
-            
+  </div>
+  
 
-            
-
-            
-        </ul>
-        <div id="credit">
-            created with <a href="http://sphinx-doc.org/">Sphinx</a> and <a href="https://github.com/Autophagy/insegel">Insegel</a>
-
-        </div>
-    </div>
-
-    <a id="menu-toggle" class="fa fa-bars" aria-hidden="true"></a>
-
-    <script type="text/javascript">
-      $("#menu-toggle").click(function() {
-        $("#menu-toggle").toggleClass("toggled");
-        $("#side-menu-container").slideToggle(300);
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
       });
-    </script>
+  </script>
 
-</footer> 
-
-</div>
+  
+  
+    
+   
 
 </body>
 </html>
