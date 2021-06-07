@@ -1,5 +1,0 @@
-Functions
-=========
-
-.. automodule:: spep
-    :members:
