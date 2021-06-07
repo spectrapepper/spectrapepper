@@ -25,7 +25,7 @@ setup_requirements = [ ]
 test_requirements = [ ]
 
 setup(
-    author="Enric Tomas Grau Luque",
+    author="Enric Tomas Grau-Luque",
     author_email='patenric@gmail.com',
     python_requires='>=3.5',
     classifiers=[
