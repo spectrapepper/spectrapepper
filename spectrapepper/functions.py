@@ -697,29 +697,30 @@ def evalgrau(data):
     data = list(data)
     tup = [i for i in range(len(data))] # number list of data type sets
     combs = tuple(combinations(tup, 3)) # make all combinations        
+    n_o_p = len(data[0])
 
-    R2 = [] # R2 list
+    r2 = [] # R2 list
     for i in range(len(combs)): # for all the combinations
         xs = data[combs[i][0] - 1] # temporal x axis
         ys = data[combs[i][1] - 1] # temporal y axis
         zs = data[combs[i][2] - 1] # temporal z axis
-        A = [] # fit function parameter
+        a = [] # fit function parameter
         b = [] # fit function parameter
-        for j in range(len(data[0])): # for all the data points
-            A.append([xs[j], ys[j], 1]) # A value
+        for j in range(n_o_p): # for all the data points
+            a.append([xs[j], ys[j], 1]) # A value
             b.append(zs[j]) # b value
         b = np.matrix(b).T # transpose matrix form
-        A = np.matrix(A) # matrix form
-        fit = (A.T * A).I * A.T * b # evaluate fir
+        a = np.matrix(a) # matrix form
+        fit = (a.T * a).I * a.T * b # evaluate fir
         rss = 0 # residual sum of squares
         tss = 0 # total sum of squares
-        
-        n_o_p = len(data[0])        
-        for i in range(len(n_o_p)): # calculate mse for all the points
-            rss += (zs[i] - (xs[i]*fit[0] + ys[i]*fit[1] + fit[2]))**2 # residual sum
-            tss += (zs[i] - np.mean(zs))**2 # total error
-        R2.append(round(float(1-rss/tss),2)) # R2    
-    merged = np.c_[combs,R2] # merge to sort         
+
+        for j in range(n_o_p): # calculate mse for all the points
+            rss += (zs[j] - (xs[j]*fit[0] + ys[j]*fit[1] + fit[2]))**2 # residual sum
+            tss += (zs[j] - np.mean(zs))**2 # total error
+        r2.append(round(float(1-rss/tss),2)) # R2
+    merged = np.c_[combs,r2] # merge to sort
+    print("yeah5")
     return merged   
 
 
@@ -817,36 +818,36 @@ def cmscore(x_points,y_points,target):
     return score,p,a,b
 
 
-def mdscore(x_points,y_points,target):
+def mdscore(x_p, y_p, tar):
     """
     Calculates the distance between points and the median center (MD) of
     clusters and sets the prediction to the closest MD. This score may be
     higher or lower than the algorithm score.
 
-    :type x_points: list[float]
-    :param x_points: Coordinates of x-axis.
+    :type x_p: list[float]
+    :param x_p: Coordinates of x-axis.
 
-    :type y_points: list[float]
-    :param y_points: Coordinates of y-axis.
+    :type y_p: list[float]
+    :param y_p: Coordinates of y-axis.
 
-    :type target: list[int]
-    :param target: Targets of each point.
+    :type tar: list[int]
+    :param tar: Targets of each point.
 
     :returns: Score by comparing MD distances. Prediction using MD distances. X-axis coords of ths CMs. Y-axis coords of the Cms.
     :rtype: list[float, list[int],list[float],list[float]]
     """
-    x_p = list(x_points)
-    y_p = list(y_points)
-    g_n = max(target) + 1
-    tar = list(target)
+    x_p = list(x_p)
+    y_p = list(y_p)
+    g_n = max(tar) + 1
+    tar = list(tar)
         
     a = [0 for i in range(g_n)]
     b = [0 for i in range(g_n)]
     d = [] # distances
     p = [] # predictions
     
-    x_s = [[] for all in range(g_n)]
-    y_s = [[] for all in range(g_n)]
+    x_s = [[] for _ in range(g_n)]
+    y_s = [[] for _ in range(g_n)]
     
     for i in range(g_n):
         for j in range(len(tar)):
@@ -961,7 +962,7 @@ def peakfinder(data, l=10):
 
 
 def confusionmatrix(tt, tp, gn, plot=False, groupnames=['','','',''], title='',
-                    colormap='Blues'):
+                    colormap='Blues', fontsize=20):
     """
     Calculates and/or plots the confusion matrix for machine learning algorithm results.
 
@@ -974,6 +975,9 @@ def confusionmatrix(tt, tp, gn, plot=False, groupnames=['','','',''], title='',
     :type gn: int
     :param gn: Number of classification groups.
 
+    :type fontsize: int
+    :param fontsize: Font size for the labels. The default is 20.
+
     :returns: The confusion matrix
     :rtype: list[float]
     """
@@ -984,6 +988,7 @@ def confusionmatrix(tt, tp, gn, plot=False, groupnames=['','','',''], title='',
     group_names = list(groupnames)
     title=str(title)
     colormap = str(colormap)
+    fontsize = int(fontsize)
     
     m = [[0 for i in range(gn)] for j in range(gn)]
     p = [0 for i in range(gn)]
@@ -1003,8 +1008,7 @@ def confusionmatrix(tt, tp, gn, plot=False, groupnames=['','','',''], title='',
         
     if plot:
         fig = plt.figure(tight_layout=True,figsize=(6, 7.5))
-        plt.rc('font', size=20)
-        legend_font = 20
+        plt.rc('font', size=fontsize)
         ax = fig.add_subplot()
         im = ax.imshow(m, cmap=colormap)
         ax.set_title(title)
@@ -1013,11 +1017,11 @@ def confusionmatrix(tt, tp, gn, plot=False, groupnames=['','','',''], title='',
         ax.set_xticklabels(group_names)
         ax.set_yticklabels(group_names)
         plt.setp(ax.get_xticklabels(), rotation=45, ha="right",rotation_mode="anchor")
-        for i in range(len(group_names)):
-            for j in range(len(group_names)):
-                text = ax.text(j, i, round(m[i][j],2),
-                                ha='center', va='center', color='black')
-        
+        # to show values in pixels
+        # for i in range(len(group_names)):
+            # for j in range(len(group_names)):
+                # text = ax.text(j, i, round(m[i][j],2), ha='center', va='center', color='black')
+
     return m
 
 
@@ -1060,7 +1064,7 @@ def sdev(data):
     return curve_std
 
 
-def peakfit(data, ax, pos, look=20, shift=5, wid = 5):
+def peakfit(data, ax, pos, look=20, shift=5, wid=5.0):
     """
     Feats peak as an optimization problem.
 
@@ -1079,6 +1083,9 @@ def peakfit(data, ax, pos, look=20, shift=5, wid = 5):
     :type shift: int
     :param shift: Possible shift of the peak. The default is 5.
 
+    :type wid: float
+    :param wid: Initial width of fit. The default is 5.
+
     :returns: Fitted curve.
     :rtype: list[float]
     """
@@ -1089,7 +1096,7 @@ def peakfit(data, ax, pos, look=20, shift=5, wid = 5):
     s = int(shift)
     pos = int(pos)
     amp = max(y)/2
-    wid = wid
+    wid = float(wid)
     
     def objective(x): 
         fit = []
@@ -1399,7 +1406,7 @@ def shuffle(arrays, delratio=0):
             features = np.delete(features,row , 0)  
     ###
     
-    new_list = [[] for all in all_list]
+    new_list = [[] for _ in all_list]
     lengths = []
 
     for i in range(len(all_list)):
@@ -1430,7 +1437,7 @@ def mergedata(data):
     :rtype: list[float]
     """
     data = list(data) # list of lists
-    master = [[] for all in data[0]]
+    master = [[] for _ in data[0]]
     for i in range(len(data[0])):
         for j in range(len(data)):
             master[i].extend(data[j][i])
@@ -1939,8 +1946,6 @@ def grau(data, labels, cm="seismic", fons=20, figs=(25, 15),
     fig = plt.figure(tight_layout=True,figsize=figsize)
     
     y = [i+0.5 for i  in range(n)]
-    ticker = mpl.ticker.FixedLocator(y)
-    formatter = mpl.ticker.FixedFormatter(labels)
     
     ax = fig.add_subplot(gs[0, 0])
     cm = plt.cm.get_cmap(cm)
