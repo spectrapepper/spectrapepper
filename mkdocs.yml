@@ -7,7 +7,7 @@ site_url: https://enricgrau.github.io/spectrapepper
 repo_url: https://github.com/enricgrau/spectrapepper
 
  # theme produces error. It is because custom_dir:"docs/overrides" is not on the library. Docs work properly.
- theme:
+theme:
     palette:
         scheme: preference
     name: material
