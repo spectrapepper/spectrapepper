@@ -1,3 +1,5 @@
+
+
 site_name: spectrapepper
 
 site_url: https://enricgrau.github.io/spectrapepper
@@ -39,9 +41,9 @@ markdown_extensions:
 #     - auto
 
 nav:
-    - Home: index.html
-    - Installation: quickstart.html
-    - Contributing: contributions.html
+    - Home: index.rst
+    - Installation: quickstart.rst
+    - Contributing: contributions.rst
     - Report Issues: https://github.com/enricgrau/spectrapepper/issues
     - API Reference:
-          - spectrapepper module: functions.html
+          - spectrapepper module: functions.rst
