@@ -13,7 +13,7 @@ import pandas as pd
 from scipy import sparse
 from scipy import interpolate
 from scipy.stats import stats
-from scipy.signal import butter,filtfilt
+from scipy.signal import butter, filtfilt
 from scipy.optimize import minimize
 # import scipy.interpolate as si
 from scipy.interpolate import splev, splrep
@@ -42,10 +42,10 @@ def load_data(file):
 
     :returns: List of the data.
     :rtype: list[float]
-    """  
+    """
     new_data = []
     raw_data = open(file, "r")
-    for row in raw_data: 
+    for row in raw_data:
         row = row.replace(",", ".")
         row = row.replace(";", " ")
         row = row.replace("NaN", "-1")
@@ -59,7 +59,7 @@ def load_data(file):
     return new_data
 
 
-def load(file, fromline = 0):
+def load(file, fromline=0):
     """
     Load data from a standard text file obtained from LabSpec and other
     spectroscopy instruments. Normally, when single measurement these come in 
@@ -74,11 +74,11 @@ def load(file, fromline = 0):
     
     :returns: List of the data.
     :rtype: list[float]
-    """  
+    """
     new_data = []
     raw_data = open(file, "r")
     i = 0
-    for row in raw_data: 
+    for row in raw_data:
         if i >= fromline:
             row = row.replace(",", ".")
             row = row.replace(";", " ")
@@ -88,7 +88,7 @@ def load(file, fromline = 0):
             s_row = str.split(row)
             s_row = np.array(s_row, dtype=np.float)
             new_data.append(s_row)
-        i += 1        
+        i += 1
     raw_data.close()
 
     return new_data
@@ -113,14 +113,15 @@ def loadheader(file, line, split=False):
     :rtype: string
     """
     line = int(line)
-    
-    info = linecache.getline('raman.txt',line)
-    
-    if split:     
+    file = str(file)
+
+    info = linecache.getline(file, line)
+
+    if split:
         info = str.split(info)
-        
+
     info = np.array(info, dtype=np.str)
-    
+
     return info
 
 
@@ -136,32 +137,29 @@ def loadline(file, line, tp='float'):
     :type line: int
     :param line: Line number. Counts from 1.     
 
-    :returns: Array with the desierd line.
+    :type tp: str
+    :param tp: Type of data. If its numeric then float, if text then str. Default is float.
+
+    :returns: Array with the desired line.
     :rtype: list[float]
     """
     line = int(line)
     file = str(file)
-    
-    info = linecache.getline(file,line)
-    
-    # print(len(info))
-    # print(info[0])
-    # x = info[0].isdigit()
-    # print(x)
-    
+
+    info = linecache.getline(file, line)
     info = info.replace("NaN", "-1")
     info = info.replace("nan", "-1")
     info = info.replace("--", "-1")
-    
     info = str.split(info)
-    
+
     if tp == 'float':
         info = np.array(info, dtype=np.float)
-    
+
     if tp == 'str':
         info = np.array(info, dtype=np.str)
-    
+
     return info
+
 
 def butter_lowpass_filter(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
     """
@@ -185,8 +183,8 @@ def butter_lowpass_filter(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
     :returns: Filtered data
     :rtype: list[float]
     """
-    y = list(data) # so it does not change the input list
-    normal_cutoff = cutoff / (nyq*fs)
+    y = list(data)  # so it does not change the input list
+    normal_cutoff = cutoff / (nyq * fs)
     b, a = butter(order, normal_cutoff, btype='low', analog=False)
     # dim = np.array(y)
     if len(np.array(y).shape) > 1:
@@ -194,10 +192,10 @@ def butter_lowpass_filter(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
             y[i] = filtfilt(b, a, y[i])
     else:
         y = filtfilt(b, a, y)
-    return y    
+    return y
 
 
-def normtomax(data): 
+def normtomax(data):
     """
     Normalizes spectras to the maximum value of each, in other words, the
     maximum value of each spectras is set to 1.
@@ -208,17 +206,17 @@ def normtomax(data):
     :returns: Normalized data.
     :rtype: list[float]
     """
-    y = copy.deepcopy(data) # so it does not chamge the input list
-    dims = len(np.array(y).shape) # detect dimensions
+    y = copy.deepcopy(data)  # so it does not chamge the input list
+    dims = len(np.array(y).shape)  # detect dimensions
     if dims >= 2:
         for i in range(len(y)):
             max_data = max(y[i])
             for j in range(len(y[i])):
-                y[i][j] = y[i][j]/max_data
+                y[i][j] = y[i][j] / max_data
     else:
         max_data = max(y)
         for i in range(len(y)):
-            y[i] = y[i]/max_data
+            y[i] = y[i] / max_data
     return y
 
 
@@ -236,15 +234,15 @@ def normtovalue(data, val):
     :returns: Normalized data.
     :rtype: list[float]
     """
-    y = copy.deepcopy(data) # so it does not chamge the input list
-    dims = len(np.array(data).shape) # detect dimensions
+    y = copy.deepcopy(data)  # so it does not change the input list
+    dims = len(np.array(data).shape)  # detect dimensions
     if dims >= 2:
-        for i in range(len(y)): # for all spectras
-            for j in range(len(y[i])): # for all elements in the spectra
-                y[i][j] = y[i][j]/val # divide by the maximum      
+        for i in range(len(y)):  # for all spectras
+            for j in range(len(y[i])):  # for all elements in the spectra
+                y[i][j] = y[i][j] / val  # divide by the maximum
     else:
-        for i in range(len(y)): # for all spectras
-            y[i] = y[i]/val
+        for i in range(len(y)):  # for all spectras
+            y[i] = y[i] / val
     return y
 
 
@@ -252,33 +250,33 @@ def baseline_als(y, lam=100, p=0.001, niter=10):
     """
     Calculation of the baseline using Asymmetric Least Squares Smoothing. This
     script only makes the calculation but it does not remove it. Original idea of
-    this algorythm by P. Eilers and H. Boelens (2005), and available details at:
+    this algorithm by P. Eilers and H. Boelens (2005), and available details at:
     https://stackoverflow.com/a/29185844/2898619
 
     :type y: list[float]
-    :param y: Specra to calculate the baseline from.
+    :param y: Spectra to calculate the baseline from.
 
     :type lam: int
     :param lam: Lambda, smoothness. The default is 100.
 
     :type p: float
-    :param p: Asymetry. The default is 0.001.
+    :param p: Asymmetry. The default is 0.001.
 
     :type niter: int
     :param niter: Niter. The default is 10.
 
     :returns: Returns the calculated baseline.
     :rtype: list[float]
-    """    
-    L = len(y)
-    D = sparse.diags([1,-2,1],[0,-1,-2], shape=(L,L-2))
-    w = np.ones(L)
+    """
+    l = len(y)
+    d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
+    w = np.ones(l)
     for i in range(niter):
-        W = sparse.spdiags(w, 0, L, L)
-        Z = W + lam * D.dot(D.transpose())
-        z = spsolve(Z, w*y)
-        w = p * (y > z) + (1-p) * (y < z) 
-    return z 
+        W = sparse.spdiags(w, 0, l, l)
+        Z = W + lam * d.dot(d.transpose())
+        z = spsolve(Z, w * y)
+        w = p * (y > z) + (1 - p) * (y < z)
+    return z
 
 
 def alsbaseline(data, lam=100000, p=0.001, niter=10):
@@ -292,21 +290,21 @@ def alsbaseline(data, lam=100000, p=0.001, niter=10):
     :param lam: also known as lambda, smoothness
 
     :type p: float
-    :param p: asymetry
+    :param p: asymmetry
 
     :type niter: int
     :param niter: niter
 
     :returns: The spectra with the removed als baseline.
     :rtype: list[float]
-    """    
+    """
     y = list(data)
     for i in range(len(y)):
         y[i] = y[i] - baseline_als(y[i], lam, p, niter)
     return y
 
 
-def bspbaseline(data, x_axis, points, avg=5, remove=False):
+def bspbaseline(data, x_axis, points, avg=5):
     """
     Calcuates the baseline using b-spline. Find useful details and guidelines
     in https://stackoverflow.com/a/34807513/2898619.
@@ -318,7 +316,7 @@ def bspbaseline(data, x_axis, points, avg=5, remove=False):
     :param x_axis: x axis of the data, to interpolate the baseline function.
 
     :type points: list[int]
-    :param n: positions in axis of points to calculate the bspine.
+    :param points: positions in axis of points to calculate the bspine.
 
     :type avg: int
     :param avg: points to each side to make average.
@@ -333,22 +331,22 @@ def bspbaseline(data, x_axis, points, avg=5, remove=False):
     x_axis = list(x_axis)
     x = list(points)
     avg = int(avg)
-    
-    y = [] # y values for the selected x
-    for i in range(len(points)): # for all the selected points
-        temp = np.mean(data[points[i] - avg: points[i] + avg + 1]) # average
-        y.append(temp) # append to y   
-    
+
+    y = []  # y values for the selected x
+    for i in range(len(points)):  # for all the selected points
+        temp = np.mean(data[points[i] - avg: points[i] + avg + 1])  # average
+        y.append(temp)  # append to y
+
     for i in range(len(x)):
-        x[i] = x_axis[x[i]] # change x position to x axis value
-    
+        x[i] = x_axis[x[i]]  # change x position to x axis value
+
     spl = splrep(x, y)
     baseline = splev(x_axis, spl)
-    
+
     return baseline
 
 
-def lorentzian_fit(data_x, ax, wid = 4, it = 100):
+def lorentzian_fit(data_x, ax, wid=4, it=100):
     """
     Fit a Lorentz distributed curve for a single spectra. Good guidelines
     for similar structures can be found at http://emilygraceripka.com/blog/16.
@@ -368,33 +366,33 @@ def lorentzian_fit(data_x, ax, wid = 4, it = 100):
     :returns: Lorentz fit.
     :rtype: list[float]
     """
-    x = list(ax) # change the variable so it doesnt change the original
-    y = list(data_x) # change the variable so it doesnt change the original
-    cen = 0 # position (wavelength, x value)
-    peak_i_pos = 0 # position (axis position, i value)
-    amp = max(y) # maximum value of function, peak value, amplitud of the fit
-    fit = [] # fit function
-    err = [] # error log to choose the optimum
-    for i in range(len(y)): # for all the data
-        if amp == y[i]: # if it is the maximum
-            cen = ax[i] # save the axis value x
-            peak_i_pos = int(i) # also save the position i
-            break  
+    x = list(ax)  # change the variable so it doesnt change the original
+    y = list(data_x)  # change the variable so it doesnt change the original
+    cen = 0  # position (wavelength, x value)
+    peak_i_pos = 0  # position (axis position, i value)
+    amp = max(y)  # maximum value of function, peak value, amplitud of the fit
+    #  fit = []  # fit function
+    err = []  # error log to choose the optimum
+    for i in range(len(y)):  # for all the data
+        if amp == y[i]:  # if it is the maximum
+            cen = ax[i]  # save the axis value x
+            peak_i_pos = int(i)  # also save the position i
+            break
     for i in range(it):  # search "it" iterations
-        temp = 0 # reset temporal error
-        fit = [] # reset lorentz fit array
-        p = cen - 0.5 + ( 0.01 * i ) # pos of the peak respect to the reference measured peak
-        for j in range(len(x)): # for all the points
-            fit.append(amp*wid**2/((x[j]-p)**2+wid**2))
-        for j in range(peak_i_pos - 25, peak_i_pos + 25): # error between -25 and +25 of the peak position
-            temp = temp + ( fit[j] - y[j] ) ** 2 # total error    
-        err.append(temp) # log error 
-    fit = [] # reset array
-    for i in range(len(err)): # look for the minimum error
-        if min(err) == err[i]: # if it is the minimum error
-            p = cen - 0.5 + ( 0.01 * i ) # then calculate the fit again
+        temp = 0  # reset temporal error
+        fit = []  # reset lorentz fit array
+        p = cen - 0.5 + (0.01 * i)  # pos of the peak respect to the reference measured peak
+        for j in range(len(x)):  # for all the points
+            fit.append(amp * wid ** 2 / ((x[j] - p) ** 2 + wid ** 2))
+        for j in range(peak_i_pos - 25, peak_i_pos + 25):  # error between -25 and +25 of the peak position
+            temp = temp + (fit[j] - y[j]) ** 2  # total error
+        err.append(temp)  # log error
+    fit = []  # reset array
+    for i in range(len(err)):  # look for the minimum error
+        if min(err) == err[i]:  # if it is the minimum error
+            p = cen - 0.5 + (0.01 * i)  # then calculate the fit again
             for j in range(len(y)):
-                fit.append(amp*wid**2/((x[j]-p)**2+wid**2))
+                fit.append(amp * wid ** 2 / ((x[j] - p) ** 2 + wid ** 2))
             break
     return fit
 
@@ -419,33 +417,34 @@ def gaussian_fit(data_x, ax, sigma=4.4, it=100):
     :returns: Gaussian fit.
     :rtype: list[float]
     """
-    x = list(ax) # change the variable so it doesnt change the original
-    y = list(data_x) # change the variable so it doesnt change the original
-    cen = 0 # position (wavelength, x value)
-    peak_i_pos = 0 # position (axis position, i value)
-    amp = max(y) # maximum value of function, peak value,a mplitud of the fit
-    fit = [] # fit function
-    err = [] # error log to choose the optimum
-    for i in range(len(y)): # for all the data
-        if amp == y[i]: # if it is the maximum
-            cen = ax[i] # save the axis value x
-            peak_i_pos = int(i) # also save the position i
+    x = list(ax)  # change the variable so it doesnt change the original
+    y = list(data_x)  # change the variable so it doesnt change the original
+    cen = 0  # position (wavelength, x value)
+    peak_i_pos = 0  # position (axis position, i value)
+    amp = max(y)  # maximum value of function, peak value,a mplitud of the fit
+    # fit = []  # fit function
+    err = []  # error log to choose the optimum
+    for i in range(len(y)):  # for all the data
+        if amp == y[i]:  # if it is the maximum
+            cen = ax[i]  # save the axis value x
+            peak_i_pos = int(i)  # also save the position i
             break
     for i in range(it):  # search "it" iterations
-        temp = 0 # reset temporal error
-        fit = [] # reset lorentz fit array
-        p = cen - 0.5 + ( 0.01 * i ) # pos of the peak respect to the reference measured peak
-        for j in range(len(x)): # for all the points
-            fit.append((11*amp)*(1/(sigma*(np.sqrt(2*np.pi))))*(np.exp(-0.5*(((x[j]-p)/sigma)**2))))
-        for j in range(peak_i_pos - 25, peak_i_pos + 25): # error between -25 and +25 of the peak position
-            temp = temp + ( fit[j] - y[j] ) ** 2 # total error    
-        err.append(temp) # log error 
-    fit = [] # reset array
-    for i in range(len(err)): # look for the minimum error
-        if min(err) == err[i]: # if it is the minimum error
-            p = cen - 0.5 + ( 0.01 * i ) # then calculta the fit again
+        temp = 0  # reset temporal error
+        fit = []  # reset lorentz fit array
+        p = cen - 0.5 + (0.01 * i)  # pos of the peak respect to the reference measured peak
+        for j in range(len(x)):  # for all the points
+            fit.append((11 * amp) * (1 / (sigma * (np.sqrt(2 * np.pi)))) * (np.exp(-0.5 * (((x[j] - p) / sigma) ** 2))))
+        for j in range(peak_i_pos - 25, peak_i_pos + 25):  # error between -25 and +25 of the peak position
+            temp = temp + (fit[j] - y[j]) ** 2  # total error
+        err.append(temp)  # log error
+    fit = []  # reset array
+    for i in range(len(err)):  # look for the minimum error
+        if min(err) == err[i]:  # if it is the minimum error
+            p = cen - 0.5 + (0.01 * i)  # then calculta the fit again
             for j in range(len(y)):
-                fit.append((11*amp)*(1/(sigma*(np.sqrt(2*np.pi))))*(np.exp(-0.5*(((x[j]-p)/sigma)**2))))
+                fit.append(
+                    (11 * amp) * (1 / (sigma * (np.sqrt(2 * np.pi)))) * (np.exp(-0.5 * (((x[j] - p) / sigma) ** 2))))
             break
     return fit
 
@@ -465,32 +464,32 @@ def cortopos(vals, ax):
     :returns: Position in the axis of the values in vals
     :rtype: list[int]
     """
-    axis = list(ax) # axis
-    y = list(vals) # axis values that you want to transalte to position
-    
+    axis = list(ax)  # axis
+    y = list(vals)  # axis values that you want to transalte to position
+
     if len(np.array(y).shape) > 1:
-        pos = [[0 for _ in range(len(y[0]))] for _ in range(len(y))] # i position of area limits
-        for i in range(len(y)): # this loop takes the aprox x and takes its position
+        pos = [[0 for _ in range(len(y[0]))] for _ in range(len(y))]  # i position of area limits
+        for i in range(len(y)):  # this loop takes the aprox x and takes its position
             for j in range(len(y[0])):
-                dif_temp = 999 # safe initial difference
-                temp_pos = 0 # temporal best position
-                for k in range(len(axis)): # search in x_axis
-                    if abs(y[i][j] - axis[k]) < dif_temp: # compare if better
-                        temp_pos = k # save best value
-                        dif_temp = abs(y[i][j] - axis[k]) # calculate new diff
-                y[i][j] = axis[temp_pos] # save real value in axis
-                pos[i][j] = temp_pos # save the position
+                dif_temp = 999  # safe initial difference
+                temp_pos = 0  # temporal best position
+                for k in range(len(axis)):  # search in x_axis
+                    if abs(y[i][j] - axis[k]) < dif_temp:  # compare if better
+                        temp_pos = k  # save best value
+                        dif_temp = abs(y[i][j] - axis[k])  # calculate new diff
+                y[i][j] = axis[temp_pos]  # save real value in axis
+                pos[i][j] = temp_pos  # save the position
     else:
-        pos = [] # i position of area limits
-        for i in range(len(y)): # this loop takes the aprox x and takes its position
-            dif_temp = 999 # safe initial difference
-            temp_pos = 0 # temporal best position
+        pos = []  # i position of area limits
+        for i in range(len(y)):  # this loop takes the aprox x and takes its position
+            dif_temp = 999  # safe initial difference
+            temp_pos = 0  # temporal best position
             for k in range(len(axis)):
                 if abs(y[i] - axis[k]) < dif_temp:
                     temp_pos = k
                     dif_temp = abs(y[i] - axis[k])
-            y[i] = axis[temp_pos] # save real value in axis
-            pos.append(temp_pos) # save the position
+            y[i] = axis[temp_pos]  # save real value in axis
+            pos.append(temp_pos)  # save the position
     return pos
 
 
@@ -510,14 +509,14 @@ def areacalculator(x_data, limits, norm=False):
 
     :returns: A list of areas according to the requested limits.
     :rtype: list[float]
-    """  
-    data = list(x_data) # data
-    lims = list(limits) # 
-    
-    areas = [[0 for _ in range(len(lims))] for _ in range(len(data))] # final values of areas
-    for i in range(len(data)): # calculate the areas for all the points
-        for j in range(len(lims)): # for all the areas
-            areas[i][j] = np.sum(data[i][lims[j][0]:lims[j][1]]) # calculate the sum
+    """
+    data = list(x_data)
+    lims = list(limits)
+
+    areas = [[0 for _ in range(len(lims))] for _ in range(len(data))]  # final values of areas
+    for i in range(len(data)):  # calculate the areas for all the points
+        for j in range(len(lims)):  # for all the areas
+            areas[i][j] = np.sum(data[i][lims[j][0]:lims[j][1]])  # calculate the sum
             if norm:
                 areas[i][j] = areas[i][j] / np.sum(data[i])
     return areas
@@ -546,29 +545,29 @@ def bincombs(n, s_min=1, s_max=0):
     if s_max == 0:
         s_max = n
 
-    e = 0 # counter
-    iters = [] # final matrix
-    temp = [] # temp matrix
-    stuff = [] # matrix of ALL combinations
+    iters = []  # final matrix
+    temp = []  # temp matrix
+    stuff = []  # matrix of ALL combinations
 
-    for i in range(n): # create possibilities vector (0 and 1)
+    for i in range(n):  # create possibilities vector (0 and 1)
         stuff.append(1)
         stuff.append(0)
-    
-    for subset in itertools.combinations(stuff, n): 
-        temp.append(subset) # get ALL combinations possible from "stuff"
-            
-    for i in range(len(temp)): # for all the possibilities...
+
+    for subset in itertools.combinations(stuff, n):
+        temp.append(subset)  # get ALL combinations possible from "stuff"
+
+    for i in range(len(temp)):  # for all the possibilities...
         e = 0
-        for j in range(len(iters)): # check if it already exists
-            if temp[i] == iters[j]: # if it matches, add 1
+        for j in range(len(iters)):  # check if it already exists
+            if temp[i] == iters[j]:  # if it matches, add 1
                 e += 1
             else:
-                e += 0 # if not, add 0
-        if e == 0 and sum(temp[i]) >= s_min and sum(temp[i]) <= s_max:
-            iters.append(temp[i]) # if new and fall into the criteria, then add
-              
-    return iters 
+                e += 0  # if not, add 0
+        # e == 0 and sum(temp[i]) >= s_min and sum(temp[i]) <= s_max
+        if e == 0 and s_min <= sum(temp[i]) <= s_max:
+            iters.append(temp[i])  # if new and fall into the criteria, then add
+
+    return iters
 
 
 def normsum(data):
@@ -580,19 +579,19 @@ def normsum(data):
 
     :returns: Normalized data
     :rtype: list[float]
-    """   
+    """
     y = copy.deepcopy(data)
     dims = len(np.array(data).shape)
     if dims >= 2:
         for i in range(len(y)):
             s = sum(y[i])
             for j in range(len(y[i])):
-                y[i][j] = y[i][j]/s
-    else:    
+                y[i][j] = y[i][j] / s
+    else:
         y = list(data)
         s = sum(y)
         for i in range(len(y)):
-            y[i] = y[i]/s
+            y[i] = y[i] / s
     return y
 
 
@@ -605,19 +604,19 @@ def normtoglobalmax(data):
 
     :returns: Normalized data
     :rtype: list[float]
-    """ 
+    """
     y = copy.deepcopy(data)
     dims = len(np.array(data).shape)
     if dims >= 2:
         for i in range(len(y)):
             s = sum(y[i])
             for j in range(len(y[i])):
-                y[i][j] = y[i][j]/s
-    else:    
+                y[i][j] = y[i][j] / s
+    else:
         y = list(data)
         s = sum(y)
         for i in range(len(y)):
-            y[i] = y[i]/s
+            y[i] = y[i] / s
     return y
 
 
@@ -635,12 +634,12 @@ def interpolation(data, x_axis):
     :returns: Interpolated data and the new axis
     :rtype: list[list[float],list[float]]
     """
-    ### LOAD DATA ###
+    # LOAD DATA
 
     # master_x = []
     # temp_y = []
     # files = list(files_names)
-    
+
     # for i in range(len(files)):
     #     data_temp = load_data(files[i])
     #     master_x.append(list(data_temp[0]))
@@ -648,14 +647,11 @@ def interpolation(data, x_axis):
     #     y = np.delete(y, 0, 1) # delete first column
     #     y = np.delete(y, 0, 1) # delete second (first) column 
     #     temp_y.append(y)
-    
-    ### END OF LOAD DATA ###
 
-    temp_y = list(data) # data, no axis
-    master_x = list(x_axis) # axis
+    temp_y = list(data)  # data, no axis
+    master_x = list(x_axis)  # axis
 
-
-    ### NEW AXIS ###
+    # NEW AXIS
     new_step = 1
     new_start = -1
     new_end = 99999999
@@ -664,22 +660,19 @@ def interpolation(data, x_axis):
             new_start = math.ceil(min(master_x[i]))
         if max(master_x[i]) < new_end:
             new_end = math.floor(max(master_x[i]))
-    x_new = np.arange(new_start, new_end+new_step, new_step)
-    ### END NEW AXIS ###
-    
-    ### MASTER DATA ###
+    x_new = np.arange(new_start, new_end + new_step, new_step)
+
+    # MASTER DATA
     master_y = []
     for i in range(len(temp_y)):
         for j in range(len(temp_y[i])):
-                this = interpolate.interp1d(master_x[i], temp_y[i][j])
-                master_y.append(this)
-    ### END MASTER DATA ###
-    
-    ### INTERPOLATIONS ###
+            this = interpolate.interp1d(master_x[i], temp_y[i][j])
+            master_y.append(this)
+
+    # INTERPOLATIONS
     for i in range(len(master_y)):
         master_y[i] = master_y[i](x_new)
-    ### END INTERPOLATIONS ###
-    
+
     return master_y, x_new
 
 
@@ -695,32 +688,33 @@ def evalgrau(data):
     :rtype: list[float]
     """
     data = list(data)
-    tup = [i for i in range(len(data))] # number list of data type sets
-    combs = tuple(combinations(tup, 3)) # make all combinations        
+    tup = [i for i in range(len(data))]  # number list of data type sets
+    combs = tuple(combinations(tup, 3))  # make all combinations
+    n_o_p = len(data[0])
 
-    R2 = [] # R2 list
-    for i in range(len(combs)): # for all the combinations
-        xs = data[combs[i][0] - 1] # temporal x axis
-        ys = data[combs[i][1] - 1] # temporal y axis
-        zs = data[combs[i][2] - 1] # temporal z axis
-        A = [] # fit function parameter
-        b = [] # fit function parameter
-        for j in range(len(data[0])): # for all the data points
-            A.append([xs[j], ys[j], 1]) # A value
-            b.append(zs[j]) # b value
-        b = np.matrix(b).T # transpose matrix form
-        A = np.matrix(A) # matrix form
-        fit = (A.T * A).I * A.T * b # evaluate fir
-        rss = 0 # residual sum of squares
-        tss = 0 # total sum of squares
-        
-        n_o_p = len(data[0])        
-        for i in range(len(n_o_p)): # calculate mse for all the points
-            rss += (zs[i] - (xs[i]*fit[0] + ys[i]*fit[1] + fit[2]))**2 # residual sum
-            tss += (zs[i] - np.mean(zs))**2 # total error
-        R2.append(round(float(1-rss/tss),2)) # R2    
-    merged = np.c_[combs,R2] # merge to sort         
-    return merged   
+    r2 = []  # R2 list
+    for i in range(len(combs)):  # for all the combinations
+        xs = data[combs[i][0] - 1]  # temporal x axis
+        ys = data[combs[i][1] - 1]  # temporal y axis
+        zs = data[combs[i][2] - 1]  # temporal z axis
+        a = []  # fit function parameter
+        b = []  # fit function parameter
+        for j in range(n_o_p):  # for all the data points
+            a.append([xs[j], ys[j], 1])  # A value
+            b.append(zs[j])  # b value
+        b = np.matrix(b).T  # transpose matrix form
+        a = np.matrix(a)  # matrix form
+        fit = (a.T * a).I * a.T * b  # evaluate fir
+        rss = 0  # residual sum of squares
+        tss = 0  # total sum of squares
+
+        for j in range(n_o_p):  # calculate mse for all the points
+            rss += (zs[j] - (xs[j] * fit[0] + ys[j] * fit[1] + fit[2])) ** 2  # residual sum
+            tss += (zs[j] - np.mean(zs)) ** 2  # total error
+        r2.append(round(float(1 - rss / tss), 2))
+    merged = np.c_[combs, r2]
+
+    return merged
 
 
 def groupscores(all_targets, used_targets, predicted_targets):
@@ -739,20 +733,20 @@ def groupscores(all_targets, used_targets, predicted_targets):
     :returns: List of scores for each group.
     :rtype: list[float]
     """
-    g_count = [0 for i in range(int(max(all_targets) + 1))] # list to count points per group
-    g_scores = [0 for i in range(int(max(all_targets) + 1))] # list to store the scores
-    for i in range(len(g_scores)): # for all the groups
-        for j in range(len(predicted_targets)): # for all the points
+    g_count = [0 for _ in range(int(max(all_targets) + 1))]  # list to count points per group
+    g_scores = [0 for _ in range(int(max(all_targets) + 1))]  # list to store the scores
+    for i in range(len(g_scores)):  # for all the groups
+        for j in range(len(predicted_targets)):  # for all the points
             if used_targets[j] == i:
                 g_count[i] += 1
                 if predicted_targets[j] == used_targets[j]:
-                    g_scores[i] += 1            
+                    g_scores[i] += 1
     for i in range(len(g_scores)):
-        g_scores[i] = round( g_scores[i] / g_count[i] , 2)   
-    return g_scores     
+        g_scores[i] = round(g_scores[i] / g_count[i], 2)
+    return g_scores
 
 
-def cmscore(x_points,y_points,target):
+def cmscore(x_points, y_points, target):
     """
     Calculates the distance between points and the center of mass (CM) of
     clusters and sets the prediction to the closest CM. This score may be
@@ -767,87 +761,89 @@ def cmscore(x_points,y_points,target):
     :type target: list[int]
     :param target: Targets of each point.
 
-    :returns: Score by comparing CM distances. Prediction using CM distances. X-axis coords of ths CMs. Y-axis coords of the Cms.
+    :returns: Score by comparing CM distances. Prediction using CM distances. X-axis coords of ths CMs.
+        Y-axis coords of the Cms.
     :rtype: list[float, list[int],list[float],list[float]]
     """
     x_p = list(x_points)
     y_p = list(y_points)
     tar = list(target)
     g_n = int(max(target) + 1)
-        
-    a = [0 for i in range(g_n)] # avg D1
-    b = [0 for i in range(g_n)] # avg D2
-    c = [0 for i in range(g_n)] # N for each group
-    d = [] # distances
-    p = [] # predictions
-    
+
+    a = [0 for _ in range(g_n)]  # avg D1
+    b = [0 for _ in range(g_n)]  # avg D2
+    c = [0 for _ in range(g_n)]  # N for each group
+    d = []  # distances
+    p = []  # predictions
+
     for i in range(len(tar)):
         for j in range(g_n):
             if tar[i] == j:
-                a[j] += x_p[i]  
+                a[j] += x_p[i]
                 b[j] += y_p[i]
                 c[j] += 1
-                
+
     for i in range(g_n):
-        a[i] = a[i]/c[i]
-        b[i] = b[i]/c[i]
-    
+        a[i] = a[i] / c[i]
+        b[i] = b[i] / c[i]
+
     correct = 0
     for i in range(len(tar)):
         temp1 = -1
         temp2 = 1000
         temp3 = []
-        
+
         for j in range(g_n):
-            temp3.append(((x_p[i]-a[j])**2 
-            +(y_p[i]-b[j])**2)**0.5)
-            
+            temp3.append(((x_p[i] - a[j]) ** 2
+                          + (y_p[i] - b[j]) ** 2) ** 0.5)
+
             if temp3[j] < temp2:
                 temp2 = temp3[j]
                 temp1 = j
-        
+
         p.append(temp1)
-        d.append(temp3) 
-        
+        d.append(temp3)
+
         if tar[i] == temp1:
-            correct += 1 
-    
-    score = round(correct/len(tar),2)
-    
-    return score,p,a,b
+            correct += 1
+
+    score = round(correct / len(tar), 2)
+
+    return score, p, a, b
 
 
-def mdscore(x_points,y_points,target):
+def mdscore(x_p, y_p, tar):
     """
     Calculates the distance between points and the median center (MD) of
     clusters and sets the prediction to the closest MD. This score may be
     higher or lower than the algorithm score.
 
-    :type x_points: list[float]
-    :param x_points: Coordinates of x-axis.
+    :type x_p: list[float]
+    :param x_p: Coordinates of x-axis.
 
-    :type y_points: list[float]
-    :param y_points: Coordinates of y-axis.
+    :type y_p: list[float]
+    :param y_p: Coordinates of y-axis.
 
-    :type target: list[int]
-    :param target: Targets of each point.
+    :type tar: list[int]
+    :param tar: Targets of each point.
 
-    :returns: Score by comparing MD distances. Prediction using MD distances. X-axis coords of ths CMs. Y-axis coords of the Cms.
+    :returns: Score by comparing MD distances. Prediction using MD distances. X-axis coords of ths CMs.
+        Y-axis coords of the Cms.
     :rtype: list[float, list[int],list[float],list[float]]
     """
-    x_p = list(x_points)
-    y_p = list(y_points)
-    g_n = max(target) + 1
-    tar = list(target)
-        
-    a = [0 for i in range(g_n)]
-    b = [0 for i in range(g_n)]
-    d = [] # distances
-    p = [] # predictions
-    
-    x_s = [[] for all in range(g_n)]
-    y_s = [[] for all in range(g_n)]
-    
+    x_p = list(x_p)
+    y_p = list(y_p)
+    g_n = max(tar) + 1
+    tar = list(tar)
+
+    a = [0 for _ in range(g_n)]
+    b = [0 for _ in range(g_n)]
+    d = []  # distances
+    p = []  # predictions
+
+    x_s = [[] for _ in range(g_n)]
+    y_s = [[] for _ in range(g_n)]
+
     for i in range(g_n):
         for j in range(len(tar)):
             if i == tar[j]:
@@ -855,7 +851,7 @@ def mdscore(x_points,y_points,target):
                 y_s[i].append(y_p[j])
 
     for i in range(g_n):
-        a[i] = np.median(x_s[i])  
+        a[i] = np.median(x_s[i])
         b[i] = np.median(y_s[i])
 
     correct = 0
@@ -864,22 +860,22 @@ def mdscore(x_points,y_points,target):
         temp2 = 1000
         temp3 = []
         for j in range(g_n):
-            temp3.append(((x_p[i]-a[j])**2 
-            +(y_p[i]-b[j])**2)**0.5)
-            
+            temp3.append(((x_p[i] - a[j]) ** 2
+                          + (y_p[i] - b[j]) ** 2) ** 0.5)
+
             if temp3[j] < temp2:
                 temp2 = temp3[j]
                 temp1 = j
-        
+
         p.append(temp1)
-        d.append(temp3) 
-        
+        d.append(temp3)
+
         if tar[i] == temp1:
-            correct += 1 
-    
-    score = round(correct/len(tar),2)
-    
-    return score,p,a,b
+            correct += 1
+
+    score = round(correct / len(tar), 2)
+
+    return score, p, a, b
 
 
 def normtopeak(data, x_axis, peak, shift=10):
@@ -905,53 +901,51 @@ def normtopeak(data, x_axis, peak, shift=10):
     x_axis = list(x_axis)
     peak = [int(peak)]
     shift = int(shift)
-    
+
     pos = cortopos(peak, x_axis)
-    section = y[pos[0]-shift:pos[0]+shift]   
-    highest = peakfinder(section,l=int(shift/2))
-    
+    section = y[pos[0] - shift:pos[0] + shift]
+    highest = peakfinder(section, l=int(shift / 2))
+
     c = 0
     for i in range(len(highest)):
         if highest[i] == 1:
             c = i
-            break    
-    
-    local_max = y[pos[0]-shift + c]
+            break
+
+    local_max = y[pos[0] - shift + c]
     y = y / local_max
     return y
-    
 
-def peakfinder(data, l=10):
+
+def peakfinder(data, look=10):
     """
     Find the location of the peaks in a single vector.
 
     :type data: list[float]
     :param data: Data to find a peak in.
 
-    :type l: int
-    :param l: Amount of position to each side to decide if it is a local maximum. The default is 10.
+    :type look: int
+    :param look: Amount of position to each side to decide if it is a local maximum. The default is 10.
 
     :returns: A vector of same length with 1 or 0 if it finds or not a peak in that position
     :rtype: list[int]
     """
-    y = list(data)
-    look = l #positions to each side to look max or min (2*look)
-    is_max = [0 for i in data]
-    is_min = [0 for i in data]
-    for i in range(look, len(y) - look): #start at "look" to avoid o.o.r
-        lower = 0 #negative if lower, positive if higher
+    y = copy.deepcopy(data)
+    is_max = [0 for _ in data]
+    is_min = [0 for _ in data]
+    for i in range(look, len(y) - look):  # start at "look" to avoid o.o.r
+        lower = 0  # negative if lower, positive if higher
         higher = 0
         for j in range(look):
-            if (y[i] <= y[i - look + j] and
-                y[i] <= y[i + j]): #search all range lower
-                lower += 1 #+1 if lower
+            if y[i] <= y[i - look + j] and y[i] <= y[i + j]:  # search all range lower
+                lower += 1  # +1 if lower
             elif (y[i] >= y[i - look + j] and
-                  y[i] >= y[i + j]): #search all range higher
-                higher += 1 #+1 if higher    
-        if higher == look: #if all higher then its local max
+                  y[i] >= y[i + j]):  # search all range higher
+                higher += 1  # +1 if higher
+        if higher == look:  # if all higher then its local max
             is_max[i] = 1
             is_min[i] = 0
-        elif lower == look: #if all lower then its local min 
+        elif lower == look:  # if all lower then its local min
             is_max[i] = 0
             is_min[i] = 1
         else:
@@ -960,8 +954,7 @@ def peakfinder(data, l=10):
     return is_max
 
 
-def confusionmatrix(tt, tp, gn, plot=False, groupnames=['','','',''], title='',
-                    colormap='Blues'):
+def confusionmatrix(tt, tp, groupnames=['', '', ''], plot=False, title='', cmm='Blues', fontsize=20):
     """
     Calculates and/or plots the confusion matrix for machine learning algorithm results.
 
@@ -971,23 +964,36 @@ def confusionmatrix(tt, tp, gn, plot=False, groupnames=['','','',''], title='',
     :type tp: list[float]
     :param tp: Predicted targets.
 
-    :type gn: int
-    :param gn: Number of classification groups.
+    :type plot: boolean
+    :param plot: If true, plots the matrix. The default is False
+
+    :type groupnames: list[str]
+    :param groupnames: Names, or lables , of the classification groups. Default is empty.
+
+    :type title: str
+    :param title: Name of the matrix. Default is empty.
+
+    :type cmm: str
+    :param cmm: Nam eof the colormap (matplotlib) to use for the plot. Default is Blue.
+
+    :type fontsize: int
+    :param fontsize: Font size for the labels. The default is 20.
 
     :returns: The confusion matrix
     :rtype: list[float]
     """
-    tt = list(tt) # real targets
-    tp = list(tp) # predicted targets
-    gn = int(gn) # group number    
+    tt = list(tt)
+    tp = list(tp)
     plot = bool(plot)
     group_names = list(groupnames)
-    title=str(title)
-    colormap = str(colormap)
-    
-    m = [[0 for i in range(gn)] for j in range(gn)]
-    p = [0 for i in range(gn)]
-    
+    gn = len(group_names)
+    title = str(title)
+    cmm = str(cmm)
+    fontsize = int(fontsize)
+
+    m = [[0 for _ in range(gn)] for _ in range(gn)]
+    p = [0 for _ in range(gn)]
+
     for i in range(len(p)):
         for j in tt:
             if i == j:
@@ -997,27 +1003,26 @@ def confusionmatrix(tt, tp, gn, plot=False, groupnames=['','','',''], title='',
             for col in range(len(p)):
                 if tp[i] == col and tt[i] == row:
                     m[row][col] += 1
-            
+
     for i in range(len(m)):
         m[i] = np.array(m[i]) / p[i]
-        
+
     if plot:
-        fig = plt.figure(tight_layout=True,figsize=(6, 7.5))
-        plt.rc('font', size=20)
-        legend_font = 20
+        fig = plt.figure(tight_layout=True, figsize=(6, 7.5))
+        plt.rc('font', size=fontsize)
         ax = fig.add_subplot()
-        im = ax.imshow(m, cmap=colormap)
+        ax.imshow(m, cmap=cmm)
         ax.set_title(title)
         ax.set_xticks(np.arange(len(group_names)))
         ax.set_yticks(np.arange(len(group_names)))
         ax.set_xticklabels(group_names)
         ax.set_yticklabels(group_names)
-        plt.setp(ax.get_xticklabels(), rotation=45, ha="right",rotation_mode="anchor")
-        for i in range(len(group_names)):
-            for j in range(len(group_names)):
-                text = ax.text(j, i, round(m[i][j],2),
-                                ha='center', va='center', color='black')
-        
+        plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+
+        for i in range(gn):
+            for j in range(gn):
+                ax.text(j, i, round(m[i][j], 2), ha='center', va='center', color='black')
+
     return m
 
 
@@ -1032,11 +1037,11 @@ def avg(data):
     :rtype: list[float]
     """
     data = list(data)
-    avg_data = np.array([0 for i in range(len(data[0]))])
+    avg_data = np.array([0 for _ in range(len(data[0]))])
     for i in data:
         avg_data = avg_data + i
     avg_data = avg_data / len(data)
-    return avg_data 
+    return avg_data
 
 
 def sdev(data):
@@ -1049,18 +1054,18 @@ def sdev(data):
     :returns: Standard deviation curve
     :rtype: list[(]float]
     """
-    curve_std = [] # stdev for each step    
+    curve_std = []  # stdev for each step
     data = list(data)
     for i in range(len(data[0])):
         temp = []
         for j in range(len(data)):
             temp.append(data[j][i])
-        curve_std.append(sta.stdev(temp)) #stdev for each step   
+        curve_std.append(sta.stdev(temp))  # stdev for each step
     curve_std = np.array(curve_std)
     return curve_std
 
 
-def peakfit(data, ax, pos, look=20, shift=5, wid = 5):
+def peakfit(data, ax, pos, look=20, shift=5, wid=5.0):
     """
     Feats peak as an optimization problem.
 
@@ -1079,6 +1084,9 @@ def peakfit(data, ax, pos, look=20, shift=5, wid = 5):
     :type shift: int
     :param shift: Possible shift of the peak. The default is 5.
 
+    :type wid: float
+    :param wid: Initial width of fit. The default is 5.
+
     :returns: Fitted curve.
     :rtype: list[float]
     """
@@ -1088,39 +1096,39 @@ def peakfit(data, ax, pos, look=20, shift=5, wid = 5):
     look = int(look)
     s = int(shift)
     pos = int(pos)
-    amp = max(y)/2
-    wid = wid
-    
-    def objective(x): 
+    amp = max(y) / 2
+    wid = float(wid)
+
+    def objective(x):
         fit = []
         error = 0
-        for j in range(len(ax)): # for all the points
-            fit.append(x[0]*x[1]**2/((ax[j]-ax[pos])**2+x[1]**2))
-        for j in range(pos - look, pos + look): # error between +-look of the peak position
-            error += (fit[j]-y[j])**2 # total error                 
+        for i in range(len(ax)):  # for all the points
+            fit.append(x[0] * x[1] ** 2 / ((ax[i] - ax[pos]) ** 2 + x[1] ** 2))
+        for j in range(pos - look, pos + look):  # error between +-look of the peak position
+            error += (fit[j] - y[j]) ** 2  # total error
         return error
-        
+
     def constraint1(x):
-       return 0
-    
-    for i in range(pos-s,pos+s):
-        if y[i] > y[pos]:
-            pos = i
-    
-    x0 = np.array([amp,wid]) # master vector to optimize, initial values
-    bnds = [[0,max(y)],[1,1000]]
+        return 0
+
+    for k in range(pos - s, pos + s):
+        if y[k] > y[pos]:
+            pos = k
+
+    x0 = np.array([amp, wid])  # master vector to optimize, initial values
+    bnds = [[0, max(y)], [1, 1000]]
     con1 = {'type': 'ineq', 'fun': constraint1}
     cons = ([con1])
-    solution = minimize(objective,x0,method='SLSQP',bounds=bnds,constraints=cons)
+    solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
     x = solution.x
-    
+
     fit = []
-    for j in range(len(ax)): # for all the points
-            fit.append(x[0]*x[1]**2/((ax[j]-ax[int(pos)])**2+x[1]**2))
-    return fit        
+    for l in range(len(ax)):  # for all the points
+        fit.append(x[0] * x[1] ** 2 / ((ax[l] - ax[int(pos)]) ** 2 + x[1] ** 2))
+    return fit
 
 
-def decbound(xx,yy,xlims,ylims,divs=0.01):
+def decbound(xx, yy, xlims, ylims, divs=0.01):
     """
     Calculates the Decision Boundaries.
 
@@ -1142,38 +1150,38 @@ def decbound(xx,yy,xlims,ylims,divs=0.01):
     :returns: The decision boundaries.
     :rtype: list[float]
     """
-    cmx = list(xx) # centroids
+    cmx = list(xx)  # centroids
     cmy = list(yy)
-    divs = float(divs) # step
-    map_x = list(np.array(xlims)/divs) # mapping limits
-    map_y = list(np.array(ylims)/divs)
-        
-    x_divs = int((map_x[1]-map_x[0])) # mapping combining 'divs' & 'lims'
-    y_divs = int((map_y[1]-map_y[0]))
+    divs = float(divs)  # step
+    map_x = list(np.array(xlims) / divs)  # mapping limits
+    map_y = list(np.array(ylims) / divs)
 
-    x_cords = [divs*i for i in range(int(min(map_x)),int(max(map_x)))] # coordinates
-    y_cords = [divs*i for i in range(int(min(map_y)),int(max(map_y)))]
-       
-    pmap = [[0 for i in range(x_divs)] for j in range(y_divs)] # matrix
-    
+    x_divs = int((map_x[1] - map_x[0]))  # mapping combining 'divs' & 'lims'
+    y_divs = int((map_y[1] - map_y[0]))
+
+    x_cords = [divs * i for i in range(int(min(map_x)), int(max(map_x)))]  # coordinates
+    y_cords = [divs * i for i in range(int(min(map_y)), int(max(map_y)))]
+
+    pmap = [[0 for _ in range(x_divs)] for _ in range(y_divs)]  # matrix
+
     for i in range(len(x_cords)):
         for j in range(len(y_cords)):
             t1 = 9999999999999999999999999
-            #grad = [] #####
+            # grad = [] #####
             for k in range(len(cmx)):
-                d = (cmx[k]-x_cords[i])**2 + (cmy[k]-y_cords[j])**2
-                #grad.append(d) ####
+                d = (cmx[k] - x_cords[i]) ** 2 + (cmy[k] - y_cords[j]) ** 2
+                # grad.append(d) ####
                 if d < t1:
                     t1 = d
                     pmap[j][i] = k
-            #grad = np.array(grad)/sum(grad) #####
-            #pmap[j][i] = 0 ####
-            #for k in range(len(grad)): ####
+            # grad = np.array(grad)/sum(grad) #####
+            # pmap[j][i] = 0 ####
+            # for k in range(len(grad)): ####
             #    pmap[j][i] += len(grad) - (k+1)*grad[k] ###
     return pmap
 
 
-def regression(target, variable, cov=0, exp=0):
+def regression(target, variable, cov=0):
     """
     Performs an N dimensional regression.
 
@@ -1186,51 +1194,47 @@ def regression(target, variable, cov=0, exp=0):
     :type cov: int
     :param cov: If 1 is regression with covariance, like spearman. The default is 0.
 
-    :type exp: int
-    :param exp: For exponent (non linear) regressions. Not working yet. The default is 0.
-
     :returns: Prediction of the fitting and the Fitting parameters.
     :rtype: list[list[float],list[float]]
     """
     target = list(target)
     master = list(variable)
     cov = int(cov)
-    # exp = int(exp) # for non-linear fittings in the future
-    
+
     if cov == 1:
-        master.append(target) # array of arrays
+        master.append(target)  # array of arrays
         print(len(master))
-        pos = [i for i in range(len(master[0]))] # ascending values
-        df = pd.DataFrame(data=master[0], columns=['0']) # 1st col is 1st var
-        for i in range(len(master)): # for all variables and target
-            df[str(2*i)] = master[i] # insert into dataframe
-            df = df.sort_values(by=[str(2*i)]) # sort ascending
-            df[str(1+2*i)] = pos # translate to position
-            df = df.sort_index() # reorder to maintain original position
-    
-        master = [df[str(2*i+1)] for i in range(int(len(df.columns)/2-1))]
-        target = df[str(len(df.columns)-1)]
-        
-    A = [] # fit function parameter
-    for i in range(len(master[0])): # for all the data points
-        v = [1 for i in range(len(master)+1)]
+        pos = [i for i in range(len(master[0]))]  # ascending values
+        df = pd.DataFrame(data=master[0], columns=['0'])  # 1st col is 1st var
+        for i in range(len(master)):  # for all variables and target
+            df[str(2 * i)] = master[i]  # insert into dataframe
+            df = df.sort_values(by=[str(2 * i)])  # sort ascending
+            df[str(1 + 2 * i)] = pos  # translate to position
+            df = df.sort_index()  # reorder to maintain original position
+
+        master = [df[str(2 * i + 1)] for i in range(int(len(df.columns) / 2 - 1))]
+        target = df[str(len(df.columns) - 1)]
+
+    A = []  # fit function parameter
+    for i in range(len(master[0])):  # for all the data points
+        v = [1 for i in range(len(master) + 1)]
         for j in range(len(master)):
             v[j] = master[j][i]
-        A.append(v) # A value
-    
-    b = np.matrix(target).T # transpose matrix
+        A.append(v)  # A value
+
+    b = np.matrix(target).T  # transpose matrix
     A = np.matrix(A)
-    fit = (A.T * A).I * A.T * b # evaluate fir
+    fit = (A.T * A).I * A.T * b  # evaluate fir
 
     prediction = []
     for i in range(len(master[0])):
         p = 0
         for j in range(len(master)):
-            p += master[j][i]*fit[j]
-        p += fit[len(fit)-1]
+            p += master[j][i] * fit[j]
+        p += fit[len(fit) - 1]
         prediction.append(float(p))
 
-    return prediction,fit
+    return prediction, fit
 
 
 def decdensity(lims, x_points, y_points, groups, divs=0.5):
@@ -1255,44 +1259,47 @@ def decdensity(lims, x_points, y_points, groups, divs=0.5):
     :returns: The density decision map.
     :rtype: list[float]
     """
-    divs = float(divs) # resolution, step
-    
-    map_x = list(np.array(lims[:2])/divs) # mapping limits
-    map_y = list(np.array(lims[2:])/divs)
-    
-    x_p = list(x_points) # points coordinates
-    y_p = list(y_points) 
-    
-    groups = list(groups) # target (group) list
-    n_groups = int(max(groups)+1) # number of groups
-        
-    x_divs = int((map_x[1]-map_x[0])) # divisons for mapping
-    y_divs = int((map_y[1]-map_y[0]))
-    
-    x_cords = [divs*i for i in range(int(min(map_x)),int(max(map_x)))] # coordinates
-    y_cords = [divs*i for i in range(int(min(map_y)),int(max(map_y)))]
-               
-    master = [] # to store the maps for each group
-    
+    divs = float(divs)  # resolution, step
+
+    map_x = list(np.array(lims[:2]) / divs)  # mapping limits
+    map_y = list(np.array(lims[2:]) / divs)
+
+    x_p = list(x_points)  # points coordinates
+    y_p = list(y_points)
+
+    groups = list(groups)  # target (group) list
+    n_groups = int(max(groups) + 1)  # number of groups
+
+    x_divs = int((map_x[1] - map_x[0]))  # divisons for mapping
+    y_divs = int((map_y[1] - map_y[0]))
+
+    x_cords = [divs * i for i in range(int(min(map_x)), int(max(map_x)))]  # coordinates
+    y_cords = [divs * i for i in range(int(min(map_y)), int(max(map_y)))]
+
+    master = []  # to store the maps for each group
+
     for l in range(n_groups):
-        pmap = [[0 for i in range(x_divs)] for j in range(y_divs)] # individual matrices
-        for i in range(len(x_cords)-1):
-            for j in range(len(y_cords)-1):
+        pmap = [[0 for _ in range(x_divs)] for _ in range(y_divs)]  # individual matrices
+        for i in range(len(x_cords) - 1):
+            for j in range(len(y_cords) - 1):
                 count = 0
                 for k in range(len(x_p)):
-                    if (x_cords[i] < x_p[k] and x_p[k] < x_cords[i+1] and
-                        y_cords[j] < y_p[k] and y_p[k] < y_cords[j+1] and
-                        groups[k] == l):
+                    # (x_cords[i] < x_p[k] and x_p[k] < x_cords[i + 1] and
+                    # y_cords[j] < y_p[k] and y_p[k] < y_cords[j + 1] and
+                    # groups[k] == l)
+                    if (x_cords[i] < x_p[k] < x_cords[i+1] and
+                            y_cords[j] < y_p[k] < y_cords[j+1] and
+                            groups[k] == l):
                         count += 1
-                pmap[j][i] = count  
-    
-        maximum = max(np.array(pmap).flatten())       
-        pmap = np.array(pmap)/maximum
-        master.append(pmap) 
-    return master        
+                pmap[j][i] = count
+
+        maximum = max(np.array(pmap).flatten())
+        pmap = np.array(pmap) / maximum
+        master.append(pmap)
+    return master
 
 
-def colormap(c,name='my_name',n=100):
+def colormap(colors, name='my_name', n=100):
     """
     Just to simplify a bit the creation of colormaps.
 
@@ -1308,9 +1315,7 @@ def colormap(c,name='my_name',n=100):
     :returns: Colormap in Matplotlib format.
     :rtype: cmap
     """
-    colors = list(c)  # R -> G -> B
-    cmap_name = str(name)
-    cmap = LinearSegmentedColormap.from_list(cmap_name, colors, N=n)
+    cmap = LinearSegmentedColormap.from_list(name, colors, N=n)
     return cmap
 
 
@@ -1325,17 +1330,17 @@ def isaxis(data):
     :rtype: bool
     """
     features = list(data)
-    
-    is_axis = True # there is axis by default
-    x_axis = features[0] # axis should be the first
-    for i in range(len(x_axis)-1): # check all the vector
-        if x_axis[i] > x_axis[i+1]:
+
+    is_axis = True  # there is axis by default
+    x_axis = features[0]  # axis should be the first
+    for i in range(len(x_axis) - 1):  # check all the vector
+        if x_axis[i] > x_axis[i + 1]:
             is_axis = False
-            break  
+            break
     return is_axis
 
 
-def trim(data,start = 0,finish = 0):
+def trim(data, start=0, finish=0):
     """
     Deletes columns in a list from start to finish.
 
@@ -1352,16 +1357,14 @@ def trim(data,start = 0,finish = 0):
     :rtype: list[]
     """
     data = list(data)
-    s = int(start)
-    f = int(finish)
-    
-    if f == 0 or f > len(data):
-        f = len(data)
-    
-    t = f-s
-    
+
+    if finish == 0 or finish > len(data):
+        finish = len(data)
+
+    t = finish - start
+
     for i in range(t):
-        data = np.delete(data, s, 1)
+        data = np.delete(data, start, 1)
     return data
 
 
@@ -1380,36 +1383,34 @@ def shuffle(arrays, delratio=0):
     """
     all_list = list(arrays)
     delratio = float(delratio)
-    
-    features = all_list[0]
-    for i in range(1,len(all_list)):
-        features = np.c_[features,all_list[i]]
 
-    np.random.shuffle(features) # shuffle data before training the ML
- 
-    ###
-    if delratio > 0: # to random delete an amount of data
+    features = all_list[0]
+    for i in range(1, len(all_list)):
+        features = np.c_[features, all_list[i]]
+
+    np.random.shuffle(features)  # shuffle data before training the ML
+
+    if delratio > 0:  # to random delete an amount of data
         if delratio >= 1:
             delratio = 0.99
-            
-        delnum = int(math.floor(delratio*len(features))) # amount to delete
-        
+
+        delnum = int(math.floor(delratio * len(features)))  # amount to delete
+
         for i in range(delnum):
-            row = random.randrange(0,len(features)) # row to delete
-            features = np.delete(features,row , 0)  
-    ###
-    
-    new_list = [[] for all in all_list]
+            row = random.randrange(0, len(features))  # row to delete
+            features = np.delete(features, row, 0)
+
+    new_list = [[] for _ in all_list]
     lengths = []
 
     for i in range(len(all_list)):
-        if len(np.array(all_list[i]).shape) >= 2: # are lists are 2d
-            lengths.append(np.array(all_list[i]).shape[1]) # save the length
+        if len(np.array(all_list[i]).shape) >= 2:  # are lists are 2d
+            lengths.append(np.array(all_list[i]).shape[1])  # save the length
         else:
-            lengths.append(1) # otherwise is only 1 number
-    
+            lengths.append(1)  # otherwise is only 1 number
+
     for i in range(len(all_list)):
-        for j in range(len(features)): #all_list[0]
+        for j in range(len(features)):  # all_list[0]
             if i == 0:
                 new_list[i].append(features[j][0:lengths[i]])
             else:
@@ -1429,12 +1430,12 @@ def mergedata(data):
     :returns: List with the merged data.
     :rtype: list[float]
     """
-    data = list(data) # list of lists
-    master = [[] for all in data[0]]
+    data = list(data)  # list of lists
+    master = [[] for _ in data[0]]
     for i in range(len(data[0])):
         for j in range(len(data)):
             master[i].extend(data[j][i])
-    return master        
+    return master
 
 
 def logo(lay=90, leng=100, a=1, b=0.8, r1=80, r2=120, lw=2):
@@ -1462,25 +1463,25 @@ def logo(lay=90, leng=100, a=1, b=0.8, r1=80, r2=120, lw=2):
     :type lw: int
     :param lw: Line width. The default is 2.
     """
-    x = [[1 for i in range(leng)] for j in range(lay)]
-    
-    def xl(amp,wid,p):
-        return [(amp*wid**2/((i-p)**2+wid**2))*random.randint(99,101)/100 for i in range(100)]
-    
+    x = [[1 for _ in range(leng)] for _ in range(lay)]
+
+    def xl(amp, wid, p):
+        return [(amp * wid ** 2 / ((i - p) ** 2 + wid ** 2)) * random.randint(99, 101) / 100 for _ in range(100)]
+
     for i in range(len(x)):
-        wid = 0.0000002*(i**4)-0.0002*(i**3)+0.0178*(i**2)-0.0631*i+4.7259
-        pos = 0.000001*(i**4)-0.0004*(i**3)+0.046*(i**2)-1.8261*i+59.41
-        amp = wid*(a)
-        x[i] = xl(amp,wid*b,pos)
-    
+        wid = 0.0000002 * (i ** 4) - 0.0002 * (i ** 3) + 0.0178 * (i ** 2) - 0.0631 * i + 4.7259
+        pos = 0.000001 * (i ** 4) - 0.0004 * (i ** 3) + 0.046 * (i ** 2) - 1.8261 * i + 59.41
+        amp = wid * (a)
+        x[i] = xl(amp, wid * b, pos)
+
     axis = [i for i in range(leng)]
-    
+
     plt.figure(figsize=(10, 14))
     for i in range(len(x)):
-        r = [random.randint(r1,r2)/100 for i in range(leng)]
-        curve = np.array(x[i])+i+r
+        r = [random.randint(r1, r2) / 100 for i in range(leng)]
+        curve = np.array(x[i]) + i + r
         plt.plot(curve, color='black', lw=lw)
-        plt.fill_between(axis,curve, color='white', alpha=1)
+        plt.fill_between(axis, curve, color='white', alpha=1)
     plt.show()
 
 
@@ -1511,52 +1512,53 @@ def shiftref(data, peak_ref=520, mode=1, it=100, plot=True):
     mode = int(mode)
     it = int(it)
     plot = bool(plot)
-    
-    data_trans = [] # transition array
-    data_c = [] # curve (y values)
-    x_axis = [] # si x axis, later it will change 
-    fit = [] # fit curves(s), if selected
-    shift = [] # axis shift array
-    
-    for i in range(len(si_data)): # conditionning data
-        data_trans.append(np.transpose(si_data[i])) # transpose
-        x_axis.append(data_trans[i][0]) # separate axis
-        data_c.append(data_trans[i][1]) # separate curve values
-        
-    for i in range(len(data_c)): # depending on the mode chosen...    
+
+    data_trans = []  # transition array
+    data_c = []  # curve (y values)
+    x_axis = []  # si x axis, later it will change
+    fit = []  # fit curves(s), if selected
+    shift = []  # axis shift array
+
+    for i in range(len(si_data)):  # conditionning data
+        data_trans.append(np.transpose(si_data[i]))  # transpose
+        x_axis.append(data_trans[i][0])  # separate axis
+        data_c.append(data_trans[i][1])  # separate curve values
+
+    for i in range(len(data_c)):  # depending on the mode chosen...
         if mode == 1:
-            fit.append(lorentzian_fit(data_c[i], x_axis[i], 4, it)) # check my_functions for parameters
+            fit.append(lorentzian_fit(data_c[i], x_axis[i], 4, it))  # check my_functions for parameters
         if mode == 2:
             fit.append(gaussian_fit(data_c[i], x_axis[i], 4.4, it))
         if mode == 0:
             fit.append(data_c[i])
-    
-    for i in range(len(fit)): # look for the shift with max value (peak)
-        for j in range(len(fit[0])): # loop in all axis
-            if fit[i][j] == max(fit[i]): # if it is the max value,
-                shift.append(x_axis[i][j] - peak_ref) # calculate the diference
-    
-    temp = 0 # temporal variable
+
+    for i in range(len(fit)):  # look for the shift with max value (peak)
+        for j in range(len(fit[0])):  # loop in all axis
+            if fit[i][j] == max(fit[i]):  # if it is the max value,
+                shift.append(x_axis[i][j] - peak_ref)  # calculate the diference
+
+    temp = 0  # temporal variable
     for i in range(len(shift)):
-        temp = temp + shift[i] # make the average
-    
+        temp = temp + shift[i]  # make the average
+
     peakshift = -temp / len(shift)
-    
+
     if plot:
-        plt.figure() #figsize = (16,9)
+        plt.figure()  # figsize = (16,9)
         for i in range(len(data_c)):
-            plt.plot(x_axis[i], data_c[i], linewidth = 2, label='Original' + str(i))
-            plt.plot(x_axis[i], fit[i], linewidth = 2, label='Fit' + str(i), linestyle='--')
-        plt.axvline(x=peak_ref, ymin=0, ymax=max(data_c[0]), linewidth = 2, color = "red", label=peak_ref)
-        plt.axvline(x=peak_ref - peakshift, ymin=0, ymax=max(data_c[0]), linewidth = 2, color = "yellow", label="Meas. Max.")
+            plt.plot(x_axis[i], data_c[i], linewidth=2, label='Original' + str(i))
+            plt.plot(x_axis[i], fit[i], linewidth=2, label='Fit' + str(i), linestyle='--')
+        plt.axvline(x=peak_ref, ymin=0, ymax=max(data_c[0]), linewidth=2, color="red", label=peak_ref)
+        plt.axvline(x=peak_ref - peakshift, ymin=0, ymax=max(data_c[0]), linewidth=2, color="yellow",
+                    label="Meas. Max.")
         plt.gca().set_xlim(peak_ref - 15, peak_ref + 15)
-        #plt.gca().set_ylim(0, 2)
+        # plt.gca().set_ylim(0, 2)
         plt.legend(loc=0)
         plt.ylabel('a.u.')
         plt.xlabel('Shift (cm-1)')
         plt.show()
-        
-    return peakshift    
+
+    return peakshift
 
 
 def classify(data, gnumber=3, glimits=[]):
@@ -1579,65 +1581,65 @@ def classify(data, gnumber=3, glimits=[]):
     group_number = int(gnumber)
     group_limits = list(glimits)
     targets = list(data)
-    
+
     # df_targets['T'] is data from the file, ['NT'] the classification (0 to ...)
-    df_targets = pd.DataFrame(data = targets, columns =['T'])
+    df_targets = pd.DataFrame(data=targets, columns=['T'])
     group_names = []
-    class_targets = [] # ['NT']
-    
+    class_targets = []  # ['NT']
+
     # if I set the number of groups
     if group_number > 0:
-        group_limits = [[0,0] for i in range(group_number)]
+        group_limits = [[0, 0] for _ in range(group_number)]
         df_targets.sort_values(by='T', inplace=True)
-        group_size = math.floor(len(targets)/group_number)
-        left_over = len(targets) - group_size * group_number 
+        group_size = math.floor(len(targets) / group_number)
+        left_over = len(targets) - group_size * group_number
         g_s = []
         for i in range(group_number):
-            g_s.append(group_size + math.floor((i+1)/(group_number))*left_over)
+            g_s.append(group_size + math.floor((i + 1) / group_number) * left_over)
         for i in range(len(g_s)):
             for j in range(g_s[i]):
-                class_targets.append(i)    
+                class_targets.append(i)
         df_targets['NT'] = class_targets
         temp = 0
-        for i in range(group_number):    
+        for i in range(group_number):
             if i == 0:
-                group_limits[i][0] = df_targets['T'].iloc[0] 
+                group_limits[i][0] = df_targets['T'].iloc[0]
             else:
                 group_limits[i][0] = df_targets['T'].iloc[temp]
-            if i == group_number - 1:    
+            if i == group_number - 1:
                 group_limits[i][1] = df_targets['T'].iloc[df_targets['T'].size - 1]
                 group_names.append(str(group_limits[i][0]) + ' < ')
             else:
                 group_limits[i][1] = df_targets['T'].iloc[int(temp + g_s[i])]
                 group_names.append(str(group_limits[i][0]) + ' - ' + str(group_limits[i][1]))
-            temp = temp + g_s[i] 
-        df_targets.sort_index(inplace=True)         
-    
-    # if I set the limits
+            temp = temp + g_s[i]
+        df_targets.sort_index(inplace=True)
+
+        # if I set the limits
     if len(group_limits) >= 1 and group_number <= 1:
-        class_targets = [-1 for i in range(len(targets))]
-        
-        for i in range(0,len(group_limits)):
+        class_targets = [-1 for _ in range(len(targets))]
+
+        for i in range(0, len(group_limits)):
             for j in range(len(targets)):
-                
+
                 if targets[j] < group_limits[0]:
                     class_targets[j] = 0
-                    
-                if targets[j] >= group_limits[len(group_limits)-1]:
+
+                if targets[j] >= group_limits[len(group_limits) - 1]:
                     class_targets[j] = len(group_limits)
-                
-                elif targets[j] >= group_limits[i] and targets[j] < group_limits[i + 1]:
+
+                elif targets[j] >= group_limits[i] and targets[j] < group_limits[i+1]:
                     class_targets[j] = i + 1
-                    
+
         group_names.append(' < ' + str(group_limits[0]))
-        for i in range(0,len(group_limits) - 1):
-            group_names.append(str(group_limits[i]) + ' - ' + str(group_limits[i + 1])) 
-        group_names.append(str(max(group_limits)) + ' =< ')                  
-        
-    return class_targets,group_names
+        for i in range(0, len(group_limits) - 1):
+            group_names.append(str(group_limits[i]) + ' - ' + str(group_limits[i + 1]))
+        group_names.append(str(max(group_limits)) + ' =< ')
+
+    return class_targets, group_names
 
 
-def subtractref(data, ref, alpha=0.9, sample=0, plot=True, plot_lim=[50, 200], mcr=False):
+def subtractref(data, ref, alpha=0.9, sample=0, plot=True, plot_lim=[50, 200]):
     """
     Subtracts a reference spectra (i.e.: air) from the measurements.
 
@@ -1659,44 +1661,41 @@ def subtractref(data, ref, alpha=0.9, sample=0, plot=True, plot_lim=[50, 200], m
     :type plot_lim: list[int]
     :param plot_lim: Limits of the plot.
 
-    :type mcr: bool
-    :param mcr: Use MCR (self calculation), not available yet. The default is False.
-
     :returns: Data with the subtracted reference.
     :rtype: list`[float]
     """
     data = list(data)
     air = list(ref)
-    sample = int(sample) # spectrum chosen to work with. 0 is the first
-    alpha = float(alpha) # multiplication factor to delete the air spectrum on the sample
-    plot_lim = list(plot_lim) # range of the plot you want to see
+    sample = int(sample)  # spectrum chosen to work with. 0 is the first
+    alpha = float(alpha)  # multiplication factor to delete the air spectrum on the sample
+    plot_lim = list(plot_lim)  # range of the plot you want to see
 
-    x_axis = data[0] # x axis is first row
-    data = np.delete(data, 0, 0) # delete x_axis from data
+    x_axis = data[0]  # x axis is first row
+    data = np.delete(data, 0, 0)  # delete x_axis from data
     data = list(data)
-    
-    if len(air[0]) <= 2: # if not in correct format
-        air = np.transpose(air) # transpose so it is in rows
-    
-    x_axis_air = air[0] # x axis is first row
-    air = air[1] # make it the same structure as x_axis
-    final = data[sample] - air * alpha # final result
-    
+
+    if len(air[0]) <= 2:  # if not in correct format
+        air = np.transpose(air)  # transpose so it is in rows
+
+    x_axis_air = air[0]  # x axis is first row
+    air = air[1]  # make it the same structure as x_axis
+    final = data[sample] - air * alpha  # final result
+
     if plot:
-        plt.plot(x_axis, data[sample], linewidth = 1, label='Original', linestyle='--')
-        plt.plot(x_axis_air, air, linewidth = 1, label='Air', linestyle='--')
-        plt.plot(x_axis, final, linewidth = 1, label='Final')
+        plt.plot(x_axis, data[sample], linewidth=1, label='Original', linestyle='--')
+        plt.plot(x_axis_air, air, linewidth=1, label='Air', linestyle='--')
+        plt.plot(x_axis, final, linewidth=1, label='Final')
         plt.gca().set_xlim(plot_lim[0], plot_lim[1])
         plt.legend(loc=0)
         plt.ylabel('a.u.')
         plt.xlabel('Shift (cm-1)')
-        plt.show() 
-    
+        plt.show()
+
     for i in range(len(data)):
         data[i] = data[i] - air * alpha
-    
-    data.insert(0,x_axis)
-    
+
+    data.insert(0, x_axis)
+
     return data
 
 
@@ -1733,38 +1732,38 @@ def pearson(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Pear
     titlefs = float(tfs)
     title = str(ti)
     n = len(data)
-    
+
     pears = []
-    cordsi = [] # coordinates, same order as labels
-    cordsj = [] # coordinates, same order as labels
-    for i in range(n): # for all sets
-        for j in range(n):# compare with all sets
+    cordsi = []  # coordinates, same order as labels
+    cordsj = []  # coordinates, same order as labels
+    for i in range(n):  # for all sets
+        for j in range(n):  # compare with all sets
             x = data[i]
             y = data[j]
-            pears.append(stats.pearsonr(x,y)[0])
-            
+            pears.append(stats.pearsonr(x, y)[0])
+
             cordsi.append(int(i))
             cordsj.append(int(j))
-    
-    merged_pears = np.c_[ pears, cordsi, cordsj ] # merge to sort together 
-    merged_pears = sorted(merged_pears,key=lambda l:l[0], reverse=True)     
-    
-    for i in range(n): # delete the first n (the obvious 1s)
+
+    merged_pears = np.c_[pears, cordsi, cordsj]  # merge to sort together
+    merged_pears = sorted(merged_pears, key=lambda l: l[0], reverse=True)
+
+    for i in range(n):  # delete the first n (the obvious 1s)
         merged_pears = np.delete(merged_pears, 0, 0)
-    
-    for i in range(int((n*n-n)/2)): # delete the repeated half
+
+    for i in range(int((n * n - n) / 2)):  # delete the repeated half
         merged_pears = np.delete(merged_pears, i, 0)
-    
-    pears = np.reshape(pears,(n,n)) #[pearson coeff, p-value]
-    
-    gs = gridspec.GridSpec(2, 2, height_ratios=[1,1])
+
+    pears = np.reshape(pears, (n, n))  # [pearson coeff, p-value]
+
+    gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
     plt.rc('font', size=fonsize)
-    fig = plt.figure(tight_layout=True,figsize=figsize)
-    
-    y = [i+0.5 for i  in range(n)]
+    fig = plt.figure(tight_layout=True, figsize=figsize)
+
+    y = [i + 0.5 for i in range(n)]
     ticks = mpl.ticker.FixedLocator(y)
     formatt = mpl.ticker.FixedFormatter(labels)
-    
+
     ax = fig.add_subplot(gs[0, 0])
     pcm = ax.pcolormesh(pears, cmap=cm, vmin=-1, vmax=1)
     fig.colorbar(pcm, ax=ax)
@@ -1773,9 +1772,9 @@ def pearson(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Pear
     ax.yaxis.set_major_locator(ticks)
     ax.xaxis.set_major_formatter(formatt)
     ax.yaxis.set_major_formatter(formatt)
-    plt.xticks(rotation = '90')
+    plt.xticks(rotation='90')
     plt.show()
-    
+
 
 def spearman(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Spearman"):
     """
@@ -1810,38 +1809,38 @@ def spearman(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Spe
     titlefs = float(tfs)
     title = str(ti)
     n = len(data)
-    
-    spear = [] # spearman
-    cordsi = [] # coordinates, same order as labels
-    cordsj = [] # coordinates, same order as labels
+
+    spear = []  # spearman
+    cordsi = []  # coordinates, same order as labels
+    cordsj = []  # coordinates, same order as labels
     for i in range(n):
-        for j in range(n):# compare with all sets
+        for j in range(n):  # compare with all sets
             x = data[i]
             y = data[j]
-            spear.append(stats.spearmanr(x,y)[0])
-            
+            spear.append(stats.spearmanr(x, y)[0])
+
             cordsi.append(int(i))
             cordsj.append(int(j))
-    
-    merged_spear = np.c_[ spear, cordsi, cordsj ] # merge to sort together    
-    merged_spear = sorted(merged_spear,key=lambda l:l[0], reverse=True) 
-    
-    for i in range(n): # delete the first n (the obvious 1s)
-        merged_spear = np.delete(merged_spear, 0, 0)
-    
-    for i in range(int((n*n-n)/2)): # delete the repeated half
-        merged_spear = np.delete(merged_spear, i, 0)
-    
-    spear = np.reshape(spear,(n,n)) #[rho spearman, p-value]
 
-    gs = gridspec.GridSpec(2, 2, height_ratios=[1,1])
+    merged_spear = np.c_[spear, cordsi, cordsj]  # merge to sort together
+    merged_spear = sorted(merged_spear, key=lambda l: l[0], reverse=True)
+
+    for i in range(n):  # delete the first n (the obvious 1s)
+        merged_spear = np.delete(merged_spear, 0, 0)
+
+    for i in range(int((n * n - n) / 2)):  # delete the repeated half
+        merged_spear = np.delete(merged_spear, i, 0)
+
+    spear = np.reshape(spear, (n, n))  # [rho spearman, p-value]
+
+    gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
     plt.rc('font', size=fonsize)
-    fig = plt.figure(tight_layout=True,figsize=figsize)
-    
-    y = [i+0.5 for i  in range(n)]
+    fig = plt.figure(tight_layout=True, figsize=figsize)
+
+    y = [i + 0.5 for i in range(n)]
     ticks = mpl.ticker.FixedLocator(y)
     formatt = mpl.ticker.FixedFormatter(labels)
-    
+
     ax = fig.add_subplot(gs[0, 0])
     pcm = ax.pcolormesh(spear, cmap=cm, vmin=-1, vmax=1)
     fig.colorbar(pcm, ax=ax)
@@ -1850,12 +1849,12 @@ def spearman(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Spe
     ax.yaxis.set_major_locator(ticks)
     ax.xaxis.set_major_formatter(formatt)
     ax.yaxis.set_major_formatter(formatt)
-    plt.xticks(rotation = '90')
+    plt.xticks(rotation='90')
     plt.show()
 
 
 def grau(data, labels, cm="seismic", fons=20, figs=(25, 15),
-             tfs=25, ti="Grau (Beta)", marker="s", marks=100):
+         tfs=25, ti="Grau (Beta)", marker="s", marks=100):
     """
     Performs Grau correlation matrix and plots it.
 
@@ -1886,86 +1885,82 @@ def grau(data, labels, cm="seismic", fons=20, figs=(25, 15),
     :type marks: int
     :param marks: DESCRIPTION. The default is 100.
     """
+
     data = list(np.transpose(data))
     labels = list(labels)
     cm = str(cm)
-    fonsize = float(fons) # plot font size
-    figsize = list(figs) # plot size
-    titlefs = float(tfs) # title font size
-    title = str(ti) # plot name
-    marker = str(marker) # market style
-    markersize = float(marks) # marker size
-    n = len(data)
-    
-    graus = evalgrau(data) # grau correlation (3d R2)
-    g1 = [graus[i][0] for i in range(len(graus))] # first dimeniosn values
-    g2 = [graus[i][1] for i in range(len(graus))] # second dimension values
-    g3 = [graus[i][2] for i in range(len(graus))] # third dimension values
-    mse = [graus[i][3] for i in range(len(graus))] # mse's list
-    g2_shift = list(g2) # copy v2 to displace the d2 values for plotting
-    t_c = [] # list of ticks per subplot
-    xtick_labels = [] # list for labels
-    c = 1 # number of different # in combs[i][0] (first column), starts with 1
-    
-    for i in range(len(graus) - 1): # for all combinatios
-        if graus[i][0] != graus[i + 1][0]: # if it is different
-            c += 1 # then it is a new one
-    
-    for i in range(c): # for all the different first positions
-        temp = 0 # temporal variable to count ticks
-        for j in range(len(graus) - 1): # check all the combinations
-            if graus[j][0] == i: # if it is the one we are looking for
-                if  graus[j][1] != graus[j + 1][1]: # if it changes, then new tick
-                    temp +=1 # add
-        if temp == 0: # if it doesnt count, is because there is only 1
-            t_c.append(1) # so append 1
-        elif temp == 1: # if only 1 is counted
-            t_c.append(2) # then add a 2
-        else: # otherwise, 
-            t_c.append(temp) # when it is done, append to the list    
-    
-    for i in range(len(t_c)): # for all the different #
-        for j in range(t_c[i] + 1): # for the number of different 2d
-            xtick_labels.append(j + i) # append the value +1
-    xtick_labels.append('') # append '' for the last label to be blank
-    
-    for i in range(len(g1)): # to shift the position for plotting
-        for j in range(1,len(t_c)): # for all the ticks in x axis
-            if g1[i] >= j: # if bigger than 0 (first)
-                g2_shift[i] += t_c[j-1] # shift (add) all the previous
-    
-    gs = gridspec.GridSpec(2, 2, height_ratios=[1,1]) # (rows, columns)
-    plt.rc('font', size=fonsize)
-    fig = plt.figure(tight_layout=True,figsize=figsize)
-    
-    y = [i+0.5 for i  in range(n)]
-    ticker = mpl.ticker.FixedLocator(y)
-    formatter = mpl.ticker.FixedFormatter(labels)
-    
+    fontsize = float(fons)  # plot font size
+    figsize = list(figs)  # plot size
+    titlefs = float(tfs)  # title font size
+    title = str(ti)  # plot name
+    marker = str(marker)  # market style
+    markersize = float(marks)  # marker size
+
+    graus = evalgrau(data)  # grau correlation (3d R2)
+    g1 = [graus[i][0] for i in range(len(graus))]  # first dimension values
+    g2 = [graus[i][1] for i in range(len(graus))]  # second dimension values
+    g3 = [graus[i][2] for i in range(len(graus))]  # third dimension values
+    mse = [graus[i][3] for i in range(len(graus))]  # mse's list
+    g2_shift = list(g2)  # copy v2 to displace the d2 values for plotting
+    t_c = []  # list of ticks per subplot
+    xtick_labels = []  # list for labels
+    c = 1  # number of different # in combs[i][0] (first column), starts with 1
+
+    for i in range(len(graus) - 1):  # for all combinations
+        if graus[i][0] != graus[i + 1][0]:  # if it is different
+            c += 1  # then it is a new one
+
+    for i in range(c):  # for all the different first positions
+        temp = 0  # temporal variable to count ticks
+        for j in range(len(graus) - 1):  # check all the combinations
+            if graus[j][0] == i:  # if it is the one we are looking for
+                if graus[j][1] != graus[j + 1][1]:  # if it changes, then new tick
+                    temp += 1  # add
+        if temp == 0:  # if it doesnt count, is because there is only 1
+            t_c.append(1)  # so append 1
+        elif temp == 1:  # if only 1 is counted
+            t_c.append(2)  # then add a 2
+        else:  # otherwise,
+            t_c.append(temp)  # when it is done, append to the list
+
+    for i in range(len(t_c)):  # for all the different #
+        for j in range(t_c[i] + 1):  # for the number of different 2d
+            xtick_labels.append(j + i)  # append the value +1
+    xtick_labels.append('')  # append '' for the last label to be blank
+
+    for i in range(len(g1)):  # to shift the position for plotting
+        for j in range(1, len(t_c)):  # for all the ticks in x axis
+            if g1[i] >= j:  # if bigger than 0 (first)
+                g2_shift[i] += t_c[j - 1]  # shift (add) all the previous
+
+    gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])  # (rows, columns)
+    plt.rc('font', size=fontsize)
+    fig = plt.figure(tight_layout=True, figsize=figsize)
+
     ax = fig.add_subplot(gs[0, 0])
     cm = plt.cm.get_cmap(cm)
     ax.set_title(title, fontsize=titlefs)
-    sc = ax.scatter(g2_shift,g3,alpha=1,edgecolors='none',
-                    c=mse,cmap=cm,s=markersize,marker=marker)
+    sc = ax.scatter(g2_shift, g3, alpha=1, edgecolors='none',
+                    c=mse, cmap=cm, s=markersize, marker=marker)
     plt.colorbar(sc)
-    y_ticks = [i for i in range(int(min(g3)),int(max(g3)) + 1)]
+    y_ticks = [i for i in range(int(min(g3)), int(max(g3)) + 1)]
     x_ticks = [i for i in range(int(max(g2_shift)) + 2)]
     ytick_labels = []
     for i in range(len(y_ticks)):
         ytick_labels.append(labels[y_ticks[i]])
-        
-    for i in range(len(xtick_labels)-1):
+
+    for i in range(len(xtick_labels) - 1):
         xtick_labels[i] = labels[xtick_labels[i]]
     ax.set_xticks(x_ticks)
     ax.set_xticklabels(xtick_labels, fontsize=9)
     ax.set_xlim(0, max(x_ticks))
     ax.get_xticklabels()[0].set_fontweight('bold')
-    plt.xticks(rotation = '90')
+    plt.xticks(rotation='90')
     ax.set_yticks(y_ticks)
     ax.set_ylim(min(y_ticks) - 0.5, max(y_ticks) + 0.5)
     ax.set_yticklabels(ytick_labels, fontsize=20)
     ax.grid(linestyle='--')
-    
+
     temp = 0
     for i in range(len(t_c)):
         temp += t_c[i] + 1
@@ -1973,47 +1968,111 @@ def grau(data, labels, cm="seismic", fons=20, figs=(25, 15),
         ax.get_xgridlines()[temp].set_color('black')
         ax.get_xgridlines()[temp].set_linewidth(1)
         ax.get_xticklabels()[temp].set_fontweight('bold')
-    
+
     plt.show()
+
 
 def moveavg(data, move):
     """
     Calculate the moving average of a single or multiple vectors.
 
+    :type data: list[float]
+    :param data: Data to calculate the moving average. Single or multiple vectors.
+
     :type move: int
     :param move: Average range to each side (total average = move + 1).
-
-    :type data: list[float]
-    :param data: Data to calculate the moving averge. Single or multiple vectors.
 
     :returns: Smoothed vector(s).
     :rtype: list[float]
     """
     move = int(move)
     b_data = copy.deepcopy(data)
-    
+
     dims = len(np.array(b_data).shape)
 
-    avg = [] # for smoothed data
-    
-    if dims >= 2:   
+    avg = []  # for smoothed data
+
+    if dims >= 2:
         data_len = len(b_data[0])
-    
-        for j in range(len(b_data)): # each measured point
+
+        for j in range(len(b_data)):  # each measured point
             temp = []
             for i in range(move, data_len - move):
-                temp.append(np.mean(b_data[j][i - move: i + move + 1]))        
+                temp.append(np.mean(b_data[j][i - move: i + move + 1]))
             for i in range(move):
                 temp.append(0)
-                temp.insert(0, 0)  
-            avg.append(temp)  
+                temp.insert(0, 0)
+            avg.append(temp)
     else:
-        data_len = len(b_data)      
-        
+        data_len = len(b_data)
+
         for i in range(move, data_len - move):
-            avg.append(np.mean(b_data[i - move: i + move + 1]))      
+            avg.append(np.mean(b_data[i - move: i + move + 1]))
         for i in range(move):
             avg.append(0)
-            avg.insert(0, 0)  
-                
+            avg.insert(0, 0)
+
     return avg
+
+
+def plot2dml(train, train_pred=[], test=0, test_pred=0, labels=[], title='', 
+             xax='x', yax='y', lfs=15, loc='best'):
+    """
+    Plots 2-dimensional results from LDA, PCA, NCA, or similar machine learning
+    algoruthms where the output has 2 features per sample.
+    
+    :type train: pandas frame
+    :param train: Results for the training set. Pandas frame with the 2 dimensions
+        and target columns.
+        
+    :type train_pred: list
+    :param train_pred: Prediction of the training set.
+        
+    :type test: pandas frame
+    :param test: Results for the test set. Pandas frame with the 2 dimensions
+        and target columns.
+        
+    :type test_pred: list
+    :param test_pred: Prediticon of the test set.
+        
+    :type labels: list
+    :param labels: NAmes for the classification groups, if any.
+        
+    :type title: str
+    :param title: Title of the plot.
+        
+    :type xax: str
+    :param xax: Name ox x-axis
+        
+    :type yax: str
+    :param yax: NAme of y-axis
+        
+    :type lfs: int
+    :param lfs: Legend font size. Default is 15.
+        
+    :type loc: str
+    :param loc: Location of legend. Default is best.
+        
+    :returns: Plot
+    """
+    marker = ['o','v','s','d','*','^','x','+','.']
+    color = ["blue","orange","green","yellow","lime","springgreen","mediumspringgreen","cyan","royalblue","red"]
+    
+    for i in range(len(train)):  
+        group = int(train['T'][i])
+        ec = 'none'
+        
+        if len(train_pred) > 1 :
+            if train_pred[i] != train['T'][i]:
+                ec = 'red'
+            
+        plt.scatter(train['D1'][i], train['D2'][i],
+                    alpha=0.7, s=50, linewidths=1,
+                    color=color[group], marker=marker[group],
+                    edgecolor=ec)
+    plt.xlabel(xax)
+    plt.ylabel(yax)
+    plt.title(title)
+    plt.legend(labels, loc=loc, prop={'size':lfs})
+    plt.show()
+    
