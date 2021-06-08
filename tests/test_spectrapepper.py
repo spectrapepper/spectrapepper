@@ -2,10 +2,8 @@
 
 """Tests for `spectrapepper` package."""
 
-
 import unittest
-
-from spectrapepper import spectrapepper
+#  import spectrapepper
 
 
 class TestSpectrapepper(unittest.TestCase):
