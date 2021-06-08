@@ -23,7 +23,6 @@ SpectraPepper
 * Free software: MIT license
 
 
-
 Introduction
 ============
 
@@ -32,6 +31,7 @@ through straightforward, simple, and intuitive code. This library contains funct
 methodologies, including data acquisition, pre-processing, processing, and analysis. In particular, advanced and high
 statistic methods are intended to facilitate, namely combinatorial analysis and machine learning, allowing also
 fast and automated traditional methods.
+
 
 Features
 --------
@@ -44,7 +44,6 @@ The following is a short list of some of the main procedures that **SpectraPeppe
 * Combinatorial analysis tools, including Spearman, Pearson, and n-dimensional correlation coefficients.
 * Tools for Machine Learning applications, such as data merging, randomization, and decision map.
 * Easy export of data to text files to use visualization software, such as Origin.
-
 
 
 Quickstart
