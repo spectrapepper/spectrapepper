@@ -954,7 +954,7 @@ def peakfinder(data, look=10):
     return is_max
 
 
-def confusionmatrix(tt, tp, gn, plot=False, groupnames=['', '', '', ''], title='', cmm='Blues', fontsize=20):
+def confusionmatrix(tt, tp, groupnames=['', '', ''], plot=False, title='', cmm='Blues', fontsize=20):
     """
     Calculates and/or plots the confusion matrix for machine learning algorithm results.
 
@@ -963,9 +963,6 @@ def confusionmatrix(tt, tp, gn, plot=False, groupnames=['', '', '', ''], title='
 
     :type tp: list[float]
     :param tp: Predicted targets.
-
-    :type gn: int
-    :param gn: Number of classification groups.
 
     :type plot: boolean
     :param plot: If true, plots the matrix. The default is False
@@ -985,11 +982,11 @@ def confusionmatrix(tt, tp, gn, plot=False, groupnames=['', '', '', ''], title='
     :returns: The confusion matrix
     :rtype: list[float]
     """
-    tt = list(tt)  # real targets
-    tp = list(tp)  # predicted targets
-    gn = int(gn)  # group number
+    tt = list(tt)
+    tp = list(tp)
     plot = bool(plot)
     group_names = list(groupnames)
+    gn = len(group_names)
     title = str(title)
     cmm = str(cmm)
     fontsize = int(fontsize)
@@ -1014,7 +1011,7 @@ def confusionmatrix(tt, tp, gn, plot=False, groupnames=['', '', '', ''], title='
         fig = plt.figure(tight_layout=True, figsize=(6, 7.5))
         plt.rc('font', size=fontsize)
         ax = fig.add_subplot()
-        im = ax.imshow(m, cmap=cmm)
+        ax.imshow(m, cmap=cmm)
         ax.set_title(title)
         ax.set_xticks(np.arange(len(group_names)))
         ax.set_yticks(np.arange(len(group_names)))
@@ -1022,9 +1019,8 @@ def confusionmatrix(tt, tp, gn, plot=False, groupnames=['', '', '', ''], title='
         ax.set_yticklabels(group_names)
         plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
 
-        for i in range(len(group_names)):
-            for j in range(len(group_names)):
-                # text = ax.text(j, i, round(m[i][j], 2), ha='center', va='center', color='black')
+        for i in range(gn):
+            for j in range(gn):
                 ax.text(j, i, round(m[i][j], 2), ha='center', va='center', color='black')
 
     return m
@@ -1303,7 +1299,7 @@ def decdensity(lims, x_points, y_points, groups, divs=0.5):
     return master
 
 
-def colormap(c, name='my_name', n=100):
+def colormap(colors, name='my_name', n=100):
     """
     Just to simplify a bit the creation of colormaps.
 
@@ -1319,9 +1315,7 @@ def colormap(c, name='my_name', n=100):
     :returns: Colormap in Matplotlib format.
     :rtype: cmap
     """
-    colors = list(c)  # R -> G -> B
-    cmap_name = str(name)
-    cmap = LinearSegmentedColormap.from_list(cmap_name, colors, N=n)
+    cmap = LinearSegmentedColormap.from_list(name, colors, N=n)
     return cmap
 
 
@@ -1363,16 +1357,14 @@ def trim(data, start=0, finish=0):
     :rtype: list[]
     """
     data = list(data)
-    s = int(start)
-    f = int(finish)
 
-    if f == 0 or f > len(data):
-        f = len(data)
+    if finish == 0 or finish > len(data):
+        finish = len(data)
 
-    t = f - s
+    t = finish - start
 
     for i in range(t):
-        data = np.delete(data, s, 1)
+        data = np.delete(data, start, 1)
     return data
 
 
@@ -1398,7 +1390,6 @@ def shuffle(arrays, delratio=0):
 
     np.random.shuffle(features)  # shuffle data before training the ML
 
-    ###
     if delratio > 0:  # to random delete an amount of data
         if delratio >= 1:
             delratio = 0.99
@@ -1408,7 +1399,6 @@ def shuffle(arrays, delratio=0):
         for i in range(delnum):
             row = random.randrange(0, len(features))  # row to delete
             features = np.delete(features, row, 0)
-            ###
 
     new_list = [[] for _ in all_list]
     lengths = []
@@ -1905,7 +1895,6 @@ def grau(data, labels, cm="seismic", fons=20, figs=(25, 15),
     title = str(ti)  # plot name
     marker = str(marker)  # market style
     markersize = float(marks)  # marker size
-    # n = len(data)
 
     graus = evalgrau(data)  # grau correlation (3d R2)
     g1 = [graus[i][0] for i in range(len(graus))]  # first dimension values
@@ -1947,8 +1936,6 @@ def grau(data, labels, cm="seismic", fons=20, figs=(25, 15),
     gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])  # (rows, columns)
     plt.rc('font', size=fontsize)
     fig = plt.figure(tight_layout=True, figsize=figsize)
-
-    # y = [i + 0.5 for i in range(n)]
 
     ax = fig.add_subplot(gs[0, 0])
     cm = plt.cm.get_cmap(cm)
@@ -2026,3 +2013,66 @@ def moveavg(data, move):
             avg.insert(0, 0)
 
     return avg
+
+
+def plot2dml(train, train_pred=[], test=0, test_pred=0, labels=[], title='', 
+             xax='x', yax='y', lfs=15, loc='best'):
+    """
+    Plots 2-dimensional results from LDA, PCA, NCA, or similar machine learning
+    algoruthms where the output has 2 features per sample.
+    
+    :type train: pandas frame
+    :param train: Results for the training set. Pandas frame with the 2 dimensions
+        and target columns.
+        
+    :type train_pred: list
+    :param train_pred: Prediction of the training set.
+        
+    :type test: pandas frame
+    :param test: Results for the test set. Pandas frame with the 2 dimensions
+        and target columns.
+        
+    :type test_pred: list
+    :param test_pred: Prediticon of the test set.
+        
+    :type labels: list
+    :param labels: NAmes for the classification groups, if any.
+        
+    :type title: str
+    :param title: Title of the plot.
+        
+    :type xax: str
+    :param xax: Name ox x-axis
+        
+    :type yax: str
+    :param yax: NAme of y-axis
+        
+    :type lfs: int
+    :param lfs: Legend font size. Default is 15.
+        
+    :type loc: str
+    :param loc: Location of legend. Default is best.
+        
+    :returns: Plot
+    """
+    marker = ['o','v','s','d','*','^','x','+','.']
+    color = ["blue","orange","green","yellow","lime","springgreen","mediumspringgreen","cyan","royalblue","red"]
+    
+    for i in range(len(train)):  
+        group = int(train['T'][i])
+        ec = 'none'
+        
+        if len(train_pred) > 1 :
+            if train_pred[i] != train['T'][i]:
+                ec = 'red'
+            
+        plt.scatter(train['D1'][i], train['D2'][i],
+                    alpha=0.7, s=50, linewidths=1,
+                    color=color[group], marker=marker[group],
+                    edgecolor=ec)
+    plt.xlabel(xax)
+    plt.ylabel(yax)
+    plt.title(title)
+    plt.legend(labels, loc=loc, prop={'size':lfs})
+    plt.show()
+    

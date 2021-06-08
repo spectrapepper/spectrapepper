@@ -53,7 +53,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/enricgrau/spectrapepper',
-    version='0.0.7',
+    version='0.0.8',
     zip_safe=False,
     package_data={
         "": ["*.txt"],

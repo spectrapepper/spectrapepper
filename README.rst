@@ -14,6 +14,9 @@ SpectraPepper
 .. image:: https://img.shields.io/lgtm/grade/python/g/enricgrau/spectrapepper.svg?logo=lgtm&logoWidth=18
         :target: https://lgtm.com/projects/g/enricgrau/spectrapepper/context:python
 
+.. image:: https://github.com/enricgrau/spectrapepper/workflows/docs/badge.svg
+        :target: https://enricgrau.github.io/spectrapepper
+
 **A Python package to simplify and accelerate analysis of spectroscopy data.**
 
 * GitHub repo: https://github.com/enricgrau/spectrapepper
