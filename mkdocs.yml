@@ -1,0 +1,49 @@
+
+
+site_name: spectrapepper
+
+site_url: https://enricgrau.github.io/spectrapepper
+
+repo_url: https://github.com/enricgrau/spectrapepper
+
+ theme produces error. It is because custom_dir:"docs/overrides" is not on the library. Docs work properly.
+ theme:
+    palette:
+        scheme: preference
+    name: material
+    icon:
+        repo: fontawesome/brands/github
+    features:
+        - navigation.instant
+        - search.highlight
+        # - navigation.expand
+        # - navigation.tabs
+    custom_dir: "docs"
+
+plugins:
+    - search
+    - mkdocstrings
+    - git-revision-date
+    - mkdocs-jupyter:
+          include_source: True
+          # execute: True
+
+markdown_extensions:
+    - attr_list
+    - pymdownx.superfences
+    - pymdownx.highlight:
+          linenums: true
+    - toc:
+          permalink: true
+
+# google_analytics:
+#     - UA-XXXXXXXXX-X
+#     - auto
+
+nav:
+    - Home: docs/index.rst
+    - Installation: docs/quickstart.rst
+    - Contributing: docs/contributions.rst
+    - Report Issues: https://github.com/enricgrau/spectrapepper/issues
+    - API Reference:
+          - spectrapepper module: docs/functions.rst
