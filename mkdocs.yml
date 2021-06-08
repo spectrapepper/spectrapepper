@@ -7,7 +7,7 @@ repo_url: https://github.com/enricgrau/spectrapepper
 theme:
     palette:
         scheme: preference
-    name: material
+    name: mkdocs
     icon:
         repo: fontawesome/brands/github
     features:
