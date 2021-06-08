@@ -24,7 +24,7 @@ plugins:
     - mkdocs-jupyter:
           include_source: True
           # execute: True
-          
+
 markdown_extensions:
     - attr_list
     - pymdownx.superfences
@@ -38,11 +38,9 @@ markdown_extensions:
 #     - auto
 
 nav:
-    - Home: index.md
-    - Installation: installation.md
-    - Usage: usage.md
-    - Contributing: contributing.md
-    - FAQ: faq.md
+    - Home: index.html
+    - Installation: quickstart.html
+    - Contributing: contributions.html
     - Report Issues: https://github.com/enricgrau/spectrapepper/issues
     - API Reference:
-          - spectrapepper module: spectrapepper.md
+          - spectrapepper module: functions.html
