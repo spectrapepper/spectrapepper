@@ -1,5 +1,0 @@
-Functions
----------
-
-.. automodule:: functions
-   :members:
