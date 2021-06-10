@@ -1,8 +1,5 @@
 """
-This main module that contains all the functions, since this package is
-function-based for simplicity. Keep in mind that some of this functions are
-only meant to be used inside this file, however they all might be useful in
-other code. asdasd
+This main module contains all the functions available in spectrapepper.
 """
 
 import math
@@ -304,7 +301,7 @@ def alsbaseline(data, lam=100000, p=0.001, niter=10):
     return y
 
 
-def bspbaseline(data, x_axis, points, avg=5):
+def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
     """
     Calcuates the baseline using b-spline. Find useful details and guidelines
     in https://stackoverflow.com/a/34807513/2898619.
@@ -316,32 +313,98 @@ def bspbaseline(data, x_axis, points, avg=5):
     :param x_axis: x axis of the data, to interpolate the baseline function.
 
     :type points: list[int]
-    :param points: positions in axis of points to calculate the bspine.
+    :param points: axis values of points to calculate the bspine.
 
     :type avg: int
     :param avg: points to each side to make average.
 
-    :type avg: bool
-    :param avg: if True, calculates and returns (data - baseline).
+    :type remove: True
+    :param remove: if True, calculates and returns (data - baseline).
+
+    :type plot: bool
+    :param plot: if True, calculates and returns (data - baseline).    
 
     :returns: The baseline.
     :rtype: list[float]
     """
-    data = list(data)
+    data = copy.deepcopy(data)
     x_axis = list(x_axis)
     x = list(points)
     avg = int(avg)
 
     y = []  # y values for the selected x
-    for i in range(len(points)):  # for all the selected points
-        temp = np.mean(data[points[i] - avg: points[i] + avg + 1])  # average
-        y.append(temp)  # append to y
-
-    for i in range(len(x)):
-        x[i] = x_axis[x[i]]  # change x position to x axis value
+    pos = cortopos(x, x_axis)
+    for i in range(len(pos)):
+        temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
+        y.append(temp)
 
     spl = splrep(x, y)
     baseline = splev(x_axis, spl)
+    
+    if plot:        
+        plt.plot(x_axis,data)
+        plt.plot(x_axis,baseline)
+        plt.plot(x, y,'o', color='red')
+        plt.show()
+
+    if remove:
+        baseline = data - baseline
+
+    return baseline
+
+
+def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
+    """
+    Calcuates the baseline using polynomial fit.
+
+    :type data: list[float]
+    :param data: Single vector.
+
+    :type x_axis: list[float]
+    :param x_axis: x axis of the data, to interpolate the baseline function.
+
+    :type points: list[int]
+    :param points: positions in axis of points to calculate baseline.
+
+    :type deg: int
+    :param deg: Polynomial degree of the fit.
+
+    :type avg: int
+    :param avg: points to each side to make average.
+
+    :type remove: True
+    :param remove: if True, calculates and returns (data - baseline).
+
+    :type plot: bool
+    :param plot: if True, calculates and returns (data - baseline).    
+
+    :returns: The baseline.
+    :rtype: list[float]
+    """
+    data = copy.deepcopy(data)
+    
+    x_axis = list(x_axis)
+    x = list(points)
+    avg = int(avg)
+
+    y = []  # y values for the selected x
+    pos = cortopos(x, x_axis)
+    for i in range(len(pos)):
+        temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
+        y.append(temp)
+
+    z = np.polyfit(x, y, deg)  # polinomial fit
+    f = np.poly1d(z)  # 1d polinomial
+    baseline = f(x_axis)  # y values
+
+    if plot:        
+        plt.plot(x_axis,data)
+        plt.plot(x_axis,baseline)
+        plt.plot(x, y,'o', color='red')
+        plt.show()
+
+    if remove:
+        baseline = data - baseline
 
     return baseline
 
@@ -904,7 +967,7 @@ def normtopeak(data, x_axis, peak, shift=10):
 
     pos = cortopos(peak, x_axis)
     section = y[pos[0] - shift:pos[0] + shift]
-    highest = peakfinder(section, l=int(shift / 2))
+    highest = peakfinder(section, look=int(shift / 2))
 
     c = 0
     for i in range(len(highest)):
@@ -1356,7 +1419,7 @@ def trim(data, start=0, finish=0):
     :returns: Trimmed data.
     :rtype: list[]
     """
-    data = list(data)
+    data = copy.deepcopy(data)
 
     if finish == 0 or finish > len(data):
         finish = len(data)
@@ -1466,7 +1529,7 @@ def logo(lay=90, leng=100, a=1, b=0.8, r1=80, r2=120, lw=2):
     x = [[1 for _ in range(leng)] for _ in range(lay)]
 
     def xl(amp, wid, p):
-        return [(amp * wid ** 2 / ((i - p) ** 2 + wid ** 2)) * random.randint(99, 101) / 100 for _ in range(100)]
+        return [(amp * wid ** 2 / ((i - p) ** 2 + wid ** 2)) * random.randint(99, 101) / 100 for i in range(100)]
 
     for i in range(len(x)):
         wid = 0.0000002 * (i ** 4) - 0.0002 * (i ** 3) + 0.0178 * (i ** 2) - 0.0631 * i + 4.7259
@@ -2075,4 +2138,43 @@ def plot2dml(train, train_pred=[], test=0, test_pred=0, labels=[], title='',
     plt.title(title)
     plt.legend(labels, loc=loc, prop={'size':lfs})
     plt.show()
+    
+    
+def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', figsize=(3,4.5), lw=1):
+    """
+    Plots a stack plot of selected spectras.
+
+    :type data: list[float]
+    :param data: Data to in the plot.
+
+    :type add: float
+    :param add: displacement, or difference, between each curve.
+
+    :type xlabel: str
+    :param xlabel: Label of axis.
+
+    :type ylabel: str
+    :param ylabel: Label of axis.
+
+    :type cmap: str
+    :param cmap: Colormap, according to matplotlib options.
+
+    :returns: Smoothed vector(s).
+    :rtype: list[float]
+    """      
+       
+    base = [add for _ in range(len(data[0]))]
+    
+    cmap = plt.cm.get_cmap(cmap)
+    color = []
+    for i in range(len(data)):
+        color.append(cmap(i/(len(data)-1)))
+    
+    plt.figure(figsize=figsize)
+    for i in range(len(data)):
+        plt.plot(np.array(data[i]) + np.array(base)*i, color=color[i], lw=lw)
+    plt.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.show()    
     
