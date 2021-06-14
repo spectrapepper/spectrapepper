@@ -3,7 +3,7 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-import functions as spep
+import spectrapepper as spep
 
 
 class TestSpectrapepper(unittest.TestCase):
