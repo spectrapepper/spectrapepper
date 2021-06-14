@@ -1,5 +1,6 @@
 """
 This main module contains all the functions available in spectrapepper.
+
 """
 
 import math
@@ -7,7 +8,6 @@ import copy
 import random
 import numpy as np
 import pandas as pd
-import statistics as sts
 from scipy import sparse
 from scipy import interpolate
 from scipy.stats import stats
@@ -26,10 +26,6 @@ import matplotlib.gridspec as gridspec
 from matplotlib.colors import LinearSegmentedColormap
 import linecache
 import os.path
-# import pkgutil
-# from pathlib import Path
-import os
-# PACKAGEDIR = Path(__file__).parent.absolute()
 
 def load_spectras():
     """
@@ -38,24 +34,13 @@ def load_spectras():
     :returns: Sample spectral data.
     :rtype: list[float]
     """
-    # path = os.getcwd()
-    # parent = os.path.abspath(os.path.join(path, os.pardir))
-    # data = load(parent+'\spectrapepper\datasets\spectras.txt')
+    path = os.getcwd()
+    parent = os.path.abspath(os.path.join(path, os.pardir))
+    data = load(parent+'\spectrapepper\datasets\spectras.txt')
     
     # module_path = os.path.dirname(__file__)
     # data = load(module_path+'\\datasets\\spectras.txt')
-    
-    # path = str(PACKAGEDIR)+'spectrapepper\datasets\spectras.txt'
-    # print(path)
-    # text = load(path)
-    # print(text)
-    
-    location = os.path.dirname(os.path.realpath(__file__))
-    my_file = os.path.join(location, 'datasets', 'spectras.txt')
-    data = load(my_file)
-    
     return data
-
 
 def load_targets():
     """
@@ -64,19 +49,9 @@ def load_targets():
     :returns: Sample targets.
     :rtype: list[float]
     """
-    # path = os.getcwd()
-    # parent = os.path.abspath(os.path.join(path, os.pardir))
-    # data = load(parent+'\spectrapepper\datasets\targets.txt')    
-    
-    # module_path = os.path.dirname(__file__)
-    # data = load(module_path+'\\datasets\\targets.txt')
-    
-    location = os.path.dirname(os.path.realpath(__file__))
-    my_file = os.path.join(location, 'datasets', 'targets.txt')
-    data = load(my_file)
-    
+    module_path = os.path.dirname(__file__)
+    data = load(module_path+'\\datasets\\targets.txt')
     return data
-
 
 def load_params():
     """
@@ -85,19 +60,9 @@ def load_params():
     :returns: Sample parameters.
     :rtype: list[float]
     """
-    # path = os.getcwd()
-    # parent = os.path.abspath(os.path.join(path, os.pardir))
-    # data = load(parent+'\spectrapepper\datasets\params.txt')   
-    
-    # module_path = os.path.dirname(__file__)
-    # data = load(module_path+'\\datasets\\params.txt')
-    
-    location = os.path.dirname(os.path.realpath(__file__))
-    my_file = os.path.join(location, 'datasets', 'params.txt')
-    data = load(my_file)
-    
+    module_path = os.path.dirname(__file__)
+    data = load(module_path+'\\datasets\\params.txt')
     return data
-
 
 def load_data(file):
     """
@@ -127,7 +92,6 @@ def load_data(file):
     raw_data.close()
 
     return new_data
-
 
 def load(file, fromline=0):
     """
@@ -231,7 +195,7 @@ def loadline(file, line, tp='float'):
     return info
 
 
-def lowpass(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
+def butter_lowpass_filter(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
     """
     Butter low pass filter for a single or spectra or a list of them.
         
@@ -253,9 +217,10 @@ def lowpass(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
     :returns: Filtered data
     :rtype: list[float]
     """
-    y = copy.deepcopy(data)  # so it does not change the input list
+    y = list(data)  # so it does not change the input list
     normal_cutoff = cutoff / (nyq * fs)
     b, a = butter(order, normal_cutoff, btype='low', analog=False)
+    # dim = np.array(y)
     if len(np.array(y).shape) > 1:
         for i in range(len(y)):
             y[i] = filtfilt(b, a, y[i])
@@ -291,7 +256,7 @@ def normtomax(data):
 
 def normtovalue(data, val):
     """
-    Normalizes the spectras to a set value, in other words, the defined value
+    Normalizes the spectras to a set value, in other words, the define value
     will be reescaled to 1 in all the spectras.
 
     :type data: list[float]
@@ -315,7 +280,7 @@ def normtovalue(data, val):
     return y
 
 
-def alsbaseline(data, lam=100, p=0.001, niter=10):
+def baseline_als(y, lam=100, p=0.001, niter=10):
     """
     Calculation of the baseline using Asymmetric Least Squares Smoothing. This
     script only makes the calculation but it does not remove it. Original idea of
@@ -337,43 +302,40 @@ def alsbaseline(data, lam=100, p=0.001, niter=10):
     :returns: Returns the calculated baseline.
     :rtype: list[float]
     """
-    data = copy.deepcopy(data)
-    dims = len(np.array(data).shape)  # detect dimensions    
-    
-    if dims > 1:
-        l = len(data[0])
-        d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
-        w = np.ones(l)
-        for i in range(len(data)):
-            for _ in range(niter):
-                W = sparse.spdiags(w, 0, l, l)
-                Z = W + lam * d.dot(d.transpose())       
-                z = spsolve(Z, w * data[i])
-                w = p * (data[i] > z) + (1 - p) * (data[i] < z)
-            data[i] = data[i] - z  
-            
-    else:
-        l = len(data)
-        d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
-        w = np.ones(l)
-        for _ in range(niter):
-            W = sparse.spdiags(w, 0, l, l)
-            Z = W + lam * d.dot(d.transpose())
-            z = spsolve(Z, w * data)
-            w = p * (data > z) + (1 - p) * (data < z)
-        data = data - z
+    l = len(y)
+    d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
+    w = np.ones(l)
+    for i in range(niter):
+        W = sparse.spdiags(w, 0, l, l)
+        Z = W + lam * d.dot(d.transpose())
+        z = spsolve(Z, w * y)
+        w = p * (y > z) + (1 - p) * (y < z)
+    return z
 
-    
-    # l = len(y)
-    # d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
-    # w = np.ones(l)
-    # for i in range(niter):
-    #     W = sparse.spdiags(w, 0, l, l)
-    #     Z = W + lam * d.dot(d.transpose())
-    #     z = spsolve(Z, w * y)
-    #     w = p * (y > z) + (1 - p) * (y < z)
-    # y = y - z
-    return data
+
+def alsbaseline(data, lam=100000, p=0.001, niter=10):
+    """
+    This takes baseline_als and removes it from the spectra.
+
+    :type data: list[float]
+    :param data: list of spectras
+
+    :type lam: int
+    :param lam: also known as lambda, smoothness
+
+    :type p: float
+    :param p: asymmetry
+
+    :type niter: int
+    :param niter: niter
+
+    :returns: The spectra with the removed als baseline.
+    :rtype: list[float]
+    """
+    y = list(data)
+    for i in range(len(y)):
+        y[i] = y[i] - baseline_als(y[i], lam, p, niter)
+    return y
 
 
 def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
@@ -382,7 +344,7 @@ def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
     in https://stackoverflow.com/a/34807513/2898619.
 
     :type data: list[float]
-    :param data: Single or several spectras to remove the baseline from.
+    :param data: Single vector.
 
     :type x_axis: list[float]
     :param x_axis: x axis of the data, to interpolate the baseline function.
@@ -406,43 +368,24 @@ def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
     x_axis = list(x_axis)
     x = list(points)
     avg = int(avg)
+
+    y = []  # y values for the selected x
     pos = cortopos(x, x_axis)
-    y = copy.deepcopy(data)  # so it does not change the input list
-    dims = len(np.array(data).shape)  # detect dimensions
+    for i in range(len(pos)):
+        temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
+        y.append(temp)
 
-    if dims >= 2:
-        baseline = []
-        
-        for j in range(len(data)):
-            y = []  # y values for the selected x
-            for i in range(len(pos)):
-                temp = np.mean(data[j][pos[i] - avg: pos[i] + avg + 1])
-                y.append(temp)
-        
-            spl = splrep(x, y)
-                
-            if remove:
-                baseline.append(data[j] - splev(x_axis, spl))
-            else:
-                baseline.append(splev(x_axis, spl))
+    spl = splrep(x, y)
+    baseline = splev(x_axis, spl)
+    
+    if plot:        
+        plt.plot(x_axis,data)
+        plt.plot(x_axis,baseline)
+        plt.plot(x, y,'o', color='red')
+        plt.show()
 
-    else:
-        y = []  # y values for the selected x
-        for i in range(len(pos)):
-            temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
-            y.append(temp)
-    
-        spl = splrep(x, y)
-        baseline = splev(x_axis, spl)
-        
-        if plot:        
-            plt.plot(x_axis, data)
-            plt.plot(x_axis, baseline)
-            plt.plot(x, y, 'o', color='red')
-            plt.show()
-    
-        if remove:
-            baseline = data - baseline
+    if remove:
+        baseline = data - baseline
 
     return baseline
 
@@ -452,7 +395,7 @@ def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
     Calcuates the baseline using polynomial fit.
 
     :type data: list[float]
-    :param data: Single or several spectras to remove the baseline from.
+    :param data: Single vector.
 
     :type x_axis: list[float]
     :param x_axis: x axis of the data, to interpolate the baseline function.
@@ -475,68 +418,44 @@ def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
     :returns: The baseline.
     :rtype: list[float]
     """
-    data = copy.deepcopy(data)  
+    data = copy.deepcopy(data)
+    
     x_axis = list(x_axis)
     x = list(points)
     avg = int(avg)
-    pos = cortopos(x, x_axis)
+
     y = []  # y values for the selected x
-    
-    dims = len(np.array(data).shape)  # detect dimensions
-    
-    if dims >= 2:
-        baseline = []
-        for j in range(len(data)):
-            for i in range(len(pos)):
-                temp = np.mean(data[j][pos[i] - avg: pos[i] + avg + 1])
-                y.append(temp)
-        
-            z = np.polyfit(x, y, deg)  # polinomial fit
-            f = np.poly1d(z)  # 1d polinomial
-            temp = f(x_axis)  # y values
-        
-            if plot and j == 0:        
-                plt.plot(x_axis, data[j])
-                plt.plot(x_axis, temp)
-                plt.plot(x, y, 'o', color='red')
-                plt.show()
-        
-            if remove:
-                temp = data - temp
-            
-            baseline.append(temp)
-    
-    else:
-        for i in range(len(pos)):
-            temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
-            y.append(temp)
-    
-        z = np.polyfit(x, y, deg)  # polinomial fit
-        f = np.poly1d(z)  # 1d polinomial
-        baseline = f(x_axis)  # y values
-    
-        if plot:        
-            plt.plot(x_axis, data)
-            plt.plot(x_axis, baseline)
-            plt.plot(x, y, 'o', color='red')
-            plt.show()
-    
-        if remove:
-            baseline = data - baseline
+    pos = cortopos(x, x_axis)
+    for i in range(len(pos)):
+        temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
+        y.append(temp)
+
+    z = np.polyfit(x, y, deg)  # polinomial fit
+    f = np.poly1d(z)  # 1d polinomial
+    baseline = f(x_axis)  # y values
+
+    if plot:        
+        plt.plot(x_axis,data)
+        plt.plot(x_axis,baseline)
+        plt.plot(x, y,'o', color='red')
+        plt.show()
+
+    if remove:
+        baseline = data - baseline
 
     return baseline
 
 
-def lorentzfit(y, x, wid=4, it=100, plot=False):
+def lorentzian_fit(data_x, ax, wid=4, it=100):
     """
     Fit a Lorentz distributed curve for a single spectra. Good guidelines
     for similar structures can be found at http://emilygraceripka.com/blog/16.
 
-    :type y: TYPE
-    :param y: single spectra.
+    :type data_x: TYPE
+    :param data_x: single spectra.
 
-    :type x: TYPE
-    :param x: x-axis.
+    :type ax: TYPE
+    :param ax: x-axis.
 
     :type wid: TYPE, optional
     :param wid: fitted curve width. The default is 4.
@@ -544,12 +463,11 @@ def lorentzfit(y, x, wid=4, it=100, plot=False):
     :type it: TYPE, optional
     :param it: number of iterations. The default is 100.
 
-    :type plot: boolean
-    :param plot: fF 'True' then plots the data and the fit.
-
     :returns: Lorentz fit.
     :rtype: list[float]
     """
+    x = list(ax)  # change the variable so it doesnt change the original
+    y = list(data_x)  # change the variable so it doesnt change the original
     cen = 0  # position (wavelength, x value)
     peak_i_pos = 0  # position (axis position, i value)
     amp = max(y)  # maximum value of function, peak value, amplitud of the fit
@@ -557,7 +475,7 @@ def lorentzfit(y, x, wid=4, it=100, plot=False):
     err = []  # error log to choose the optimum
     for i in range(len(y)):  # for all the data
         if amp == y[i]:  # if it is the maximum
-            cen = x[i]  # save the axis value x
+            cen = ax[i]  # save the axis value x
             peak_i_pos = int(i)  # also save the position i
             break
     for i in range(it):  # search "it" iterations
@@ -576,26 +494,19 @@ def lorentzfit(y, x, wid=4, it=100, plot=False):
             for j in range(len(y)):
                 fit.append(amp * wid ** 2 / ((x[j] - p) ** 2 + wid ** 2))
             break
-
-    if plot:
-        plt.plot(x, y, label='Data')
-        plt.plot(x, fit, label='Fit')
-        plt.legend(loc=0)
-        plt.show()
-
     return fit
 
 
-def gaussfit(y, x, sigma=4.4, it=100, plot=False):
+def gaussian_fit(data_x, ax, sigma=4.4, it=100):
     """
     Fit a Gaussian distributed curve for a single spectra. Good guidelines
     for similar structures can be found at http://emilygraceripka.com/blog/16.
 
-    :type y: list[float]
-    :param x: single spectra.
+    :type data_x: list[float]
+    :param data_x: single spectra.
 
-    :type x: list[float]
-    :param x: x-axis.
+    :type ax: list[float]
+    :param ax: x-axis.
 
     :type sigma: float
     :param sigma: sigma parameter of distribution. The default is 4.4.
@@ -603,22 +514,19 @@ def gaussfit(y, x, sigma=4.4, it=100, plot=False):
     :type it: int
     :param it: number of iterations. The default is 100.
 
-    :type plot: boolean
-    :param plot: fF 'True' then plots the data and the fit.
-
     :returns: Gaussian fit.
     :rtype: list[float]
     """
-    # x = list(ax)  # change the variable so it doesnt change the original
-    # y = list(data_x)  # change the variable so it doesnt change the original
+    x = list(ax)  # change the variable so it doesnt change the original
+    y = list(data_x)  # change the variable so it doesnt change the original
     cen = 0  # position (wavelength, x value)
     peak_i_pos = 0  # position (axis position, i value)
-    amp = max(y)  # maximum value of function, peak value, amplitude of the fit
+    amp = max(y)  # maximum value of function, peak value,a mplitud of the fit
     # fit = []  # fit function
     err = []  # error log to choose the optimum
     for i in range(len(y)):  # for all the data
         if amp == y[i]:  # if it is the maximum
-            cen = x[i]  # save the axis value x
+            cen = ax[i]  # save the axis value x
             peak_i_pos = int(i)  # also save the position i
             break
     for i in range(it):  # search "it" iterations
@@ -633,69 +541,65 @@ def gaussfit(y, x, sigma=4.4, it=100, plot=False):
     fit = []  # reset array
     for i in range(len(err)):  # look for the minimum error
         if min(err) == err[i]:  # if it is the minimum error
-            p = cen - 0.5 + (0.01 * i)  # then calculate the fit again
+            p = cen - 0.5 + (0.01 * i)  # then calculta the fit again
             for j in range(len(y)):
                 fit.append(
                     (11 * amp) * (1 / (sigma * (np.sqrt(2 * np.pi)))) * (np.exp(-0.5 * (((x[j] - p) / sigma) ** 2))))
             break
-
-    if plot:
-        plt.plot(x, y, label='Data')
-        plt.plot(x, fit, label='Fit')
-        plt.legend(loc=0)
-        plt.show()
-
     return fit
 
 
-def cortopos(vals, axis):
+def cortopos(vals, ax):
     """
     To translate values to a position in an axis, basically searching for
-    the position of a value. Normally they don't fit perfectly, so it is useful
-    to use this tool that approximates to the closest.
+    the position of  avalue. Normally they dont fit perfectly, so it is useful
+    to use this tool that aproximates to the closest.
 
     :type vals: list[float]
     :param vals: List of values to be searched and translated.
 
-    :type axis: list[float]
-    :param axis: Axis.
+    :type ax: list[float]
+    :param ax: Axis.
 
     :returns: Position in the axis of the values in vals
     :rtype: list[int]
     """
-    if len(np.array(vals).shape) > 1:
-        pos = [[0 for _ in range(len(vals[0]))] for _ in range(len(vals))]  # i position of area limits
-        for i in range(len(vals)):  # this loop takes the approx. x and takes its position
-            for j in range(len(vals[0])):
+    axis = list(ax)  # axis
+    y = list(vals)  # axis values that you want to transalte to position
+
+    if len(np.array(y).shape) > 1:
+        pos = [[0 for _ in range(len(y[0]))] for _ in range(len(y))]  # i position of area limits
+        for i in range(len(y)):  # this loop takes the aprox x and takes its position
+            for j in range(len(y[0])):
                 dif_temp = 999  # safe initial difference
                 temp_pos = 0  # temporal best position
                 for k in range(len(axis)):  # search in x_axis
-                    if abs(vals[i][j] - axis[k]) < dif_temp:  # compare if better
+                    if abs(y[i][j] - axis[k]) < dif_temp:  # compare if better
                         temp_pos = k  # save best value
-                        dif_temp = abs(vals[i][j] - axis[k])  # calculate new diff
-                vals[i][j] = axis[temp_pos]  # save real value in axis
+                        dif_temp = abs(y[i][j] - axis[k])  # calculate new diff
+                y[i][j] = axis[temp_pos]  # save real value in axis
                 pos[i][j] = temp_pos  # save the position
     else:
         pos = []  # i position of area limits
-        for i in range(len(vals)):  # this loop takes the approx. x and takes its position
+        for i in range(len(y)):  # this loop takes the aprox x and takes its position
             dif_temp = 999  # safe initial difference
             temp_pos = 0  # temporal best position
             for k in range(len(axis)):
-                if abs(vals[i] - axis[k]) < dif_temp:
+                if abs(y[i] - axis[k]) < dif_temp:
                     temp_pos = k
-                    dif_temp = abs(vals[i] - axis[k])
-            vals[i] = axis[temp_pos]  # save real value in axis
+                    dif_temp = abs(y[i] - axis[k])
+            y[i] = axis[temp_pos]  # save real value in axis
             pos.append(temp_pos)  # save the position
     return pos
 
 
-def areacalculator(data, limits, norm=False):
+def areacalculator(x_data, limits, norm=False):
     """
     Area calculator using the data (x_data) and the limits in position, not
     values.
 
-    :type data: list[float]
-    :param data: Data to calculate area from
+    :type x_data: list[float]
+    :param x_data: Data to calculate area from
 
     :type limits: list[int]
     :param limits: Limits that define the areas to be calculated.
@@ -706,21 +610,15 @@ def areacalculator(data, limits, norm=False):
     :returns: A list of areas according to the requested limits.
     :rtype: list[float]
     """
-    dims = len(np.array(data).shape)
+    data = list(x_data)
+    lims = list(limits)
 
-    if dims >= 2:
-        areas = [[0 for _ in range(len(limits))] for _ in range(len(data))]  # final values of areas
-        for i in range(len(data)):  # calculate the areas for all the points
-            for j in range(len(limits)):  # for all the areas
-                areas[i][j] = np.sum(data[i][limits[j][0]:limits[j][1]])  # calculate the sum
-                if norm:
-                    areas[i][j] = areas[i][j] / np.sum(data[i])
-    else:
-        areas = [0 for _ in range(len(limits))]  # final values of areas
-        for j in range(len(limits)):  # for all the areas
-            areas[j] = np.sum(data[limits[j][0]:limits[j][1]])  # calculate the sum
+    areas = [[0 for _ in range(len(lims))] for _ in range(len(data))]  # final values of areas
+    for i in range(len(data)):  # calculate the areas for all the points
+        for j in range(len(lims)):  # for all the areas
+            areas[i][j] = np.sum(data[i][lims[j][0]:lims[j][1]])  # calculate the sum
             if norm:
-                areas[j] = areas[j] / np.sum(data)
+                areas[i][j] = areas[i][j] / np.sum(data[i])
     return areas
 
 
@@ -1250,11 +1148,11 @@ def sdev(data):
     """
     Calculates the standard deviation for each bin from a list of vectors.
 
-    :type data: list[float]
+    :type data: list[(]float]
     :param data: List of vectors.
 
     :returns: Standard deviation curve
-    :rtype: list[float]
+    :rtype: list[(]float]
     """
     curve_std = []  # stdev for each step
     data = list(data)
@@ -1265,28 +1163,6 @@ def sdev(data):
         curve_std.append(sta.stdev(temp))  # stdev for each step
     curve_std = np.array(curve_std)
     return curve_std
-
-
-def median(data):
-    """
-    Calculates the median vector of a list of vectors.
-    
-    :type data: list[float]
-    :param data: List of vectors.
-
-    :returns: median curve
-    :rtype: list[float]    
-    """
-    median = []
-    length = len(data[0])
-    meas = len(data)
-    
-    for j in range(length):
-        temp = []
-        for i in range(meas):
-            temp.append(data[i][j])
-        median.append(np.median(temp))    
-    return median
 
 
 def peakfit(data, ax, pos, look=20, shift=5, wid=5.0):
@@ -2331,139 +2207,4 @@ def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', figsize=(3,4.5),
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.show()    
-
-
-def cosmicmp(ndata, alpha = 1, avg = 2):
-    """
-    https://doi.org/10.1177/0003702819839098
-    It identifies CRs by comparing similar spectras and paring in matching
-    pairs. Uses randomnes of CRs.
     
-    :type ndata: list[float]
-    :param ndata: List of spectras to remove cosmic rays.
-
-    :type alpha: float
-    :param alpha: Factor to modify the criteria to identify a cosmic ray.
-
-    :returns: Data with removed cosmic rays.
-    :rtype: list[float]
-    """
-    data = copy.deepcopy(ndata)
-
-    sim_specs = []  # most similar spectra (position) for each spectra i
-
-    for i in range(len(data)): # for all the spectras
-        n_cov = -1  # position of most similar spectra, initial value
-        cov = 0  # to compare similarity of the spectras
-        paired = 0  # if it is already paired with another spectra
-        for j in range(len(sim_specs)):  # check if it is already paired
-            if sim_specs[j] == i:  # if it is
-                n_cov = j  # claculate nothing and just save it
-                paired = 1  # set as paired
-        
-        if paired == 0:  # if not paired, then calculate
-            b = np.dot(data[i],data[i])  # first term of equation
-            for j in range(len(data)):  # search in all spectras
-                a = np.dot(data[i],data[j])**2  # second term of eq.
-                c = np.dot(data[j],data[j])  # third term of eq.
-                temp = a/(b*c)  # final value to campare
-                if temp > cov and j != i:  # the highest value (covariance) wins
-                    n_cov = j  # save the best
-                    cov = temp  # save the best to compare
-        
-        sim_specs.append(n_cov)  # save the similar curve
-        
-        mavg = moveavg(data[i], avg)
-        
-        sigma = 0
-        for j in range(len(data[i])):
-            sigma += math.sqrt((data[i][j] - mavg[j])**2)
-        sigma = sigma / len(data[i])
-
-        for j in range(len(data[0])):  # search in all the spectra
-            if data[i][j] - data[sim_specs[i]][j] > sigma*alpha:  # if res. is higher than the stdev
-                data[i][j] = data[sim_specs[i]][j]  # must be CR, change the value
-                        
-    return data
-
-
-def cosmicdd(ndata, th = 100, asy = 0.6745, m = 5):
-    """
-    https://doi.org/10.1016/j.chemolab.2018.06.009
-    It identifies CRs by detrended differences, the differences between a
-    value and the next.
-    
-    :type ndata: list[float]
-    :param ndata: List of spectras to remove cosmic rays.
-
-    :type th: float
-    :param th: Factor to modify the criteria to identify a cosmic ray.
-    
-    :type asy: float
-    :param asy: Asymptotic bias correction
-    
-    :type : float
-    :param : Factor to modify the criteria to identify a cosmic ray.
-
-    :returns: Data with removed cosmic rays.
-    :rtype: list[float]
-    """
-    data = copy.deepcopy(ndata)
-    
-    diff = list(np.array(data)) # diff data
-     
-    for i in range(len(data)): # for each spectra
-        for j in range(len(data[0])-1): # for each step
-            diff[i][j] = abs(data[i][j]-data[i][j+1]) # diff with the next one
-    
-    zt = [] # Z scores
-    #c = 0 
-    for i in diff: # for each diff. vector
-        #c += 1
-        z = [] # temporal z score
-        temp = [] # temporal MAD (median absolute deviation)
-        med = np.median(i) # just median
-        
-        for j in i: # for each step in each diff. spectra
-            temp.append(abs(j-med)) # calculate MAD
-        mad = np.median(temp) # save MAD
-        
-        for j in i: # for each step in each diff. spectra
-            z.append(asy*(j - med)/mad) # calculate Z score
-        zt.append(z) # save Z score
-    
-    for i in range(len(data)): # for each spectra
-        for j in range(len(data[i])-1): # in all its len. except the last (range)
-            if abs(zt[i][j]) > th: # if it is larger than the th. then it is CR
-                data[i][j] = (sum(data[i][j-m:j]) + sum(data[i][j+1:j+m+1]))/(2*m) # avg, of neighbors
-    
-    return data
-
-
-def cosmicmed(data, sigma):
-    """
-    Precise cosmic ray elimination for measurements of the same point or very
-    similar spectras.
-    
-    :type data: list[float]
-    :param data: List of spectras to remove cosmic rays.
-
-    :type sigma: float
-    :param sigma: Factor to modify the criteria to identify a cosmic ray.
-        Multiplies the median of each bin.
-
-    :returns: Data with removed cosmic rays.
-    :rtype: list[float]
-    """
-    solved = copy.deepcopy(data)     
-    acq = len(solved)
-    length = len(solved[0])
-    
-    med = median(solved)
-    
-    for i in range(acq):
-        for j in range(length):
-            if data[i][j] > sigma*med[j]:
-                solved[i][j] = med[j]
-    
-    return solved

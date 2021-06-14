@@ -55,7 +55,5 @@ setup(
     url='https://github.com/enricgrau/spectrapepper',
     version='0.0.8',
     zip_safe=False,
-    package_data={
-        "": ["*.txt"],
-    }
+    package_data={'spectrapepper': ['datasets/*.txt']}
 )

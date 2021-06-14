@@ -7,3 +7,8 @@ __version__ = '0.0.8'
 
 """Import all the functions"""
 from .functions import *
+
+
+"""Include data file for examples."""
+# from pathlib import Path
+# PACKAGEDIR = Path(__file__).parent.absolute()

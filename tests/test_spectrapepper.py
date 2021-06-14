@@ -3,17 +3,22 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-#  import spectrapepper
+import functions as spep
 
 
 class TestSpectrapepper(unittest.TestCase):
     """Tests for `spectrapepper` package."""
 
     def setUp(self):
-        """Set up test fixtures, if any."""
+        pass
 
     def tearDown(self):
-        """Tear down test fixtures, if any."""
+        pass
 
-    def test_000_something(self):
-        """Test something."""
+    def test_datasets(self):
+        self.assertEqual(int(spep.load_spectras()[0][0]), 47)
+        self.assertEqual(int(spep.load_targets()[0][0]), 47)
+        self.assertEqual(int(spep.load_params()[0][0]), 47)
+
+if __name__ == '__main__':
+    unittest.main()

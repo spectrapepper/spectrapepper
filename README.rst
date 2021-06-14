@@ -4,18 +4,20 @@ SpectraPepper
 
 .. image:: https://img.shields.io/pypi/v/spectrapepper.svg
         :target: https://pypi.python.org/pypi/spectrapepper
-
 .. image:: https://img.shields.io/conda/vn/conda-forge/spectrapepper.svg
         :target: https://anaconda.org/conda-forge/spectrapepper
-
 .. image:: https://img.shields.io/badge/License-MIT-yellow.svg
         :target: https://opensource.org/licenses/MIT
-
 .. image:: https://img.shields.io/lgtm/grade/python/g/enricgrau/spectrapepper.svg?logo=lgtm&logoWidth=18
         :target: https://lgtm.com/projects/g/enricgrau/spectrapepper/context:python
-
 .. image:: https://github.com/enricgrau/spectrapepper/workflows/docs/badge.svg
         :target: https://enricgrau.github.io/spectrapepper
+.. image:: https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?label=conda%20downloads
+        :target: https://pepy.tech/project/spectrapepper
+.. image:: https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=international_system&left_color=grey&left_text=pypi%20downloads&right_color=blue
+        :target: https://pepy.tech/project/spectrapepper
+
+
 
 **A Python package to simplify and accelerate analysis of spectroscopy data.**
 
