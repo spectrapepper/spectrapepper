@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 # import my_functions as spep
 
-
 class TestSpectrapepper(unittest.TestCase):
     """Tests for `spectrapepper` package."""
     def setUp(self):
@@ -60,9 +59,9 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(r, 14.637604380000013)
         
         data2 = spep.alsbaseline(data)
-        r = sum(data2)
+        r = np.floor(sum(data2))
         print('alsbaseline: ' + str(r))
-        self.assertEqual(r, 252.8469059575725)
+        self.assertEqual(r, 252)
         
         data2 = spep.bspbaseline(data, axis, points=[100, 350, 700, 800], plot=False)
         r = sum(data2)
