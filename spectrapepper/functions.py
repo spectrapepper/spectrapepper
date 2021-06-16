@@ -101,7 +101,7 @@ def load_targets():
     return data
 
 
-def load_params():
+def load_params(transpose=False):
     """
     Load sample parameters data for the spectras.
     
@@ -118,6 +118,9 @@ def load_params():
     location = os.path.dirname(os.path.realpath(__file__))
     my_file = os.path.join(location, 'datasets', 'params.txt')
     data = load(my_file)
+    
+    if transpose:
+        data = np.transpose(data)
     
     return data
 
