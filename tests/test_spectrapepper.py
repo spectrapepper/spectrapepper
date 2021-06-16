@@ -248,12 +248,12 @@ class TestSpectrapepper(unittest.TestCase):
         print('moveavg: ' + str(r))
         self.assertEqual(r, 32)
         
-        df = pd.DataFrame(data = np.transpose([a,b,c]), columns = ['D1', 'D2', 'T'])
-        data2 = spep.plot2dml(df)
-        print('plot2dml: ')
+        # df = pd.DataFrame(data = np.transpose([a,b,c]), columns = ['D1', 'D2', 'T'])
+        # data2 = spep.plot2dml(df)
+        # print('plot2dml: ')
         
-        data2 = spep.stackplot([data, data_l1], add=1)
-        print('stackplot: ')
+        # data2 = spep.stackplot([data, data_l1], add=1)
+        # print('stackplot: ')
         
         data2 = spep.cosmicmp([data,data])
         r = np.floor(np.sum(data2))
