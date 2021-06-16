@@ -174,9 +174,9 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(r, 2)
         
         data2 = spep.regression(a,[b,c])
-        r = np.floor(np.sum(data2[0]))
+        r = np.floor(data2[0][0])
         print('regression: ' + str(r))
-        self.assertEqual(r, 39)
+        self.assertEqual(r, 1)
         
         data2 = spep.decdensity([-2,6,-1,6],a,b,c,0.25)
         r = np.floor(np.sum(data2))
