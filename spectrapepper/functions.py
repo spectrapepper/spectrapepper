@@ -7,15 +7,12 @@ import copy
 import random
 import numpy as np
 import pandas as pd
-import statistics as sts
 from scipy import sparse
 from scipy import interpolate
 from scipy.stats import stats
 from scipy.signal import butter, filtfilt
 from scipy.optimize import minimize
-# import scipy.interpolate as si
 from scipy.interpolate import splev, splrep
-# from scipy.sparse.csgraph import _validation  
 from scipy.sparse.linalg import spsolve
 import itertools
 from itertools import combinations
@@ -23,13 +20,39 @@ import statistics as sta
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.colors import ListedColormap, LinearSegmentedColormap
 import linecache
 import os.path
-# import pkgutil
-# from pathlib import Path
 import os
-# PACKAGEDIR = Path(__file__).parent.absolute()
+
+
+def load_mapp1():
+    """
+    Load sample specrtal data, axis included in the first line.
+
+    :returns: Sample spectral data.
+    :rtype: list[float]
+    """
+    location = os.path.dirname(os.path.realpath(__file__))
+    my_file = os.path.join(location, 'datasets', 'mapping1.txt')
+    data = load(my_file)
+
+    return data
+
+
+def load_mapp2():
+    """
+    Load sample specrtal data, axis included in the first line.
+
+    :returns: Sample spectral data.
+    :rtype: list[float]
+    """
+    location = os.path.dirname(os.path.realpath(__file__))
+    my_file = os.path.join(location, 'datasets', 'mapping2.txt')
+    data = load(my_file)
+
+    return data
+
 
 def load_spectras():
     """
@@ -129,7 +152,7 @@ def load_data(file):
     return new_data
 
 
-def load(file, fromline=0):
+def load(file, fromline=0, transpose=False):
     """
     Load data from a standard text file obtained from LabSpec and other
     spectroscopy instruments. Normally, when single measurement these come in 
@@ -141,6 +164,9 @@ def load(file, fromline=0):
     
     :type fromline: int
     :param fromline: Line of file from which to start loading data. The default is 0.
+    
+    :type transpose: boolean
+    :param transpose: If True transposes the data. Default is False.
     
     :returns: List of the data.
     :rtype: list[float]
@@ -160,6 +186,9 @@ def load(file, fromline=0):
             new_data.append(s_row)
         i += 1
     raw_data.close()
+
+    if transpose:
+        new_data = np.transpose(new_data)
 
     return new_data
 
@@ -195,7 +224,7 @@ def loadheader(file, line, split=False):
     return info
 
 
-def loadline(file, line, tp='float'):
+def loadline(file, line=0, tp='float'):
     """
     Random access to file. Loads a specific line in a file. Useful when
     managing large data files in processes where time is important. It can
@@ -205,7 +234,7 @@ def loadline(file, line, tp='float'):
     :param file: Url od the data file
 
     :type line: int
-    :param line: Line number. Counts from 1.     
+    :param line: Line number. Counts from 0.
 
     :type tp: str
     :param tp: Type of data. If its numeric then float, if text then str. Default is float.
@@ -213,7 +242,7 @@ def loadline(file, line, tp='float'):
     :returns: Array with the desired line.
     :rtype: list[float]
     """
-    line = int(line)
+    line = int(line) + 1
     file = str(file)
 
     info = linecache.getline(file, line)
@@ -322,8 +351,8 @@ def alsbaseline(data, lam=100, p=0.001, niter=10):
     this algorithm by P. Eilers and H. Boelens (2005), and available details at:
     https://stackoverflow.com/a/29185844/2898619
 
-    :type y: list[float]
-    :param y: Spectra to calculate the baseline from.
+    :type data: list[float]
+    :param data: Spectra to calculate the baseline from.
 
     :type lam: int
     :param lam: Lambda, smoothness. The default is 100.
@@ -362,17 +391,6 @@ def alsbaseline(data, lam=100, p=0.001, niter=10):
             z = spsolve(Z, w * data)
             w = p * (data > z) + (1 - p) * (data < z)
         data = data - z
-
-    
-    # l = len(y)
-    # d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
-    # w = np.ones(l)
-    # for i in range(niter):
-    #     W = sparse.spdiags(w, 0, l, l)
-    #     Z = W + lam * d.dot(d.transpose())
-    #     z = spsolve(Z, w * y)
-    #     w = p * (y > z) + (1 - p) * (y < z)
-    # y = y - z
     return data
 
 
@@ -407,7 +425,6 @@ def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
     x = list(points)
     avg = int(avg)
     pos = cortopos(x, x_axis)
-    y = copy.deepcopy(data)  # so it does not change the input list
     dims = len(np.array(data).shape)  # detect dimensions
 
     if dims >= 2:
@@ -836,20 +853,6 @@ def interpolation(data, x_axis):
     :returns: Interpolated data and the new axis
     :rtype: list[list[float],list[float]]
     """
-    # LOAD DATA
-
-    # master_x = []
-    # temp_y = []
-    # files = list(files_names)
-
-    # for i in range(len(files)):
-    #     data_temp = load_data(files[i])
-    #     master_x.append(list(data_temp[0]))
-    #     y = list(np.delete(data_temp, 0, 0)) # delete axis from 
-    #     y = np.delete(y, 0, 1) # delete first column
-    #     y = np.delete(y, 0, 1) # delete second (first) column 
-    #     temp_y.append(y)
-
     temp_y = list(data)  # data, no axis
     master_x = list(x_axis)  # axis
 
@@ -884,7 +887,7 @@ def evalgrau(data):
     data vectors.
 
     :type data: list[float]
-    :param data: A list of lists (no typo) of variables to compare.
+    :param data: A list of lists of variables to compare.
 
     :returns: A list with each combination and the R2 score obtained.
     :rtype: list[float]
@@ -1232,7 +1235,7 @@ def avg(data):
     """
     Calculates the average vector from a list of vectors.
 
-    :type data: list[(]float]
+    :type data: list[float]
     :param data: List of vectors.
 
     :returns: The average of the vectors in the list.
@@ -1483,15 +1486,15 @@ def decdensity(lims, x_points, y_points, groups, divs=0.5):
     :returns: The density decision map.
     :rtype: list[float]
     """
-    divs = float(divs)  # resolution, step
+    divs = float(divs)
 
     map_x = list(np.array(lims[:2]) / divs)  # mapping limits
     map_y = list(np.array(lims[2:]) / divs)
 
-    x_p = list(x_points)  # points coordinates
+    x_p = list(x_points)
     y_p = list(y_points)
 
-    groups = list(groups)  # target (group) list
+    groups = list(groups)
     n_groups = int(max(groups) + 1)  # number of groups
 
     x_divs = int((map_x[1] - map_x[0]))  # divisons for mapping
@@ -1508,11 +1511,8 @@ def decdensity(lims, x_points, y_points, groups, divs=0.5):
             for j in range(len(y_cords) - 1):
                 count = 0
                 for k in range(len(x_p)):
-                    # (x_cords[i] < x_p[k] and x_p[k] < x_cords[i + 1] and
-                    # y_cords[j] < y_p[k] and y_p[k] < y_cords[j + 1] and
-                    # groups[k] == l)
-                    if (x_cords[i] < x_p[k] < x_cords[i+1] and
-                            y_cords[j] < y_p[k] < y_cords[j+1] and
+                    if (x_cords[i] < x_p[k] <= x_cords[i+1] and
+                            y_cords[j] < y_p[k] <= y_cords[j+1] and
                             groups[k] == l):
                         count += 1
                 pmap[j][i] = count
@@ -1527,8 +1527,8 @@ def colormap(colors, name='my_name', n=100):
     """
     Just to simplify a bit the creation of colormaps.
 
-    :type c: list
-    :param c: List of colors thaat you ant on the colormap
+    :type colors: list
+    :param colors: List of colors thaat you ant on the colormap
 
     :type name: string, optional
     :param name: Name of the colormap. The default is 'my_name'.
@@ -1538,9 +1538,8 @@ def colormap(colors, name='my_name', n=100):
 
     :returns: Colormap in Matplotlib format.
     :rtype: cmap
-    """
-    cmap = LinearSegmentedColormap.from_list(name, colors, N=n)
-    return cmap
+    """    
+    return LinearSegmentedColormap.from_list(name, colors, N=n)
 
 
 def isaxis(data):
@@ -1575,20 +1574,35 @@ def trim(data, start=0, finish=0):
     :param start: Poistion of the starting point. The default is 0.
 
     :type finish: int, optional
-    :param finish: Position of the ending point. The default is 0.
+    :param finish: Position of the ending point (not included). The default is 0.
 
     :returns: Trimmed data.
     :rtype: list[]
     """
     data = copy.deepcopy(data)
 
-    if finish == 0 or finish > len(data):
-        finish = len(data)
-
-    t = finish - start
-
-    for i in range(t):
-        data = np.delete(data, start, 1)
+    dims = len(np.array(data).shape)
+    if dims > 1:
+        final = []
+        if finish == 0 or finish > len(data[0]):
+            finish = len(data[0])
+        t = finish - start    
+        for j in data:
+            temp = j
+            for i in range(t):
+                temp = np.delete(temp, start, 0)   
+            final.append(list(temp))
+        data = final
+        
+    else:
+        if finish == 0 or finish > len(data):
+            finish = len(data)
+    
+        t = finish - start
+    
+        for i in range(t):
+            data = np.delete(data, start, 0)
+            
     return data
 
 
@@ -1656,9 +1670,14 @@ def mergedata(data):
     """
     data = list(data)  # list of lists
     master = [[] for _ in data[0]]
+
     for i in range(len(data[0])):
         for j in range(len(data)):
-            master[i].extend(data[j][i])
+            dims = len(np.array(data[j]).shape)
+            if dims > 1:
+                master[i].extend(data[j][i])
+            else:
+                master[i].extend([data[j][i]])
     return master
 
 
@@ -1695,7 +1714,7 @@ def logo(lay=90, leng=100, a=1, b=0.8, r1=80, r2=120, lw=2):
     for i in range(len(x)):
         wid = 0.0000002 * (i ** 4) - 0.0002 * (i ** 3) + 0.0178 * (i ** 2) - 0.0631 * i + 4.7259
         pos = 0.000001 * (i ** 4) - 0.0004 * (i ** 3) + 0.046 * (i ** 2) - 1.8261 * i + 59.41
-        amp = wid * (a)
+        amp = wid * a
         x[i] = xl(amp, wid * b, pos)
 
     axis = [i for i in range(leng)]
@@ -1714,10 +1733,13 @@ def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, it=100, plot=True):
     Shifts the x-axis according to a shift calculated prior.
 
     :type ref_data: list[float]
-    :param ref_data: Reference measurement (Si), with axis.
+    :param ref_data: Reference measurement.
 
-    :type peak_ref: float
-    :param peak_ref: Where the reference peak should be in x-axis values. The default is 520 (Raman Si).
+    :type ref_axis: list[float]
+    :param ref_axis: X-axis of the reference measurement.
+
+    :type ref_peak: float
+    :param ref_peak: Where the reference peak should be in x-axis values. The default is 520 (Raman Si).
 
     :type mode: int
     :param mode: Fitting method, Lorentz, Gaussian, or none (1,2,3). The default is 1.
@@ -1740,19 +1762,31 @@ def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, it=100, plot=True):
 
     fit = []  # fit curves(s), if selected
     shift = []  # axis shift array
-
-    for i in range(len(ref_data)):  # depending on the mode chosen...
+    
+    dims = len(np.array(ref_data).shape)
+    if dims > 1:
+        for i in range(len(ref_data)):  # depending on the mode chosen...
+            if mode == 1:
+                fit.append(lorentzfit(ref_data[i], ref_axis[i], 4, it))
+            if mode == 2:
+                fit.append(gaussfit(ref_data[i], ref_axis[i], 4.4, it))
+            if mode == 0:
+                fit.append(ref_data[i])
+    else:
         if mode == 1:
-            fit.append(lorentzian_fit(ref_data[i], ref_axis[i], 4, it))  # check my_functions for parameters
+            fit.append(lorentzfit(ref_data, ref_axis, 4, it))
         if mode == 2:
-            fit.append(gaussian_fit(ref_data[i], ref_axis[i], 4.4, it))
+            fit.append(gaussfit(ref_data, ref_axis, 4.4, it))
         if mode == 0:
-            fit.append(ref_data[i])
+            fit.append(ref_data)
 
     for i in range(len(fit)):  # look for the shift with max value (peak)
         for j in range(len(fit[0])):  # loop in all axis
             if fit[i][j] == max(fit[i]):  # if it is the max value,
-                shift.append(ref_axis[i][j] - ref_peak)  # calculate the diference
+                if dims > 1:
+                    shift.append(ref_axis[i][j] - ref_peak)  # calculate the diference
+                else:
+                    shift.append(ref_axis[j] - ref_peak)  # calculate the diference
 
     temp = 0  # temporal variable
     for i in range(len(shift)):
@@ -1825,13 +1859,18 @@ def classify(data, gnumber=3, glimits=[]):
                 group_limits[i][0] = df_targets['T'].iloc[temp]
             if i == group_number - 1:
                 group_limits[i][1] = df_targets['T'].iloc[df_targets['T'].size - 1]
-                group_names.append(str(group_limits[i][0]) + ' < ')
             else:
                 group_limits[i][1] = df_targets['T'].iloc[int(temp + g_s[i])]
-                group_names.append(str(group_limits[i][0]) + ' - ' + str(group_limits[i][1]))
-            temp = temp + g_s[i]
+            temp = temp + g_s[i]   
+        
+        group_names.append('_ < ' + str(group_limits[0][1]))
+        for i in range(0, len(group_limits) - 2):
+            group_names.append(str(group_limits[i][1]) + ' <= _ < ' + str(group_limits[i + 1][1]))
+        group_names.append(str(group_limits[len(group_limits)-1][0]) + ' <= _')
+        
         df_targets.sort_index(inplace=True)
-
+        class_targets = list(df_targets['NT'])
+        
         # if I set the limits
     if len(group_limits) >= 1 and group_number <= 1:
         class_targets = [-1 for _ in range(len(targets))]
@@ -1844,27 +1883,30 @@ def classify(data, gnumber=3, glimits=[]):
 
                 if targets[j] >= group_limits[len(group_limits) - 1]:
                     class_targets[j] = len(group_limits)
-
-                elif targets[j] >= group_limits[i] and targets[j] < group_limits[i+1]:
+                # targets[j] >= group_limits[i] and targets[j] < group_limits[i+1]:
+                elif group_limits[i] <= targets[j] < group_limits[i + 1]:
                     class_targets[j] = i + 1
 
-        group_names.append(' < ' + str(group_limits[0]))
+        group_names.append('_ < ' + str(group_limits[0]))
         for i in range(0, len(group_limits) - 1):
-            group_names.append(str(group_limits[i]) + ' - ' + str(group_limits[i + 1]))
-        group_names.append(str(max(group_limits)) + ' =< ')
+            group_names.append(str(group_limits[i]) + ' <= _ < ' + str(group_limits[i + 1]))
+        group_names.append(str(max(group_limits)) + ' <= _')
 
     return class_targets, group_names
 
 
-def subtractref(data, ref, alpha=0.9, sample=0, plot=True, plot_lim=[50, 200]):
+def subtractref(data, ref, axis=0, alpha=0.9, sample=0, plot_lim=[0, 0], plot=False):
     """
     Subtracts a reference spectra (i.e.: air) from the measurements.
 
     :type data: list[float]
-    :param data: List of spectras, with x-axis.
+    :param data: List of or single vector.
 
     :type ref: list[float]
-    :param ref: air (reference) data, with x-axis.
+    :param ref: reference data to remove.
+
+    :type axis: list[float]
+    :param axis: Axis for both ´data´ and 'ref', only for plotting purposes.
 
     :type alpha: float
     :param alpha: Manual multiplier. The default is 0.9.
@@ -1872,51 +1914,53 @@ def subtractref(data, ref, alpha=0.9, sample=0, plot=True, plot_lim=[50, 200]):
     :type sample: int
     :param sample: Sample spectra to work with. The default is 0.
 
-    :type plot: bool
-    :param plot: To plot or not a visual aid. The default is True.
-
     :type plot_lim: list[int]
     :param plot_lim: Limits of the plot.
+
+    :type plot: bool
+    :param plot: To plot or not a visual aid. The default is True.
 
     :returns: Data with the subtracted reference.
     :rtype: list`[float]
     """
-    data = list(data)
-    air = list(ref)
+    data = copy.deepcopy(data)
+    ref = list(ref)
     sample = int(sample)  # spectrum chosen to work with. 0 is the first
-    alpha = float(alpha)  # multiplication factor to delete the air spectrum on the sample
-    plot_lim = list(plot_lim)  # range of the plot you want to see
-
-    x_axis = data[0]  # x axis is first row
-    data = np.delete(data, 0, 0)  # delete x_axis from data
-    data = list(data)
-
-    if len(air[0]) <= 2:  # if not in correct format
-        air = np.transpose(air)  # transpose so it is in rows
-
-    x_axis_air = air[0]  # x axis is first row
-    air = air[1]  # make it the same structure as x_axis
-    final = data[sample] - air * alpha  # final result
-
+    alpha = float(alpha)  # multiplication factor to delete the ref spectrum on the sample
+    
+    dims = len(np.array(data).shape)
+    
+    if dims > 1:
+        for i in range(len(data)):
+            data[i] = np.array(data[i]) - np.array(ref) * alpha  
+        toplot = data[sample]
+        final =  np.array(toplot) -  np.array(ref) * alpha
+    else:
+        toplot = copy.deepcopy(data)
+        final = np.array(data) - np.array(ref) * alpha    
+        data = final
+        
     if plot:
-        plt.plot(x_axis, data[sample], linewidth=1, label='Original', linestyle='--')
-        plt.plot(x_axis_air, air, linewidth=1, label='Air', linestyle='--')
-        plt.plot(x_axis, final, linewidth=1, label='Final')
-        plt.gca().set_xlim(plot_lim[0], plot_lim[1])
+        if axis == 0:
+                axis = [i for i in range(len(ref))]
+        else:
+            axis = list(axis)
+        
+        plt.plot(axis, toplot, linewidth=1, label='Original', linestyle='--')
+        plt.plot(axis, ref, linewidth=1, label='Air', linestyle='--')
+        plt.plot(axis, final, linewidth=1, label='Final')
+        if plot_lim[0] < plot_lim[1]:
+            plt.gca().set_xlim(plot_lim[0], plot_lim[1])
         plt.legend(loc=0)
         plt.ylabel('a.u.')
         plt.xlabel('Shift (cm-1)')
         plt.show()
 
-    for i in range(len(data)):
-        data[i] = data[i] - air * alpha
-
-    data.insert(0, x_axis)
-
-    return data
+    return list(data)
 
 
-def pearson(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Pearson"):
+def pearson(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25, 
+            ti="Pearson", plot=True):
     """
     Calculates Pearson matrix and plots it.
 
@@ -1938,10 +1982,12 @@ def pearson(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Pear
     :type tfs: int
     :param tfs: Title font size. The default is 25.
 
+    :type plot: bool
+    :param plot: If True plots the matrix. The default is True.
+
     :type ti: str
     :param ti: Plot title/name. The default is "spearman".
     """
-    data = list(np.transpose(data))
     labels = list(labels)
     cm = str(cm)
     fonsize = float(fons)
@@ -1949,6 +1995,9 @@ def pearson(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Pear
     titlefs = float(tfs)
     title = str(ti)
     n = len(data)
+
+    if len(labels) < 1:
+        labels = [i for i in range(len(data))]
 
     pears = []
     cordsi = []  # coordinates, same order as labels
@@ -1973,27 +2022,29 @@ def pearson(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Pear
 
     pears = np.reshape(pears, (n, n))  # [pearson coeff, p-value]
 
-    gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
-    plt.rc('font', size=fonsize)
-    fig = plt.figure(tight_layout=True, figsize=figsize)
+    if plot:
+        gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
+        plt.rc('font', size=fonsize)
+        fig = plt.figure(tight_layout=True, figsize=figsize)
+    
+        y = [i + 0.5 for i in range(n)]
+        ticks = mpl.ticker.FixedLocator(y)
+        formatt = mpl.ticker.FixedFormatter(labels)
+    
+        ax = fig.add_subplot(gs[0, 0])
+        pcm = ax.pcolormesh(pears, cmap=cm, vmin=-1, vmax=1)
+        fig.colorbar(pcm, ax=ax)
+        ax.set_title(title, fontsize=titlefs)
+        ax.xaxis.set_major_locator(ticks)
+        ax.yaxis.set_major_locator(ticks)
+        ax.xaxis.set_major_formatter(formatt)
+        ax.yaxis.set_major_formatter(formatt)
+        plt.xticks(rotation='90')
+        plt.show()
 
-    y = [i + 0.5 for i in range(n)]
-    ticks = mpl.ticker.FixedLocator(y)
-    formatt = mpl.ticker.FixedFormatter(labels)
+    return pears
 
-    ax = fig.add_subplot(gs[0, 0])
-    pcm = ax.pcolormesh(pears, cmap=cm, vmin=-1, vmax=1)
-    fig.colorbar(pcm, ax=ax)
-    ax.set_title(title, fontsize=titlefs)
-    ax.xaxis.set_major_locator(ticks)
-    ax.yaxis.set_major_locator(ticks)
-    ax.xaxis.set_major_formatter(formatt)
-    ax.yaxis.set_major_formatter(formatt)
-    plt.xticks(rotation='90')
-    plt.show()
-
-
-def spearman(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Spearman"):
+def spearman(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Spearman", plot=True):
     """
     Calculates Pearson matrix and plots it.
 
@@ -2015,10 +2066,12 @@ def spearman(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Spe
     :type tfs: int
     :param tfs: Title font size. The default is 25.
 
+    :type plot: bool
+    :param plot: If True plots the matrix. The default is True.
+
     :type ti: str
     :param ti: Plot title/name. The default is "spearman".
     """
-    data = list(np.transpose(data))
     labels = list(labels)
     cm = str(cm)
     fonsize = float(fons)
@@ -2026,6 +2079,9 @@ def spearman(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Spe
     titlefs = float(tfs)
     title = str(ti)
     n = len(data)
+
+    if len(labels) < 1:
+        labels = [i for i in range(len(data))]
 
     spear = []  # spearman
     cordsi = []  # coordinates, same order as labels
@@ -2050,28 +2106,31 @@ def spearman(data, labels, cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Spe
 
     spear = np.reshape(spear, (n, n))  # [rho spearman, p-value]
 
-    gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
-    plt.rc('font', size=fonsize)
-    fig = plt.figure(tight_layout=True, figsize=figsize)
+    if plot:
+        gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
+        plt.rc('font', size=fonsize)
+        fig = plt.figure(tight_layout=True, figsize=figsize)
+    
+        y = [i + 0.5 for i in range(n)]
+        ticks = mpl.ticker.FixedLocator(y)
+        formatt = mpl.ticker.FixedFormatter(labels)
+    
+        ax = fig.add_subplot(gs[0, 0])
+        pcm = ax.pcolormesh(spear, cmap=cm, vmin=-1, vmax=1)
+        fig.colorbar(pcm, ax=ax)
+        ax.set_title(title, fontsize=titlefs)
+        ax.xaxis.set_major_locator(ticks)
+        ax.yaxis.set_major_locator(ticks)
+        ax.xaxis.set_major_formatter(formatt)
+        ax.yaxis.set_major_formatter(formatt)
+        plt.xticks(rotation='90')
+        plt.show()
+    
+    return spear
 
-    y = [i + 0.5 for i in range(n)]
-    ticks = mpl.ticker.FixedLocator(y)
-    formatt = mpl.ticker.FixedFormatter(labels)
 
-    ax = fig.add_subplot(gs[0, 0])
-    pcm = ax.pcolormesh(spear, cmap=cm, vmin=-1, vmax=1)
-    fig.colorbar(pcm, ax=ax)
-    ax.set_title(title, fontsize=titlefs)
-    ax.xaxis.set_major_locator(ticks)
-    ax.yaxis.set_major_locator(ticks)
-    ax.xaxis.set_major_formatter(formatt)
-    ax.yaxis.set_major_formatter(formatt)
-    plt.xticks(rotation='90')
-    plt.show()
-
-
-def grau(data, labels, cm="seismic", fons=20, figs=(25, 15),
-         tfs=25, ti="Grau (Beta)", marker="s", marks=100):
+def grau(data, labels=[], cm="seismic", fons=20, figs=(25, 15),
+         tfs=25, ti="Grau (Beta)", marker="s", marks=100, plot=True):
     """
     Performs Grau correlation matrix and plots it.
 
@@ -2099,11 +2158,12 @@ def grau(data, labels, cm="seismic", fons=20, figs=(25, 15),
     :type marker: str
     :param marker: Plot marker type (scatter). The default is "s".
 
+    :type plot: bool
+    :param plot: If True plots the matrix. The default is True.
+
     :type marks: int
     :param marks: DESCRIPTION. The default is 100.
     """
-
-    data = list(np.transpose(data))
     labels = list(labels)
     cm = str(cm)
     fontsize = float(fons)  # plot font size
@@ -2112,6 +2172,9 @@ def grau(data, labels, cm="seismic", fons=20, figs=(25, 15),
     title = str(ti)  # plot name
     marker = str(marker)  # market style
     markersize = float(marks)  # marker size
+
+    if len(labels) < 1:
+        labels = [i for i in range(len(data))]
 
     graus = evalgrau(data)  # grau correlation (3d R2)
     g1 = [graus[i][0] for i in range(len(graus))]  # first dimension values
@@ -2150,46 +2213,49 @@ def grau(data, labels, cm="seismic", fons=20, figs=(25, 15),
             if g1[i] >= j:  # if bigger than 0 (first)
                 g2_shift[i] += t_c[j - 1]  # shift (add) all the previous
 
-    gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])  # (rows, columns)
-    plt.rc('font', size=fontsize)
-    fig = plt.figure(tight_layout=True, figsize=figsize)
-
-    ax = fig.add_subplot(gs[0, 0])
-    cm = plt.cm.get_cmap(cm)
-    ax.set_title(title, fontsize=titlefs)
-    sc = ax.scatter(g2_shift, g3, alpha=1, edgecolors='none',
-                    c=mse, cmap=cm, s=markersize, marker=marker)
-    plt.colorbar(sc)
-    y_ticks = [i for i in range(int(min(g3)), int(max(g3)) + 1)]
-    x_ticks = [i for i in range(int(max(g2_shift)) + 2)]
-    ytick_labels = []
-    for i in range(len(y_ticks)):
-        ytick_labels.append(labels[y_ticks[i]])
-
-    for i in range(len(xtick_labels) - 1):
-        xtick_labels[i] = labels[xtick_labels[i]]
-    ax.set_xticks(x_ticks)
-    ax.set_xticklabels(xtick_labels, fontsize=9)
-    ax.set_xlim(0, max(x_ticks))
-    ax.get_xticklabels()[0].set_fontweight('bold')
-    plt.xticks(rotation='90')
-    ax.set_yticks(y_ticks)
-    ax.set_ylim(min(y_ticks) - 0.5, max(y_ticks) + 0.5)
-    ax.set_yticklabels(ytick_labels, fontsize=20)
-    ax.grid(linestyle='--')
-
-    temp = 0
-    for i in range(len(t_c)):
-        temp += t_c[i] + 1
-        ax.get_xgridlines()[temp].set_linestyle('-')
-        ax.get_xgridlines()[temp].set_color('black')
-        ax.get_xgridlines()[temp].set_linewidth(1)
-        ax.get_xticklabels()[temp].set_fontweight('bold')
+    if plot:
+        gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])  # (rows, columns)
+        plt.rc('font', size=fontsize)
+        fig = plt.figure(tight_layout=True, figsize=figsize)
+    
+        ax = fig.add_subplot(gs[0, 0])
+        cm = plt.cm.get_cmap(cm)
+        ax.set_title(title, fontsize=titlefs)
+        sc = ax.scatter(g2_shift, g3, alpha=1, edgecolors='none',
+                        c=mse, cmap=cm, s=markersize, marker=marker)
+        plt.colorbar(sc)
+        y_ticks = [i for i in range(int(min(g3)), int(max(g3)) + 1)]
+        x_ticks = [i for i in range(int(max(g2_shift)) + 2)]
+        ytick_labels = []
+        for i in range(len(y_ticks)):
+            ytick_labels.append(labels[y_ticks[i]])
+    
+        for i in range(len(xtick_labels) - 1):
+            xtick_labels[i] = labels[xtick_labels[i]]
+        ax.set_xticks(x_ticks)
+        ax.set_xticklabels(xtick_labels, fontsize=9)
+        ax.set_xlim(0, max(x_ticks))
+        ax.get_xticklabels()[0].set_fontweight('bold')
+        plt.xticks(rotation='90')
+        ax.set_yticks(y_ticks)
+        ax.set_ylim(min(y_ticks) - 0.5, max(y_ticks) + 0.5)
+        ax.set_yticklabels(ytick_labels, fontsize=20)
+        ax.grid(linestyle='--')
+    
+        temp = 0
+        for i in range(len(t_c)):
+            temp += t_c[i] + 1
+            ax.get_xgridlines()[temp].set_linestyle('-')
+            ax.get_xgridlines()[temp].set_color('black')
+            ax.get_xgridlines()[temp].set_linewidth(1)
+            ax.get_xticklabels()[temp].set_fontweight('bold')
 
     plt.show()
+    
+    return g2_shift
 
 
-def moveavg(data, move):
+def moveavg(data, move=2):
     """
     Calculate the moving average of a single or multiple vectors.
 
@@ -2232,8 +2298,8 @@ def moveavg(data, move):
     return avg
 
 
-def plot2dml(train, train_pred=[], test=0, test_pred=0, labels=[], title='', 
-             xax='x', yax='y', lfs=15, loc='best'):
+def plot2dml(train, names=['D1', 'D2', 'T'], train_pred=[],
+             labels=[], title='', xax='x', yax='y', lfs=15, loc='best'):
     """
     Plots 2-dimensional results from LDA, PCA, NCA, or similar machine learning
     algoruthms where the output has 2 features per sample.
@@ -2241,17 +2307,18 @@ def plot2dml(train, train_pred=[], test=0, test_pred=0, labels=[], title='',
     :type train: pandas frame
     :param train: Results for the training set. Pandas frame with the 2 dimensions
         and target columns.
-        
+    
+    :type names: list[str]
+    :param names: Name of the lables in the dataframe. For example, for LDA:
+        D1, D2 and T.    
+    
     :type train_pred: list
     :param train_pred: Prediction of the training set.
         
     :type test: pandas frame
     :param test: Results for the test set. Pandas frame with the 2 dimensions
         and target columns.
-        
-    :type test_pred: list
-    :param test_pred: Prediticon of the test set.
-        
+
     :type labels: list
     :param labels: NAmes for the classification groups, if any.
         
@@ -2272,29 +2339,29 @@ def plot2dml(train, train_pred=[], test=0, test_pred=0, labels=[], title='',
         
     :returns: Plot
     """
-    marker = ['o','v','s','d','*','^','x','+','.']
-    color = ["blue","orange","green","yellow","lime","springgreen","mediumspringgreen","cyan","royalblue","red"]
+    marker = ['o', 'v', 's', 'd', '*', '^', 'x', '+', '.']
+    color = ["blue", "orange", "green", "yellow", "lime", "springgreen", "mediumspringgreen", "cyan", "royalblue", "red"]
     
     for i in range(len(train)):  
         group = int(train['T'][i])
         ec = 'none'
         
-        if len(train_pred) > 1 :
-            if train_pred[i] != train['T'][i]:
+        if len(train_pred) > 1:
+            if train_pred[i] != train[names[2]][i]:
                 ec = 'red'
             
-        plt.scatter(train['D1'][i], train['D2'][i],
+        plt.scatter(train[names[0]][i], train[names[1]][i],
                     alpha=0.7, s=50, linewidths=1,
                     color=color[group], marker=marker[group],
                     edgecolor=ec)
     plt.xlabel(xax)
     plt.ylabel(yax)
     plt.title(title)
-    plt.legend(labels, loc=loc, prop={'size':lfs})
+    plt.legend(labels, loc=loc, prop={'size': lfs})
     plt.show()
     
     
-def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', figsize=(3,4.5), lw=1):
+def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', figsize=(3, 4.5), lw=1):
     """
     Plots a stack plot of selected spectras.
 
@@ -2312,6 +2379,12 @@ def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', figsize=(3,4.5),
 
     :type cmap: str
     :param cmap: Colormap, according to matplotlib options.
+
+    :type figsize: tuple
+    :param figsize: Size of the plot. Default is (3, 4.5)
+
+    :type lw: float
+    :param lw: Linewidth of the curves.
 
     :returns: Smoothed vector(s).
     :rtype: list[float]
@@ -2333,7 +2406,7 @@ def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', figsize=(3,4.5),
     plt.show()    
 
 
-def cosmicmp(ndata, alpha = 1, avg = 2):
+def cosmicmp(ndata, alpha=1, avg=2):
     """
     https://doi.org/10.1177/0003702819839098
     It identifies CRs by comparing similar spectras and paring in matching
@@ -2352,7 +2425,7 @@ def cosmicmp(ndata, alpha = 1, avg = 2):
 
     sim_specs = []  # most similar spectra (position) for each spectra i
 
-    for i in range(len(data)): # for all the spectras
+    for i in range(len(data)):  # for all the spectras
         n_cov = -1  # position of most similar spectra, initial value
         cov = 0  # to compare similarity of the spectras
         paired = 0  # if it is already paired with another spectra
@@ -2362,10 +2435,10 @@ def cosmicmp(ndata, alpha = 1, avg = 2):
                 paired = 1  # set as paired
         
         if paired == 0:  # if not paired, then calculate
-            b = np.dot(data[i],data[i])  # first term of equation
+            b = np.dot(data[i], data[i])  # first term of equation
             for j in range(len(data)):  # search in all spectras
-                a = np.dot(data[i],data[j])**2  # second term of eq.
-                c = np.dot(data[j],data[j])  # third term of eq.
+                a = np.dot(data[i], data[j])**2  # second term of eq.
+                c = np.dot(data[j], data[j])  # third term of eq.
                 temp = a/(b*c)  # final value to campare
                 if temp > cov and j != i:  # the highest value (covariance) wins
                     n_cov = j  # save the best
@@ -2387,7 +2460,7 @@ def cosmicmp(ndata, alpha = 1, avg = 2):
     return data
 
 
-def cosmicdd(ndata, th = 100, asy = 0.6745, m = 5):
+def cosmicdd(ndata, th=100, asy=0.6745, m=5):
     """
     https://doi.org/10.1016/j.chemolab.2018.06.009
     It identifies CRs by detrended differences, the differences between a
@@ -2402,45 +2475,43 @@ def cosmicdd(ndata, th = 100, asy = 0.6745, m = 5):
     :type asy: float
     :param asy: Asymptotic bias correction
     
-    :type : float
-    :param : Factor to modify the criteria to identify a cosmic ray.
+    :type m: float
+    :param m: Number of neighbor values to use for average.
 
     :returns: Data with removed cosmic rays.
     :rtype: list[float]
     """
     data = copy.deepcopy(ndata)
     
-    diff = list(np.array(data)) # diff data
+    diff = list(np.array(data))  # diff data
      
-    for i in range(len(data)): # for each spectra
-        for j in range(len(data[0])-1): # for each step
-            diff[i][j] = abs(data[i][j]-data[i][j+1]) # diff with the next one
+    for i in range(len(data)):  # for each spectra
+        for j in range(len(data[0])-1):  # for each step
+            diff[i][j] = abs(data[i][j]-data[i][j+1])  # diff with the next one
     
-    zt = [] # Z scores
-    #c = 0 
-    for i in diff: # for each diff. vector
-        #c += 1
-        z = [] # temporal z score
-        temp = [] # temporal MAD (median absolute deviation)
-        med = np.median(i) # just median
+    zt = []  # Z scores
+    for i in diff:  # for each diff. vector
+        z = []  # temporal z score
+        temp = []  # temporal MAD (median absolute deviation)
+        med = np.median(i)  # just median
         
-        for j in i: # for each step in each diff. spectra
-            temp.append(abs(j-med)) # calculate MAD
-        mad = np.median(temp) # save MAD
+        for j in i:  # for each step in each diff. spectra
+            temp.append(abs(j-med))  # calculate MAD
+        mad = np.median(temp)  # save MAD
         
-        for j in i: # for each step in each diff. spectra
-            z.append(asy*(j - med)/mad) # calculate Z score
-        zt.append(z) # save Z score
+        for j in i:  # for each step in each diff. spectra
+            z.append(asy*(j - med)/mad)  # calculate Z score
+        zt.append(z)  # save Z score
     
-    for i in range(len(data)): # for each spectra
-        for j in range(len(data[i])-1): # in all its len. except the last (range)
-            if abs(zt[i][j]) > th: # if it is larger than the th. then it is CR
-                data[i][j] = (sum(data[i][j-m:j]) + sum(data[i][j+1:j+m+1]))/(2*m) # avg, of neighbors
+    for i in range(len(data)):  # for each spectra
+        for j in range(len(data[i])-1):  # in all its len. except the last (range)
+            if abs(zt[i][j]) > th:  # if it is larger than the th. then it is CR
+                data[i][j] = (sum(data[i][j-m:j]) + sum(data[i][j+1:j+m+1]))/(2*m)  # avg, of neighbors
     
     return data
 
 
-def cosmicmed(data, sigma):
+def cosmicmed(data, sigma=1.5):
     """
     Precise cosmic ray elimination for measurements of the same point or very
     similar spectras.

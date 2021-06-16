@@ -14,10 +14,10 @@ SpectraPepper
         :target: https://enricgrau.github.io/spectrapepper
 .. image:: https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?label=conda%20downloads
         :target: https://pepy.tech/project/spectrapepper
-.. image:: https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=international_system&left_color=grey&left_text=pypi%20downloads&right_color=blue
+.. image:: https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=none&left_color=grey&left_text=pypi%20downloads&right_color=blue
         :target: https://pepy.tech/project/spectrapepper
-
-
+.. image:: https://img.shields.io/badge/stackoverflow-Ask%20a%20question-blue
+        :target: https://stackoverflow.com/questions/tagged/spectrapepper
 
 **A Python package to simplify and accelerate analysis of spectroscopy data.**
 
@@ -27,7 +27,6 @@ SpectraPepper
 * Conda-forge: https://anaconda.org/conda-forge/spectrapepper
 * Free software: MIT license
 
-
 Introduction
 ============
 
@@ -36,7 +35,6 @@ through straightforward, simple, and intuitive code. This library contains funct
 methodologies, including data acquisition, pre-processing, processing, and analysis. In particular, advanced and high
 statistic methods are intended to facilitate, namely combinatorial analysis and machine learning, allowing also
 fast and automated traditional methods.
-
 
 Features
 --------
@@ -49,7 +47,6 @@ The following is a short list of some of the main procedures that **SpectraPeppe
 * Combinatorial analysis tools, including Spearman, Pearson, and n-dimensional correlation coefficients.
 * Tools for Machine Learning applications, such as data merging, randomization, and decision map.
 * Easy export of data to text files to use visualization software, such as Origin.
-
 
 Quickstart
 ----------
