@@ -1,5 +1,6 @@
 """
-This main module contains all the functions available in spectrapepper.
+This main module contains all the functions available in spectrapepper. Please use the search function to look up
+specific functionalities with key words.
 """
 
 import math

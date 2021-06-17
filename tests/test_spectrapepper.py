@@ -3,11 +3,11 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-# import spectrapepper as spep
+import spectrapepper as spep
 import numpy as np
 import pandas as pd
-import my_functions as spep
-import sys
+# import my_functions as spep
+# import sys
 
 class TestSpectrapepper(unittest.TestCase):
     """Tests for `spectrapepper` package."""
