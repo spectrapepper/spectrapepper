@@ -5,6 +5,7 @@
 [![image](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![image](https://img.shields.io/lgtm/grade/python/g/enricgrau/spectrapepper.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/enricgrau/spectrapepper/context:python)
 [![image](https://github.com/enricgrau/spectrapepper/workflows/docs/badge.svg)](https://enricgrau.github.io/spectrapepper)
+[![codecov](https://codecov.io/gh/enricgrau/spectrapepper/branch/main/graph/badge.svg?token=IVM5BFGYHV)](https://codecov.io/gh/enricgrau/spectrapepper)
 [![Downloads](https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=none&left_color=grey&right_color=blue&left_text=pypi%20downloads)](https://pepy.tech/project/spectrapepper)
 [![image](https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?label=conda%20downloads)](https://anaconda.org/conda-forge/spectrapepper)
 [![image](https://img.shields.io/badge/stackoverflow-Ask%20a%20question-blue)](https://stackoverflow.com/questions/tagged/spectrapepper)

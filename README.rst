@@ -12,6 +12,8 @@ SpectraPepper
         :target: https://lgtm.com/projects/g/enricgrau/spectrapepper/context:python
 .. image:: https://github.com/enricgrau/spectrapepper/workflows/docs/badge.svg
         :target: https://enricgrau.github.io/spectrapepper
+.. image:: https://codecov.io/gh/enricgrau/spectrapepper/branch/main/graph/badge.svg?token=IVM5BFGYHV
+        :target: https://codecov.io/gh/enricgrau/spectrapepper
 .. image:: https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?label=conda%20downloads
         :target: https://pepy.tech/project/spectrapepper
 .. image:: https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=none&left_color=grey&left_text=pypi%20downloads&right_color=blue
