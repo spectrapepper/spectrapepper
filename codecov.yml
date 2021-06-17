@@ -1,4 +1,0 @@
-ignore:
-- "tests/test_spectrapepper.py"
-- "examples"
-- "**/setup.py"
