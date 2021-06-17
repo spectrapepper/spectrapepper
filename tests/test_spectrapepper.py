@@ -7,7 +7,7 @@ import spectrapepper as spep
 import numpy as np
 import pandas as pd
 # import my_functions as spep
-import sys
+# import sys
 
 class TestSpectrapepper(unittest.TestCase):
     """Tests for `spectrapepper` package."""
@@ -25,16 +25,11 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(spep.load_mapp2()[0][0], 54.8098)
 
     def test_loaders(self):
-        data2 = spep.loadline('datasets/spectras.txt',2)
-        r = round(sum(data2),2)
-        print('loadline: ' + str(r))
-        self.assertEqual(r, 1460.99)
+        data2 = spep.test_loads()
+        r = data2
+        print('test_loads: ' + str(r))
+        self.assertEqual(r, True)
         
-        data2 = spep.loadheader('datasets/headers.txt', 2, split=True)
-        r = data2[2]
-        print('loadheader: ' + str(r))
-        self.assertEqual(r, 'second')
-
         
     def test_functions(self):
         spectras = spep.load_spectras()

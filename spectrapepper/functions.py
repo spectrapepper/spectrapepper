@@ -149,7 +149,7 @@ def load_data(file):
         row = row.replace("nan", "-1")
         row = row.replace("--", "-1")
         s_row = str.split(row)
-        s_row = np.array(s_row, dtype=np.float)
+        s_row = np.array(s_row, dtype=float)
         new_data.append(s_row)
     raw_data.close()
 
@@ -186,7 +186,7 @@ def load(file, fromline=0, transpose=False):
             row = row.replace("nan", "-1")
             row = row.replace("--", "-1")
             s_row = str.split(row)
-            s_row = np.array(s_row, dtype=np.float)
+            s_row = np.array(s_row, dtype=float)
             new_data.append(s_row)
         i += 1
     raw_data.close()
@@ -256,12 +256,42 @@ def loadline(file, line=0, tp='float'):
     info = str.split(info)
 
     if tp == 'float':
-        info = np.array(info, dtype=np.float)
+        info = np.array(info, dtype=float)
 
     if tp == 'str':
-        info = np.array(info, dtype=np.str)
+        info = np.array(info, dtype=str)
 
     return info
+
+
+def test_loads():
+    """
+    Only for tests purposes. Ingroed in documentation.
+    
+    :returns: A True is test is succesful.
+    :rtype: bool
+    """
+    default = False
+    
+    location = os.path.dirname(os.path.realpath(__file__))
+    
+    my_file = os.path.join(location, 'datasets', 'spectras.txt')
+    data = loadline(my_file,2)
+    r = round(sum(data), 0)
+    print(r)
+    if r == 1461:
+        default = True
+    
+    my_file = os.path.join(location, 'datasets', 'headers.txt')
+    data = loadheader(my_file, 2, split=True)
+    r = data[2]
+    if r != 'second':
+        default = False
+    
+    return default
+    
+
+test_loads()
 
 
 def lowpass(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
