@@ -223,7 +223,7 @@ def loadheader(file, line, split=False):
     if split:
         info = str.split(info)
 
-    info = np.array(info, dtype=np.str)
+    info = np.array(info, dtype=str)
 
     return info
 
