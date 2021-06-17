@@ -2301,8 +2301,8 @@ def moveavg(data, move=2):
     return avg
 
 
-def plot2dml(train, names=['D1', 'D2', 'T'], train_pred=[],
-             labels=[], title='', xax='x', yax='y', lfs=15, loc='best'):
+def plot2dml(train, names=['D1', 'D2', 'T'], train_pred=[], labels=[],
+             title='', xax='x', yax='y', lfs=15, loc='best', plot=True):
     """
     Plots 2-dimensional results from LDA, PCA, NCA, or similar machine learning
     algoruthms where the output has 2 features per sample.
@@ -2339,6 +2339,9 @@ def plot2dml(train, names=['D1', 'D2', 'T'], train_pred=[],
         
     :type loc: str
     :param loc: Location of legend. Default is best.
+    
+    :type plot: bool
+    :param plot: If True it plot. Only for test purposes.
         
     :returns: Plot
     """
@@ -2349,22 +2352,24 @@ def plot2dml(train, names=['D1', 'D2', 'T'], train_pred=[],
         group = int(train['T'][i])
         ec = 'none'
         
-        if len(train_pred) > 1:
+        if len(train_pred) > 1 and plot:
             if train_pred[i] != train[names[2]][i]:
                 ec = 'red'
-            
-        plt.scatter(train[names[0]][i], train[names[1]][i],
-                    alpha=0.7, s=50, linewidths=1,
-                    color=color[group], marker=marker[group],
+        plt.scatter(train[names[0]][i], train[names[1]][i], alpha=0.7, s=50,
+                    linewidths=1, color=color[group], marker=marker[group],
                     edgecolor=ec)
-    plt.xlabel(xax)
-    plt.ylabel(yax)
-    plt.title(title)
-    plt.legend(labels, loc=loc, prop={'size': lfs})
-    plt.show()
+    if plot:
+        plt.xlabel(xax)
+        plt.ylabel(yax)
+        plt.title(title)
+        plt.legend(labels, loc=loc, prop={'size': lfs})
+        plt.show()
+    
+    return plot
     
     
-def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', figsize=(3, 4.5), lw=1):
+def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', 
+              figsize=(3, 4.5), lw=1, plot=True):
     """
     Plots a stack plot of selected spectras.
 
@@ -2389,8 +2394,11 @@ def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', figsize=(3, 4.5)
     :type lw: float
     :param lw: Linewidth of the curves.
 
-    :returns: Smoothed vector(s).
-    :rtype: list[float]
+    :type plot: bool
+    :param plot: If True it plot. Only for test purposes.
+
+    :returns: plot
+    :rtype: bool
     """      
        
     base = [add for _ in range(len(data[0]))]
@@ -2400,13 +2408,16 @@ def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', figsize=(3, 4.5)
     for i in range(len(data)):
         color.append(cmap(i/(len(data)-1)))
     
-    plt.figure(figsize=figsize)
-    for i in range(len(data)):
-        plt.plot(np.array(data[i]) + np.array(base)*i, color=color[i], lw=lw)
-    plt.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.show()    
+    if plot:
+        plt.figure(figsize=figsize)
+        for i in range(len(data)):
+            plt.plot(np.array(data[i]) + np.array(base)*i, color=color[i], lw=lw)
+        plt.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.show()  
+        
+    return plot
 
 
 def cosmicmp(ndata, alpha=1, avg=2):
@@ -2541,3 +2552,68 @@ def cosmicmed(data, sigma=1.5):
                 solved[i][j] = med[j]
     
     return solved
+
+
+def makeaxisstep(start, step, length, adjust=False, rounded=-1):
+    """
+    Creates an axis, or vector, from 'start' with bins of length 'step' 
+    for a distance of 'length'.
+    
+    :type start: float 
+    :param start: first value of the axis
+        
+    :type : 
+    :param :
+        
+    :type : 
+    :param :
+    
+    :type : 
+    :param :
+        
+    :type rounded: int 
+    :param rounded: Number of decimals to consider. If -1 then no rounding is
+        performed.
+        
+    :returns: Axis with the set parameters.
+    :rtype: list[float]
+    """
+    if adjust:
+        d = str(step)[::-1].find('.')
+        axis = [round(start+step*i,d) for i in range(length)]
+    else:
+        if rounded >= 0:
+            axis = [round(start+step*i,rounded) for i in range(length)]
+        else:
+            axis = [start+step*i for i in range(length)]
+    return axis
+
+
+def makeaxisdivs(start, finish, divs, rounded=-1):
+    """
+    Creates an axis, or vector, from 'start' to 'finish' with 'divs' divisions. 
+    
+    :type start: float 
+    :param start: first value of the axis
+        
+    :type finish: 
+    :param finish:
+        
+    :type divs: 
+    :param divs:
+        
+    :type rounded: int 
+    :param rounded: Number of decimals to consider. If -1 then no rounding is
+        performed.
+        
+    :returns: Axis with the set parameters.
+    :rtype: list[float]
+    """
+    length = int(finish - start)
+    step = (finish-start)/divs
+    if rounded >= 0:
+        axis = [round(start+step*i,rounded) for i in range(length)]
+    else:
+        axis = [start+step*i for i in range(length)]
+    return axis
+

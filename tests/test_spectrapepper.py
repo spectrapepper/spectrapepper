@@ -3,10 +3,10 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-import spectrapepper as spep
+# import spectrapepper as spep
 import numpy as np
 import pandas as pd
-# import my_functions as spep
+import my_functions as spep
 
 class TestSpectrapepper(unittest.TestCase):
     """Tests for `spectrapepper` package."""
@@ -248,12 +248,14 @@ class TestSpectrapepper(unittest.TestCase):
         print('moveavg: ' + str(r))
         self.assertEqual(r, 32)
         
-        # df = pd.DataFrame(data = np.transpose([a,b,c]), columns = ['D1', 'D2', 'T'])
-        # data2 = spep.plot2dml(df)
-        # print('plot2dml: ')
+        df = pd.DataFrame(data = np.transpose([a,b,c]), columns = ['D1', 'D2', 'T'])
+        data2 = spep.plot2dml(df, plot=False)
+        print('plot2dml: ')
+        self.assertEqual(data2, False)
         
-        # data2 = spep.stackplot([data, data_l1], add=1)
-        # print('stackplot: ')
+        data2 = spep.stackplot([data, data_l1], add=1, plot=False)
+        print('stackplot: ')
+        self.assertEqual(data2, False)
         
         data2 = spep.cosmicmp([data,data])
         r = np.floor(np.sum(data2))
@@ -269,6 +271,16 @@ class TestSpectrapepper(unittest.TestCase):
         r = np.floor(np.sum(data2))
         print('cosmicmed: ' + str(r))
         self.assertEqual(r, 2927)
+        
+        data2 = spep.makeaxisstep(1000, 0.98, 2000, rounded=2)
+        r = np.floor(sum(data2))
+        print('makeaxisstep: ' + str(r))
+        self.assertEqual(r, 3959020)
+        
+        data2 = spep.makeaxisdivs(1000, 2000, 900, rounded=2)
+        r = np.floor(sum(data2))
+        print('makeaxisdivs: ' + str(r))
+        self.assertEqual(r, 1555000)
         
         
 if __name__ == '__main__':
