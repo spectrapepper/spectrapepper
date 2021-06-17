@@ -746,7 +746,7 @@ load numbers as floats.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.logo">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">logo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">80</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">120</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#logo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.logo" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">logo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">90</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">leng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">80</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">120</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#logo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.logo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints the logo of SpectraPepper.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -759,6 +759,12 @@ load numbers as floats.</p>
 <li><p><strong>r2</strong> (<em>int</em>) – Random upper limit. The default is 120.</p></li>
 <li><p><strong>lw</strong> (<em>int</em>) – Line width. The default is 2.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>plot</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -803,6 +809,59 @@ for similar structures can be found at <a class="reference external" href="http:
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Filtered data</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="functions.makeaxisdivs">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">makeaxisdivs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rounded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#makeaxisdivs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.makeaxisdivs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an axis, or vector, from ‘start’ to ‘finish’ with ‘divs’ divisions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>start</strong> (<em>float</em>) – first value of the axis</p></li>
+<li><p><strong>finish</strong> – </p></li>
+<li><p><strong>divs</strong> – </p></li>
+<li><p><strong>rounded</strong> (<em>int</em>) – Number of decimals to consider. If -1 then no rounding is
+performed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Axis with the set parameters.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="functions.makeaxisstep">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">makeaxisstep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rounded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#makeaxisstep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.makeaxisstep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an axis, or vector, from ‘start’ with bins of length ‘step’ 
+for a distance of ‘length’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>start</strong> (<em>float</em>) – first value of the axis</p>
+</dd>
+</dl>
+<p>:type : 
+:param :</p>
+<p>:type : 
+:param :</p>
+<p>:type : 
+:param :</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rounded</strong> (<em>int</em>) – Number of decimals to consider. If -1 then no rounding is
+performed.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Axis with the set parameters.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list[float]</p>
@@ -1050,7 +1109,7 @@ will be reescaled to 1 in all the spectras.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.plot2dml">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">plot2dml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['D1',</span> <span class="pre">'D2',</span> <span class="pre">'T']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_pred</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lfs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#plot2dml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.plot2dml" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">plot2dml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['D1',</span> <span class="pre">'D2',</span> <span class="pre">'T']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_pred</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'y'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lfs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'best'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#plot2dml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.plot2dml" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots 2-dimensional results from LDA, PCA, NCA, or similar machine learning
 algoruthms where the output has 2 features per sample.</p>
 <dl class="field-list simple">
@@ -1069,6 +1128,7 @@ and target columns.</p></li>
 <li><p><strong>yax</strong> (<em>str</em>) – NAme of y-axis</p></li>
 <li><p><strong>lfs</strong> (<em>int</em>) – Legend font size. Default is 15.</p></li>
 <li><p><strong>loc</strong> (<em>str</em>) – Location of legend. Default is best.</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – If True it plot. Only for test purposes.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1206,7 +1266,7 @@ and target columns.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.stackplot">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">stackplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Spectral'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3,</span> <span class="pre">4.5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#stackplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.stackplot" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">stackplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Spectral'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(3,</span> <span class="pre">4.5)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#stackplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.stackplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots a stack plot of selected spectras.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1218,13 +1278,14 @@ and target columns.</p></li>
 <li><p><strong>cmap</strong> (<em>str</em>) – Colormap, according to matplotlib options.</p></li>
 <li><p><strong>figsize</strong> (<em>tuple</em>) – Size of the plot. Default is (3, 4.5)</p></li>
 <li><p><strong>lw</strong> (<em>float</em>) – Linewidth of the curves.</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – If True it plot. Only for test purposes.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Smoothed vector(s).</p>
+<dd class="field-even"><p>plot</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list[float]</p>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>

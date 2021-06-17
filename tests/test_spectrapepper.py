@@ -3,10 +3,11 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-import spectrapepper as spep
+# import spectrapepper as spep
 import numpy as np
 import pandas as pd
-# import my_functions as spep
+import my_functions as spep
+import sys
 
 class TestSpectrapepper(unittest.TestCase):
     """Tests for `spectrapepper` package."""
@@ -22,7 +23,20 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(spep.load_params()[0][0], 300)
         self.assertEqual(spep.load_mapp1()[0][0], 54.5611)
         self.assertEqual(spep.load_mapp2()[0][0], 54.8098)
+      
+    def test_loaders(self):
         
+        data2 = spep.loadheader('datasets/headers.txt',2, split=True)
+        r = data2[2]
+        print('loadheader: ' + str(r))
+        self.assertEqual(r, 'second')
+        
+        data2 = spep.loadline('datasets/spectras.txt',2)
+        r = round(sum(data2),2)
+        print('loadline: ' + str(r))
+        self.assertEqual(r, 1460.99)
+        
+    
     def test_functions(self):
         spectras = spep.load_spectras()
         data = spectras[1]
@@ -89,10 +103,14 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(r, 523)
         
         data2 = spep.areacalculator(data, [[50, 100], [350, 450], [460, 500]], norm=True)
-        print('areacalculator: ' + str(np.floor(sum(data2))))
         r = round((sum(data2)),1)
         print('areacalculator: ' + str(r))
         self.assertEqual(r, 0.2)
+        
+        data2 = spep.bincombs(3)
+        r = data2[2]
+        print('bincombs: ' + str(r))
+        self.assertEqual(r, (1, 1, 0))
         
         data2 = spep.normsum(data)
         r = np.floor(sum(data2))
@@ -207,6 +225,11 @@ class TestSpectrapepper(unittest.TestCase):
         r = np.floor(np.sum(data2))
         print('mergedata: ' + str(r))
         self.assertEqual(r, 125)
+        
+        data2 = spep.logo(plot=False)
+        r = data2
+        print('shiftref: ' + str(r))
+        self.assertEqual(r, False)
         
         data2 = spep.shiftref([data,data],[axis,axis],plot=False)
         r = np.floor(data2)

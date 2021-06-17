@@ -1684,7 +1684,7 @@ def mergedata(data):
     return master
 
 
-def logo(lay=90, leng=100, a=1, b=0.8, r1=80, r2=120, lw=2):
+def logo(lay=90, leng=100, a=1, b=0.8, r1=80, r2=120, lw=2, plot=True):
     """
     Prints the logo of SpectraPepper.
 
@@ -1708,6 +1708,9 @@ def logo(lay=90, leng=100, a=1, b=0.8, r1=80, r2=120, lw=2):
 
     :type lw: int
     :param lw: Line width. The default is 2.
+    
+    :returns: plot
+    :rtype: bool
     """
     x = [[1 for _ in range(leng)] for _ in range(lay)]
 
@@ -1721,14 +1724,16 @@ def logo(lay=90, leng=100, a=1, b=0.8, r1=80, r2=120, lw=2):
         x[i] = xl(amp, wid * b, pos)
 
     axis = [i for i in range(leng)]
-
-    plt.figure(figsize=(10, 14))
-    for i in range(len(x)):
-        r = [random.randint(r1, r2) / 100 for i in range(leng)]
-        curve = np.array(x[i]) + i + r
-        plt.plot(curve, color='black', lw=lw)
-        plt.fill_between(axis, curve, color='white', alpha=1)
-    plt.show()
+    
+    if plot:
+        plt.figure(figsize=(10, 14))
+        for i in range(len(x)):
+            r = [random.randint(r1, r2) / 100 for i in range(leng)]
+            curve = np.array(x[i]) + i + r
+            plt.plot(curve, color='black', lw=lw)
+            plt.fill_between(axis, curve, color='white', alpha=1)
+        plt.show()
+    return plot
 
 
 def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, it=100, plot=True):
