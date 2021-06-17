@@ -17,9 +17,8 @@ jobs:
         python-version: 3.7
     - name: Generate Report
       run: |
-        pip install numpy
-        pip install pandas
-        pip install coverage
+        pip install --user -r requirements.txt
+        pip install --user -r requirements_dev.txt
         coverage run -m unittest
     - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v1
