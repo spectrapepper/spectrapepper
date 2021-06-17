@@ -18,6 +18,7 @@ jobs:
     - name: Generate Report
       run: |
         pip install numpy
+        pip install pandas
         pip install coverage
         coverage run -m unittest
     - name: Upload Coverage to Codecov
