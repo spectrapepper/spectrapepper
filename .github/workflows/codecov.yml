@@ -17,6 +17,7 @@ jobs:
         python-version: 3.7
     - name: Generate Report
       run: |
+        pip install numpy
         pip install coverage
         coverage run -m unittest
     - name: Upload Coverage to Codecov
