@@ -30,7 +30,6 @@ class TestSpectrapepper(unittest.TestCase):
         print('loadline: ' + str(r))
         self.assertEqual(r, 1460.99)
         
-    
         data2 = spep.loadheader('datasets/headers.txt', 2, split=True)
         r = data2[2]
         print('loadheader: ' + str(r))
