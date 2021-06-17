@@ -109,4 +109,4 @@ ENV/
 
 # Files in tests
 tests/my_functions.py
-tests/datasets/
+#tests/datasets/
