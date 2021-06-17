@@ -272,15 +272,15 @@ class TestSpectrapepper(unittest.TestCase):
         print('cosmicmed: ' + str(r))
         self.assertEqual(r, 2927)
         
-        data2 = spep.makeaxisstep(1000, 0.98, 2000, rounded=2)
+        data2 = spep.makeaxisstep(1000, 0.98, 1000, rounded=2)
         r = np.floor(sum(data2))
         print('makeaxisstep: ' + str(r))
-        self.assertEqual(r, 3959020)
+        self.assertEqual(r, 1489510)
         
-        data2 = spep.makeaxisdivs(1000, 2000, 900, rounded=2)
+        data2 = spep.makeaxisdivs(1000, 1500, 900, rounded=2)
         r = np.floor(sum(data2))
         print('makeaxisdivs: ' + str(r))
-        self.assertEqual(r, 1555000)
+        self.assertEqual(r, 569305)
         
         
 if __name__ == '__main__':
