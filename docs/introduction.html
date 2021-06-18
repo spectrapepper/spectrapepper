@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html4" lang="en" >
 <head>
   <meta charset="utf-8" />
   
@@ -13,8 +13,6 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,10 +29,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -174,13 +172,18 @@
 <a class="reference external image-reference" href="https://anaconda.org/conda-forge/spectrapepper"><img alt="https://img.shields.io/conda/vn/conda-forge/spectrapepper.svg" src="https://img.shields.io/conda/vn/conda-forge/spectrapepper.svg" /></a>
 <a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="https://img.shields.io/badge/License-MIT-yellow.svg" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
 <a class="reference external image-reference" href="https://lgtm.com/projects/g/enricgrau/spectrapepper/context:python"><img alt="https://img.shields.io/lgtm/grade/python/g/enricgrau/spectrapepper.svg?logo=lgtm&amp;logoWidth=18" src="https://img.shields.io/lgtm/grade/python/g/enricgrau/spectrapepper.svg?logo=lgtm&amp;logoWidth=18" /></a>
+<a class="reference external image-reference" href="https://enricgrau.github.io/spectrapepper"><img alt="https://github.com/enricgrau/spectrapepper/workflows/docs/badge.svg" src="https://github.com/enricgrau/spectrapepper/workflows/docs/badge.svg" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/enricgrau/spectrapepper"><img alt="https://codecov.io/gh/enricgrau/spectrapepper/branch/main/graph/badge.svg?token=IVM5BFGYHV" src="https://codecov.io/gh/enricgrau/spectrapepper/branch/main/graph/badge.svg?token=IVM5BFGYHV" /></a>
+<a class="reference external image-reference" href="https://pepy.tech/project/spectrapepper"><img alt="https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?label=conda%20downloads" src="https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?label=conda%20downloads" /></a>
+<a class="reference external image-reference" href="https://pepy.tech/project/"><img alt="https://static.pepy.tech/personalized-badge/spectrapepper?period=total&amp;units=none&amp;left_color=grey&amp;left_text=pypi%20downloads&amp;right_color=blue" src="https://static.pepy.tech/personalized-badge/spectrapepper?period=total&amp;units=none&amp;left_color=grey&amp;left_text=pypi%20downloads&amp;right_color=blue" /></a>
+<a class="reference external image-reference" href="https://stackoverflow.com/questions/tagged/spectrapepper"><img alt="https://img.shields.io/badge/stackoverflow-Ask%20a%20question-blue" src="https://img.shields.io/badge/stackoverflow-Ask%20a%20question-blue" /></a>
 <p><strong>A Python package to simplify and accelerate analysis of spectroscopy data.</strong></p>
 <ul class="simple">
-<li><p>GitHub repo: <a class="reference external" href="https://github.com/enricgrau/spectrapepper">https://github.com/enricgrau/spectrapepper</a></p></li>
-<li><p>Documentation: <a class="reference external" href="https://enricgrau.github.io/spectrapepper">https://enricgrau.github.io/spectrapepper</a></p></li>
-<li><p>PyPI: <a class="reference external" href="https://pypi.python.org/pypi/spectrapepper">https://pypi.python.org/pypi/spectrapepper</a></p></li>
-<li><p>Conda-forge: <a class="reference external" href="https://anaconda.org/conda-forge/spectrapepper">https://anaconda.org/conda-forge/spectrapepper</a></p></li>
-<li><p>Free software: MIT license</p></li>
+<li>GitHub repo: <a class="reference external" href="https://github.com/enricgrau/spectrapepper">https://github.com/enricgrau/spectrapepper</a></li>
+<li>Documentation: <a class="reference external" href="https://enricgrau.github.io/spectrapepper">https://enricgrau.github.io/spectrapepper</a></li>
+<li>PyPI: <a class="reference external" href="https://pypi.python.org/pypi/spectrapepper">https://pypi.python.org/pypi/spectrapepper</a></li>
+<li>Conda-forge: <a class="reference external" href="https://anaconda.org/conda-forge/spectrapepper">https://anaconda.org/conda-forge/spectrapepper</a></li>
+<li>Free software: MIT license</li>
 </ul>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
@@ -193,12 +196,12 @@ fast and automated traditional methods.</p>
 <h3>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h3>
 <p>The following is a short list of some of the main procedures that <strong>SpectraPepper</strong> package enables.</p>
 <ul class="simple">
-<li><p>Automatic and user-defined baseline removal.</p></li>
-<li><p>Several normalization methods.</p></li>
-<li><p>Noise filters, trimming, and other pre-processing tools.</p></li>
-<li><p>Combinatorial analysis tools, including Spearman, Pearson, and n-dimensional correlation coefficients.</p></li>
-<li><p>Tools for Machine Learning applications, such as data merging, randomization, and decision map.</p></li>
-<li><p>Easy export of data to text files to use visualization software, such as Origin.</p></li>
+<li>Baseline calculation adn removal functions.</li>
+<li>Several normalization methods.</li>
+<li>Noise filters, trimming, and other pre-processing tools.</li>
+<li>Combinatorial analysis tools, including Spearman, Pearson, and n-dimensional correlation coefficients.</li>
+<li>Tools for Machine Learning applications, such as data merging, randomization, and decision map.</li>
+<li>Easy export of data to text files to use visualization software, such as Origin.</li>
 </ul>
 </div>
 <div class="section" id="credits">

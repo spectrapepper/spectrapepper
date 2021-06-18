@@ -14,6 +14,21 @@ SpectraPepper
 .. image:: https://img.shields.io/lgtm/grade/python/g/enricgrau/spectrapepper.svg?logo=lgtm&logoWidth=18
         :target: https://lgtm.com/projects/g/enricgrau/spectrapepper/context:python
 
+.. image:: https://github.com/enricgrau/spectrapepper/workflows/docs/badge.svg
+        :target: https://enricgrau.github.io/spectrapepper
+
+.. image:: https://codecov.io/gh/enricgrau/spectrapepper/branch/main/graph/badge.svg?token=IVM5BFGYHV
+        :target: https://codecov.io/gh/enricgrau/spectrapepper
+
+.. image:: https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?label=conda%20downloads
+        :target: https://pepy.tech/project/spectrapepper
+
+.. image:: https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=none&left_color=grey&left_text=pypi%20downloads&right_color=blue
+        :target: https://pepy.tech/project/
+
+.. image:: https://img.shields.io/badge/stackoverflow-Ask%20a%20question-blue
+        :target: https://stackoverflow.com/questions/tagged/spectrapepper
+
 **A Python package to simplify and accelerate analysis of spectroscopy data.**
 
 * GitHub repo: https://github.com/enricgrau/spectrapepper
@@ -21,7 +36,6 @@ SpectraPepper
 * PyPI: https://pypi.python.org/pypi/spectrapepper
 * Conda-forge: https://anaconda.org/conda-forge/spectrapepper
 * Free software: MIT license
-
 
 
 Introduction
@@ -38,7 +52,7 @@ Features
 
 The following is a short list of some of the main procedures that **SpectraPepper** package enables.
 
-* Automatic and user-defined baseline removal.
+* Baseline calculation adn removal functions.
 * Several normalization methods.
 * Noise filters, trimming, and other pre-processing tools.
 * Combinatorial analysis tools, including Spearman, Pearson, and n-dimensional correlation coefficients.

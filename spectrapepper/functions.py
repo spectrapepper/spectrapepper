@@ -289,9 +289,6 @@ def test_loads():
         default = False
     
     return default
-    
-
-test_loads()
 
 
 def lowpass(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
