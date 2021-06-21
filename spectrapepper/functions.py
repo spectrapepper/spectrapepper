@@ -21,7 +21,7 @@ import statistics as sta
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
-from matplotlib.colors import ListedColormap, LinearSegmentedColormap
+from matplotlib.colors import LinearSegmentedColormap
 import linecache
 import os.path
 import os
@@ -126,36 +126,6 @@ def load_params(transpose=False):
     return data
 
 
-def load_data(file):
-    """
-    Load data from a standard text file obtained from LabSpec and other
-    spectroscopy instruments. When single measurement these come in columns with
-    the first one being the x-axis. When it is a mapping, the first row is the
-    x-axis and the following are the measurements. Sometimes the first 2 columns
-    will be the coordinates. No headers, yet.
-
-    :type file: str
-    :param file: Url of data file. Must not have headers and separated by 'spaces' (LabSpec).
-
-    :returns: List of the data.
-    :rtype: list[float]
-    """
-    new_data = []
-    raw_data = open(file, "r")
-    for row in raw_data:
-        row = row.replace(",", ".")
-        row = row.replace(";", " ")
-        row = row.replace("NaN", "-1")
-        row = row.replace("nan", "-1")
-        row = row.replace("--", "-1")
-        s_row = str.split(row)
-        s_row = np.array(s_row, dtype=float)
-        new_data.append(s_row)
-    raw_data.close()
-
-    return new_data
-
-
 def load(file, fromline=0, transpose=False):
     """
     Load data from a standard text file obtained from LabSpec and other
@@ -197,38 +167,7 @@ def load(file, fromline=0, transpose=False):
     return new_data
 
 
-def loadheader(file, line, split=False):
-    """
-    Random access to file. Loads a specific header line in a file. Useful when
-    managing large data files in processes where time is important. It can
-    load headers as strings. If used with numbers they will be set as string.
-
-    :type file: str
-    :param file: Url od the data file
-
-    :type line: int
-    :param line: Line number. Counts from 1.    
-    
-    :type split: boolean
-    :param split: True to make a list of strings, separated by space. The default is False.
-
-    :returns: Array with the desierd line.
-    :rtype: string
-    """
-    line = int(line)
-    file = str(file)
-
-    info = linecache.getline(file, line)
-
-    if split:
-        info = str.split(info)
-
-    info = np.array(info, dtype=str)
-
-    return info
-
-
-def loadline(file, line=0, tp='float'):
+def loadline(file, line=0, tp='float', split=False):
     """
     Random access to file. Loads a specific line in a file. Useful when
     managing large data files in processes where time is important. It can
@@ -241,24 +180,30 @@ def loadline(file, line=0, tp='float'):
     :param line: Line number. Counts from 0.
 
     :type tp: str
-    :param tp: Type of data. If its numeric then float, if text then str. Default is float.
+    :param tp: Type of data. If its numeric then 'float', if text then 'string'.
+        Default is 'float'.
+
+    :type split: boolean
+    :param split: True to make a list of strings when 'tp' is 'string', 
+        separated by space. The default is False.
 
     :returns: Array with the desired line.
     :rtype: list[float]
     """
     line = int(line) + 1
     file = str(file)
-
     info = linecache.getline(file, line)
-    info = info.replace("NaN", "-1")
-    info = info.replace("nan", "-1")
-    info = info.replace("--", "-1")
-    info = str.split(info)
-
+    
     if tp == 'float':
+        info = info.replace("NaN", "-1")
+        info = info.replace("nan", "-1")
+        info = info.replace("--", "-1")
+        info = str.split(info)
         info = np.array(info, dtype=float)
 
-    if tp == 'str':
+    if tp == 'string':
+        if split:
+                info = str.split(info)
         info = np.array(info, dtype=str)
 
     return info
@@ -283,7 +228,7 @@ def test_loads():
         default = True
     
     my_file = os.path.join(location, 'datasets', 'headers.txt')
-    data = loadheader(my_file, 2, split=True)
+    data = loadline(my_file, 1, tp='string', split=True)
     r = data[2]
     if r != 'second':
         default = False
@@ -337,7 +282,7 @@ def normtomax(data):
     """
     y = copy.deepcopy(data)  # so it does not chamge the input list
     dims = len(np.array(y).shape)  # detect dimensions
-    if dims >= 2:
+    if dims > 1:
         for i in range(len(y)):
             max_data = max(y[i])
             for j in range(len(y[i])):
@@ -364,14 +309,8 @@ def normtovalue(data, val):
     :rtype: list[float]
     """
     y = copy.deepcopy(data)  # so it does not change the input list
-    dims = len(np.array(data).shape)  # detect dimensions
-    if dims >= 2:
-        for i in range(len(y)):  # for all spectras
-            for j in range(len(y[i])):  # for all elements in the spectra
-                y[i][j] = y[i][j] / val  # divide by the maximum
-    else:
-        for i in range(len(y)):  # for all spectras
-            y[i] = y[i] / val
+    y = np.array(y)/val
+    y = list(y)
     return y
 
 
@@ -528,21 +467,20 @@ def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
     x = list(points)
     avg = int(avg)
     pos = cortopos(x, x_axis)
-    y = []  # y values for the selected x
-    
     dims = len(np.array(data).shape)  # detect dimensions
     
-    if dims >= 2:
+    if dims > 1:
         baseline = []
         for j in range(len(data)):
+            y = []  # y values for the selected x
+            temp = []
             for i in range(len(pos)):
                 temp = np.mean(data[j][pos[i] - avg: pos[i] + avg + 1])
                 y.append(temp)
-        
+                        
             z = np.polyfit(x, y, deg)  # polinomial fit
             f = np.poly1d(z)  # 1d polinomial
             temp = f(x_axis)  # y values
-        
             if plot and j == 0:        
                 plt.plot(x_axis, data[j])
                 plt.plot(x_axis, temp)
@@ -550,11 +488,11 @@ def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
                 plt.show()
         
             if remove:
-                temp = data - temp
-            
+                temp = data[j] - temp
             baseline.append(temp)
     
     else:
+        y = []  # y values for the selected x
         for i in range(len(pos)):
             temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
             y.append(temp)
@@ -832,7 +770,7 @@ def normsum(data):
     """
     y = copy.deepcopy(data)
     dims = len(np.array(data).shape)
-    if dims >= 2:
+    if dims > 1:
         for i in range(len(y)):
             s = sum(y[i])
             for j in range(len(y[i])):
@@ -857,16 +795,15 @@ def normtoglobalmax(data):
     """
     y = copy.deepcopy(data)
     dims = len(np.array(data).shape)
-    if dims >= 2:
+    if dims > 1:
+        maximum = -99999999  # safe start
         for i in range(len(y)):
-            s = sum(y[i])
-            for j in range(len(y[i])):
-                y[i][j] = y[i][j] / s
-    else:
-        y = list(data)
-        s = sum(y)
-        for i in range(len(y)):
-            y[i] = y[i] / s
+            for j in range(len(y[0])):
+                if y[i][j] > maximum:
+                    maximum = y[i][j]
+        y = normtovalue(y, maximum)
+    else:  # if s single vector, then is the same as nortomax (loca)
+        y = normtomax(y)
     return y
 
 
@@ -1119,7 +1056,7 @@ def normtopeak(data, x_axis, peak, shift=10):
     Normalizes the spectras to a particular peak.
 
     :type data: list[float]
-    :param data: Data to be normalized, no x-axis
+    :param data: Data to be normalized.
 
     :type x_axis: list[float]
     :param x_axis: X-axis of the data
@@ -1134,22 +1071,38 @@ def normtopeak(data, x_axis, peak, shift=10):
     :rtype: list[float]
     """
     y = copy.deepcopy(data)
+    dims = len(np.array(y).shape)
+    
     x_axis = list(x_axis)
-    peak = [int(peak)]
+    # peak = [int(peak)]
     shift = int(shift)
-
-    pos = cortopos(peak, x_axis)
-    section = y[pos[0] - shift:pos[0] + shift]
-    highest = peakfinder(section, look=int(shift / 2))
-
-    c = 0
-    for i in range(len(highest)):
-        if highest[i] == 1:
-            c = i
-            break
-
-    local_max = y[pos[0] - shift + c]
-    y = y / local_max
+    pos = cortopos([int(peak)], x_axis)
+    
+    if dims > 1:
+        for j in range(len(y)):
+            section = y[j][pos[0] - shift:pos[0] + shift]
+            highest = peakfinder(section, look=int(shift / 2))
+        
+            c = 0
+            for i in range(len(highest)):
+                if highest[i] == 1:
+                    c = i
+                    break
+        
+            local_max = y[j][pos[0] - shift + c]
+            y[j] = y[j] / local_max
+    else:
+        section = y[pos[0] - shift:pos[0] + shift]
+        highest = peakfinder(section, look=int(shift / 2))
+    
+        c = 0
+        for i in range(len(highest)):
+            if highest[i] == 1:
+                c = i
+                break
+    
+        local_max = y[pos[0] - shift + c]
+        y = y / local_max
     return y
 
 
@@ -1461,7 +1414,6 @@ def regression(target, variable, cov=0):
 
     if cov == 1:
         master.append(target)  # array of arrays
-        print(len(master))
         pos = [i for i in range(len(master[0]))]  # ascending values
         df = pd.DataFrame(data=master[0], columns=['0'])  # 1st col is 1st var
         for i in range(len(master)):  # for all variables and target
@@ -1673,7 +1625,7 @@ def shuffle(arrays, delratio=0):
     lengths = []
 
     for i in range(len(all_list)):
-        if len(np.array(all_list[i]).shape) >= 2:  # are lists are 2d
+        if len(np.array(all_list[i]).shape) > 1:  # are lists are 2d
             lengths.append(np.array(all_list[i]).shape[1])  # save the length
         else:
             lengths.append(1)  # otherwise is only 1 number
@@ -1710,58 +1662,6 @@ def mergedata(data):
             else:
                 master[i].extend([data[j][i]])
     return master
-
-
-def logo(lay=90, leng=100, a=1, b=0.8, r1=80, r2=120, lw=2, plot=True):
-    """
-    Prints the logo of SpectraPepper.
-
-    :type lay: int
-    :param lay: Amount of layers/vectors. The default is 90.
-
-    :type leng: int
-    :param leng: Length of the layers. The default is 100.
-
-    :type a: int
-    :param a: Amplitud. The default is 1.
-
-    :type b: int
-    :param b: Width. The default is 0.8.
-
-    :type r1: int
-    :param r1: Random lower limit. The default is 80.
-
-    :type r2: int
-    :param r2: Random upper limit. The default is 120.
-
-    :type lw: int
-    :param lw: Line width. The default is 2.
-    
-    :returns: plot
-    :rtype: bool
-    """
-    x = [[1 for _ in range(leng)] for _ in range(lay)]
-
-    def xl(amp, wid, p):
-        return [(amp * wid ** 2 / ((i - p) ** 2 + wid ** 2)) * random.randint(99, 101) / 100 for i in range(100)]
-
-    for i in range(len(x)):
-        wid = 0.0000002 * (i ** 4) - 0.0002 * (i ** 3) + 0.0178 * (i ** 2) - 0.0631 * i + 4.7259
-        pos = 0.000001 * (i ** 4) - 0.0004 * (i ** 3) + 0.046 * (i ** 2) - 1.8261 * i + 59.41
-        amp = wid * a
-        x[i] = xl(amp, wid * b, pos)
-
-    axis = [i for i in range(leng)]
-    
-    if plot:
-        plt.figure(figsize=(10, 14))
-        for i in range(len(x)):
-            r = [random.randint(r1, r2) / 100 for i in range(leng)]
-            curve = np.array(x[i]) + i + r
-            plt.plot(curve, color='black', lw=lw)
-            plt.fill_between(axis, curve, color='white', alpha=1)
-        plt.show()
-    return plot
 
 
 def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, it=100, plot=True):
@@ -2058,15 +1958,13 @@ def pearson(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25,
 
     pears = np.reshape(pears, (n, n))  # [pearson coeff, p-value]
 
+    gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
+    plt.rc('font', size=fonsize)
+    y = [i + 0.5 for i in range(n)]
+    ticks = mpl.ticker.FixedLocator(y)
+    formatt = mpl.ticker.FixedFormatter(labels)
     if plot:
-        gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
-        plt.rc('font', size=fonsize)
-        fig = plt.figure(tight_layout=True, figsize=figsize)
-    
-        y = [i + 0.5 for i in range(n)]
-        ticks = mpl.ticker.FixedLocator(y)
-        formatt = mpl.ticker.FixedFormatter(labels)
-    
+        fig = plt.figure(tight_layout=True, figsize=figsize)    
         ax = fig.add_subplot(gs[0, 0])
         pcm = ax.pcolormesh(pears, cmap=cm, vmin=-1, vmax=1)
         fig.colorbar(pcm, ax=ax)
@@ -2142,15 +2040,13 @@ def spearman(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="
 
     spear = np.reshape(spear, (n, n))  # [rho spearman, p-value]
 
+    gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
+    plt.rc('font', size=fonsize)
+    y = [i + 0.5 for i in range(n)]
+    ticks = mpl.ticker.FixedLocator(y)
+    formatt = mpl.ticker.FixedFormatter(labels)
     if plot:
-        gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
-        plt.rc('font', size=fonsize)
         fig = plt.figure(tight_layout=True, figsize=figsize)
-    
-        y = [i + 0.5 for i in range(n)]
-        ticks = mpl.ticker.FixedLocator(y)
-        formatt = mpl.ticker.FixedFormatter(labels)
-    
         ax = fig.add_subplot(gs[0, 0])
         pcm = ax.pcolormesh(spear, cmap=cm, vmin=-1, vmax=1)
         fig.colorbar(pcm, ax=ax)
@@ -2249,25 +2145,24 @@ def grau(data, labels=[], cm="seismic", fons=20, figs=(25, 15),
             if g1[i] >= j:  # if bigger than 0 (first)
                 g2_shift[i] += t_c[j - 1]  # shift (add) all the previous
 
+
+    gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
+    plt.rc('font', size=fontsize)   
+    cm = plt.cm.get_cmap(cm)
+    y_ticks = [i for i in range(int(min(g3)), int(max(g3)) + 1)]
+    x_ticks = [i for i in range(int(max(g2_shift)) + 2)]
+    ytick_labels = []
+    for i in range(len(y_ticks)):
+        ytick_labels.append(labels[y_ticks[i]])
+    for i in range(len(xtick_labels) - 1):
+        xtick_labels[i] = labels[xtick_labels[i]]
     if plot:
-        gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])  # (rows, columns)
-        plt.rc('font', size=fontsize)
         fig = plt.figure(tight_layout=True, figsize=figsize)
-    
         ax = fig.add_subplot(gs[0, 0])
-        cm = plt.cm.get_cmap(cm)
         ax.set_title(title, fontsize=titlefs)
         sc = ax.scatter(g2_shift, g3, alpha=1, edgecolors='none',
                         c=mse, cmap=cm, s=markersize, marker=marker)
         plt.colorbar(sc)
-        y_ticks = [i for i in range(int(min(g3)), int(max(g3)) + 1)]
-        x_ticks = [i for i in range(int(max(g2_shift)) + 2)]
-        ytick_labels = []
-        for i in range(len(y_ticks)):
-            ytick_labels.append(labels[y_ticks[i]])
-    
-        for i in range(len(xtick_labels) - 1):
-            xtick_labels[i] = labels[xtick_labels[i]]
         ax.set_xticks(x_ticks)
         ax.set_xticklabels(xtick_labels, fontsize=9)
         ax.set_xlim(0, max(x_ticks))
@@ -2311,7 +2206,7 @@ def moveavg(data, move=2):
 
     avg = []  # for smoothed data
 
-    if dims >= 2:
+    if dims > 1:
         data_len = len(b_data[0])
 
         for j in range(len(b_data)):  # each measured point
@@ -2385,12 +2280,13 @@ def plot2dml(train, names=['D1', 'D2', 'T'], train_pred=[], labels=[],
         group = int(train['T'][i])
         ec = 'none'
         
-        if len(train_pred) > 1 and plot:
+        if len(train_pred) > 1:
             if train_pred[i] != train[names[2]][i]:
                 ec = 'red'
-        plt.scatter(train[names[0]][i], train[names[1]][i], alpha=0.7, s=50,
-                    linewidths=1, color=color[group], marker=marker[group],
-                    edgecolor=ec)
+        if plot:
+            plt.scatter(train[names[0]][i], train[names[1]][i], alpha=0.7, s=50,
+                        linewidths=1, color=color[group], marker=marker[group],
+                        edgecolor=ec)
     if plot:
         plt.xlabel(xax)
         plt.ylabel(yax)

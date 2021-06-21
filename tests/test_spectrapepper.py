@@ -3,11 +3,11 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-import spectrapepper as spep
+# import spectrapepper as spep
 import numpy as np
 import pandas as pd
-# import my_functions as spep
-# import sys
+import my_functions as spep
+import sys
 
 class TestSpectrapepper(unittest.TestCase):
     """Tests for `spectrapepper` package."""
@@ -60,26 +60,51 @@ class TestSpectrapepper(unittest.TestCase):
         r = np.floor(sum(data2))
         print('normtomax: ' + str(r))
         self.assertEqual(r, 105)
-
+        
+        data2 = spep.normtomax([data, data_l1])
+        r = np.floor(np.sum(data2))
+        print('normtomax_multi: ' + str(r))
+        self.assertEqual(r, 205)
+        
         data2 = spep.normtovalue(data,100)
         r = np.floor(sum(data2))
         print('normtovalue: ' + str(r))
         self.assertEqual(r, 14)
-
+        
+        data2 = spep.normtovalue([data, data_l1],100)
+        r = np.floor(np.sum(data2))
+        print('normtovalue_multi: ' + str(r))
+        self.assertEqual(r, 29)
+        
         data2 = spep.alsbaseline(data)
-        r = np.floor(np.floor(sum(data2)))
+        r = (np.floor(sum(data2)))
         print('alsbaseline: ' + str(r))
         self.assertEqual(r, 252)
-
+        
+        data2 = spep.alsbaseline([data, data_l1])
+        r = (np.floor(np.sum(data2)))
+        print('alsbaseline_multi: ' + str(r))
+        self.assertEqual(r, 515)
+        
         data2 = spep.bspbaseline(data, axis, points=[100, 350, 700, 800], plot=False)
         r = np.floor(sum(data2))
         print('bspbaseline: ' + str(r))
         self.assertEqual(r, 149)
 
+        data2 = spep.bspbaseline([data, data_l1], axis, points=[100, 350, 700, 800], plot=False)
+        r = np.floor(np.sum(data2))
+        print('bspbaseline_multi: ' + str(r))
+        self.assertEqual(r, 283)
+        
         data2 = spep.polybaseline(data, axis, points=[100, 350, 700, 800], plot=False)
         r = np.floor(sum(data2))
         print('polybaseline: ' + str(r))
         self.assertEqual(r, 47)
+
+        data2 = spep.polybaseline([data, data_l1], axis, points=[100, 350, 700, 800], plot=False)
+        r = np.floor(np.sum(data2))
+        print('polybaseline_multi: ' + str(r))
+        self.assertEqual(r, 88)
 
         data2 = spep.lorentzfit(data, axis, plot=False)
         r = np.floor(sum(data2))
@@ -92,14 +117,24 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(r, 166)
 
         data2 = spep.cortopos([50,100,121,400], axis)
-        r = np.floor(sum(data2))
+        r = sum(data2)
         print('cortopos: ' + str(r))
         self.assertEqual(r, 523)
+        
+        data2 = spep.cortopos([[50,100,121,400],[60,120,141,300]], axis)
+        r = np.sum(data2)
+        print('cortopos_multi: ' + str(r))
+        self.assertEqual(r, 992)
 
         data2 = spep.areacalculator(data, [[50, 100], [350, 450], [460, 500]], norm=True)
-        r = round((sum(data2)),1)
+        r = round(sum(data2),2)
         print('areacalculator: ' + str(r))
-        self.assertEqual(r, 0.2)
+        self.assertEqual(r, 0.21)
+
+        data2 = spep.areacalculator([data, data_l1], [[50, 100], [350, 450], [460, 500]], norm=True)
+        r = round(np.sum(data2),2)
+        print('areacalculator_multi: ' + str(r))
+        self.assertEqual(r, 0.42)
 
         data2 = spep.bincombs(3)
         r = data2[2]
@@ -107,14 +142,24 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(r, (1, 1, 0))
 
         data2 = spep.normsum(data)
-        r = np.floor(sum(data2))
+        r = round(sum(data2), 2)
         print('normsum: ' + str(r))
-        self.assertEqual(r, 1)
+        self.assertEqual(r, 1.00)
+
+        data2 = spep.normsum([data, data_l1])
+        r = round(np.sum(data2), 2)
+        print('normsum_multi: ' + str(r))
+        self.assertEqual(r, 2.00)
 
         data2 = spep.normtoglobalmax(data)
-        r = np.floor(sum(data2))
+        r = round(sum(data2), 2)
         print('normtoglobalmax: ' + str(r))
-        self.assertEqual(r, 1)
+        self.assertEqual(r, 105.12)
+
+        data2 = spep.normtoglobalmax([data, data_l1])
+        r = round(np.sum(data2), 2)
+        print('normtoglobalmax_multi: ' + str(r))
+        self.assertEqual(r, 200.22)
 
         data1 = spep.load_mapp1()
         axis1 = data1[0]
@@ -146,9 +191,14 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(r, 11)
 
         data2 = spep.normtopeak(data,axis, 200)
-        r = np.floor(sum(data2))
+        r = round(sum(data2), 2)
         print('normtopeak: ' + str(r))
-        self.assertEqual(r, 460)
+        self.assertEqual(r, 460.2)
+
+        data2 = spep.normtopeak([data, data_l1], axis, 200)
+        r = round(np.sum(data2), 2)
+        print('normtopeak_multi: ' + str(r))
+        self.assertEqual(r, 931.1)
 
         data2 = spep.peakfinder(data)
         r = np.floor(sum(data2))
@@ -186,9 +236,14 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(r, 2)
 
         data2 = spep.regression(a,[b,c])
-        r = np.floor(data2[0][0])
+        r = round(np.sum(data2[0]), 2)
         print('regression: ' + str(r))
-        self.assertEqual(r, 1)
+        self.assertEqual(r, 40)
+
+        data2 = spep.regression(a, [b,c], cov=1)
+        r = round(np.sum(data2[0]), 2)
+        print('regression_cov: ' + str(r))
+        self.assertEqual(r, 136)
 
         data2 = spep.decdensity([-2,6,-1,6],a,b,c,0.25)
         r = np.floor(np.sum(data2))
@@ -205,25 +260,30 @@ class TestSpectrapepper(unittest.TestCase):
         print('isaxis: ' + str(r))
         self.assertEqual(r, False)
 
-        data2 = spep.trim(a, start=1, finish=9)
-        r = np.floor(sum(data2))
+        data2 = spep.trim(data, start=1, finish=9)
+        r = round(sum(data2), 2)
         print('trim: ' + str(r))
-        self.assertEqual(r, 20)
+        self.assertEqual(r, 1450.55)
+
+        data2 = spep.trim([data,data_l1], start=1, finish=9)
+        r = round(np.sum(data2), 2)
+        print('trim_multi: ' + str(r))
+        self.assertEqual(r, 2898.12)
 
         data2 = spep.shuffle([a,b,c], delratio=0)
         r = sum(data2[1])
         print('shuffle: ' + str(r))
         self.assertEqual(r, 39)
 
+        data2 = spep.shuffle([a,b,c], delratio=0.1)
+        r = len(data2[1])
+        print('shuffle_delratio: ' + str(r))
+        self.assertEqual(r, 16)
+
         data2 = spep.mergedata([a,b,c])
         r = np.floor(np.sum(data2))
         print('mergedata: ' + str(r))
         self.assertEqual(r, 125)
-
-        data2 = spep.logo(plot=False)
-        r = data2
-        print('shiftref: ' + str(r))
-        self.assertEqual(r, False)
 
         data2 = spep.shiftref([data,data],[axis,axis],plot=False)
         r = np.floor(data2)
@@ -246,28 +306,33 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(r, 20)
 
         data2 = spep.pearson(params, plot=False)
-        r = np.floor(np.sum(data2))
+        r = round(np.sum(data2), 2)
         print('pearson: ' + str(r))
-        self.assertEqual(r, 25)
+        self.assertEqual(r, 25.39)
 
         data2 = spep.spearman(params, plot=False)
-        r = np.floor(np.sum(data2))
+        r = round(np.sum(data2), 2)
         print('spearman: ' + str(r))
-        self.assertEqual(r, 17)
+        self.assertEqual(r, 17.64)
 
         data2 = spep.grau(params, plot=False)
         r = np.floor(np.sum(data2))
         print('grau: ' + str(r))
         self.assertEqual(r, 12376)
 
-        data2 = spep.moveavg(a,2)
-        r = np.floor(np.sum(data2))
+        data2 = spep.moveavg(data, 2)
+        r = round(np.sum(data2), 2)
         print('moveavg: ' + str(r))
-        self.assertEqual(r, 32)
+        self.assertEqual(r, 1460.06)
+
+        data2 = spep.moveavg([data,data_l1], 2)
+        r = round(np.sum(data2), 2)
+        print('moveavg_multi: ' + str(r))
+        self.assertEqual(r, 2917.29)
 
         df = pd.DataFrame(data = np.transpose([a,b,c]), columns = ['D1', 'D2', 'T'])
         data2 = spep.plot2dml(df, plot=False)
-        print('plot2dml: ')
+        print('plot2dml: ' + str(data2))
         self.assertEqual(data2, False)
 
         data2 = spep.stackplot([data, data_l1], add=1, plot=False)

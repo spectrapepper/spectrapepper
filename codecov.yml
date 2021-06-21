@@ -6,3 +6,7 @@ comment:
   require_head: yes       # [yes :: must have a head report to post]
   branches:               # branch names that can post comment
     - "main"
+
+ignore:
+- "tests/*"
+- "spectrapepper/__init__.py"

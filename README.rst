@@ -14,11 +14,11 @@ SpectraPepper
         :target: https://enricgrau.github.io/spectrapepper
 .. image:: https://codecov.io/gh/enricgrau/spectrapepper/branch/main/graph/badge.svg?token=IVM5BFGYHV
         :target: https://codecov.io/gh/enricgrau/spectrapepper
-.. image:: https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?label=conda%20downloads
+.. image:: https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?color=blue&label=conda%20downloads
         :target: https://pepy.tech/project/spectrapepper
 .. image:: https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=none&left_color=grey&left_text=pypi%20downloads&right_color=blue
         :target: https://pepy.tech/project/spectrapepper
-.. image:: https://img.shields.io/badge/stackoverflow-Ask%20a%20question-blue
+.. image:: https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown
         :target: https://stackoverflow.com/questions/tagged/spectrapepper
 
 **A Python package to simplify and accelerate analysis of spectroscopy data.**

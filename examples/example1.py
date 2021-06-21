@@ -3,10 +3,11 @@ This example shows some of the normalization functions available.
 """
 
 #import the library
-import my_functions as spep
+import spectrapepper as spep
 
 #load data
-data = spep.load('data/spectras.txt', fromline=1)
+# data = spep.load('data/spectras.txt', fromline=1)
+data = spep.load_spectras()
 
 #load the axis
 axis = spep.loadline('data/spectras.txt', line=1)
@@ -29,18 +30,18 @@ for i in norm1:
 plt.title('Spectras with maximum normalized to 1')
 plt.xlabel('Shift (cm-1)')
 plt.ylabel('Counts (a.u.)')
-plt.show()    
+plt.show()
 
 for i in norm2:
     plt.plot(axis,i)
 plt.title('Spectras with 10 normalized to 1')
 plt.xlabel('Shift (cm-1)')
 plt.ylabel('Counts (a.u.)')
-plt.show() 
+plt.show()
 
 for i in norm3:
     plt.plot(axis,i)
 plt.title('Spectras with global maximum normalized to 1')
 plt.xlabel('Shift (cm-1)')
-plt.ylabel('Counts (a.u.)')  
-plt.show() 
+plt.ylabel('Counts (a.u.)')
+plt.show()
