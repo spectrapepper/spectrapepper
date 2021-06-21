@@ -1,4 +1,6 @@
-# Spectrapepper
+<center>
+    <img src="https://raw.githubusercontent.com/enricgrau/spectrapepper/main/docs/_static/spectrapepper-alt.png" width="50%">
+</center>
 
 [![image](https://img.shields.io/pypi/v/spectrapepper.svg)](https://pypi.python.org/pypi/spectrapepper)
 [![image](https://img.shields.io/conda/vn/conda-forge/spectrapepper.svg)](https://anaconda.org/conda-forge/spectrapepper)
