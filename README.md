@@ -10,7 +10,7 @@
 [![codecov](https://codecov.io/gh/enricgrau/spectrapepper/branch/main/graph/badge.svg?token=IVM5BFGYHV)](https://codecov.io/gh/enricgrau/spectrapepper)
 [![Downloads](https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=none&left_color=grey&right_color=blue&left_text=pypi%20downloads)](https://pepy.tech/project/spectrapepper)
 [![image](https://img.shields.io/conda/dn/conda-forge/spectrapepper?color=blue&label=conda%20downloads)](https://anaconda.org/conda-forge/spectrapepper)
-[![image](https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown)](https://stackoverflow.com/questions/tagged/spectrapepper)
+[![image](https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown?logo=stackoverflow&logoWidth=18&logoColor=white)](https://stackoverflow.com/questions/tagged/spectrapepper)
 
 **A Python package to simplify and accelerate analysis of spectroscopy data.**
 

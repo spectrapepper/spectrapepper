@@ -3,11 +3,11 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-import spectrapepper as spep
+# import spectrapepper as spep
 import numpy as np
 import pandas as pd
-# import my_functions as spep
-# import sys
+import my_functions as spep
+import sys
 
 class TestSpectrapepper(unittest.TestCase):
     """Tests for `spectrapepper` package."""
@@ -29,8 +29,8 @@ class TestSpectrapepper(unittest.TestCase):
         r = data2
         print('test_loads: ' + str(r))
         self.assertEqual(r, True)
-        
-        
+
+    '''
     def test_functions(self):
         spectras = spep.load_spectras()
         data = spectras[1]
@@ -38,13 +38,11 @@ class TestSpectrapepper(unittest.TestCase):
         data_l1 = spectras[2]
         params = spep.load_params(True)
 
-
-        a = [0,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4]
-        b = [4,2,2,3,4,3,2,3,4,1,0,3,1,2,2,3,0]
-        c = [0,2,4,1,4,1,3,2,4,4,0,4,2,4,3,4,4]
+        a = [0, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4]
+        b = [4, 2, 2, 3, 4, 3, 2, 3, 4, 1, 0, 3, 1, 2, 2, 3, 0]
+        c = [0, 2, 4, 1, 4, 1, 3, 2, 4, 4, 0, 4, 2, 4, 3, 4, 4]
         t = [0.69, 0.72, 0.83, 0.1, 0.13, 0.18, 0.13, 0.83, 0.16, 0.25,
               0.44, 0.42, 0.84, 0.16, 0.2, 0.71, 0.06, 0.16, 0.17, 0.42]
-
 
         data2 = spep.lowpass(data, cutoff=0.7, fs=10)
         r = np.floor(sum(data2))
@@ -56,36 +54,36 @@ class TestSpectrapepper(unittest.TestCase):
         print('moveavg: ' + str(r))
         self.assertEqual(r, 1442)
 
-        data2 = spep.normtomax(data)
-        r = np.floor(sum(data2))
-        print('normtomax: ' + str(r))
-        self.assertEqual(r, 105)
-        
-        data2 = spep.normtomax([data, data_l1])
-        r = np.floor(np.sum(data2))
-        print('normtomax_multi: ' + str(r))
-        self.assertEqual(r, 205)
-        
+        data2 = spep.normtomax(data, zeromin=True)
+        r = round(sum(data2), 2)
+        print('normtomax_zeromin: ' + str(r))
+        self.assertEqual(r, 89.49)
+
+        data2 = spep.normtomax([data, data_l1], zeromin=True)
+        r = round(np.sum(data2), 2)
+        print('normtomax_multi_zeromin: ' + str(r))
+        self.assertEqual(r, 175.20)
+
         data2 = spep.normtovalue(data,100)
         r = np.floor(sum(data2))
         print('normtovalue: ' + str(r))
         self.assertEqual(r, 14)
-        
+
         data2 = spep.normtovalue([data, data_l1],100)
         r = np.floor(np.sum(data2))
         print('normtovalue_multi: ' + str(r))
         self.assertEqual(r, 29)
-        
+
         data2 = spep.alsbaseline(data)
         r = (np.floor(sum(data2)))
         print('alsbaseline: ' + str(r))
         self.assertEqual(r, 252)
-        
+
         data2 = spep.alsbaseline([data, data_l1])
         r = (np.floor(np.sum(data2)))
         print('alsbaseline_multi: ' + str(r))
         self.assertEqual(r, 515)
-        
+
         data2 = spep.bspbaseline(data, axis, points=[100, 350, 700, 800], plot=False)
         r = np.floor(sum(data2))
         print('bspbaseline: ' + str(r))
@@ -95,7 +93,7 @@ class TestSpectrapepper(unittest.TestCase):
         r = np.floor(np.sum(data2))
         print('bspbaseline_multi: ' + str(r))
         self.assertEqual(r, 283)
-        
+
         data2 = spep.polybaseline(data, axis, points=[100, 350, 700, 800], plot=False)
         r = np.floor(sum(data2))
         print('polybaseline: ' + str(r))
@@ -120,7 +118,7 @@ class TestSpectrapepper(unittest.TestCase):
         r = sum(data2)
         print('cortopos: ' + str(r))
         self.assertEqual(r, 523)
-        
+
         data2 = spep.cortopos([[50,100,121,400],[60,120,141,300]], axis)
         r = np.sum(data2)
         print('cortopos_multi: ' + str(r))
@@ -300,10 +298,15 @@ class TestSpectrapepper(unittest.TestCase):
         print('classify2: ' + str(r))
         self.assertEqual(r, 19)
 
-        data2 = spep.subtractref(a,b,alpha=0.5, plot=False)
-        r = np.floor(np.sum(data2))
+        data2 = spep.subtractref(a,c,alpha=0.59, plot=False)
+        r = round(sum(data2), 2)
         print('subtractref: ' + str(r))
-        self.assertEqual(r, 20)
+        self.assertEqual(r, 12.86)
+
+        data2 = spep.subtractref([a,b],c,alpha=0.79, plot=False)
+        r = round(np.sum(data2), 2)
+        print('subtractref_multi: ' + str(r))
+        self.assertEqual(r, 6.32)
 
         data2 = spep.pearson(params, plot=False)
         r = round(np.sum(data2), 2)
@@ -355,15 +358,34 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(r, 2927)
 
         data2 = spep.makeaxisstep(1000, 0.98, 1000, rounded=2)
-        r = np.floor(sum(data2))
+        r = round(sum(data2), 2)
         print('makeaxisstep: ' + str(r))
-        self.assertEqual(r, 1489510)
+        self.assertEqual(r, 1489510.00)
+
+        data2 = spep.makeaxisstep(1000, 0.543, 1000, rounded=0)
+        r = round(sum(data2), 2)
+        print('makeaxisstep: ' + str(r))
+        self.assertEqual(r, 1271229.00)
+
+        data2 = spep.makeaxisstep(1000, 0.789, 1000, adjust=True)
+        r = round(sum(data2), 2)
+        print('makeaxisstep: ' + str(r))
+        self.assertEqual(r, 1394105.50)
 
         data2 = spep.makeaxisdivs(1000, 1500, 900, rounded=2)
-        r = np.floor(sum(data2))
+        r = round(sum(data2), 2)
         print('makeaxisdivs: ' + str(r))
-        self.assertEqual(r, 569305)
+        self.assertEqual(r, 1125000.00)
 
+        data2 = spep.makeaxisdivs(1000, 1400, 900, rounded=0)
+        r = round(sum(data2), 2)
+        print('makeaxisdivs: ' + str(r))
+        self.assertEqual(r, 1080000.00)
 
+        data2 = spep.minmax(spectras)
+        r = round(np.sum(data2), 2)
+        print('minmax: ' + str(r))
+        self.assertEqual(r, 532470.08)
+    '''
 if __name__ == '__main__':
     unittest.main()
