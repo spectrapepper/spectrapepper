@@ -30,7 +30,6 @@ class TestSpectrapepper(unittest.TestCase):
         print('test_loads: ' + str(r))
         self.assertEqual(r, True)
 
-    '''
     def test_functions(self):
         spectras = spep.load_spectras()
         data = spectras[1]
@@ -386,6 +385,6 @@ class TestSpectrapepper(unittest.TestCase):
         r = round(np.sum(data2), 2)
         print('minmax: ' + str(r))
         self.assertEqual(r, 532470.08)
-    '''
+
 if __name__ == '__main__':
     unittest.main()
