@@ -6,8 +6,8 @@ import unittest
 import spectrapepper as spep
 import numpy as np
 import pandas as pd
-#  import my_functions as spep
-#  import sys
+# import my_functions as spep
+# import sys
 
 class TestSpectrapepper(unittest.TestCase):
     """Tests for `spectrapepper` package."""
@@ -242,10 +242,10 @@ class TestSpectrapepper(unittest.TestCase):
         print('regression_cov: ' + str(r))
         self.assertEqual(r, 136)
 
-        data2 = spep.decdensity([-2,6,-1,6],a,b,c,0.25)
-        r = np.floor(np.sum(data2))
+        data2 = spep.decdensity([-1,5,-1,5], a, b, c, 1)
+        r = np.floor(np.sum(data2[4]))
         print('decdensity: ' + str(r))
-        self.assertEqual(r, 12)
+        self.assertEqual(r, 2)
 
         data2 = spep.colormap(['red','green','blue'],'test',n=101)
         r = np.floor(data2(99)[1])
