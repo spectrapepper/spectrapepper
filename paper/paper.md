@@ -15,7 +15,7 @@ authors:
       affiliation: "1"
     - name: Alejandro Perez-Rodriguez
       orcid: 0000-0002-8357-5824
-      affiliation: "1", "2"
+      affiliation: "1, 2"
     - name: Maxim Guc
       orcid: 0000-0002-8357-5824
       affiliation: "1"
