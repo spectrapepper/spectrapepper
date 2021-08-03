@@ -66,12 +66,20 @@ downloaded from https://github.com/enricgrau/spectrapepper.
 # Features
 
 A brief list of features include, but not limited to:
--   Baseline removal functions.
--   Normalization methods.
--   Low and high-pass filters and trimming tools.
--   Combinatorial analysis tools, such as Spearman, Pearson, and n-dimensional correlation coefficients.
--   Tools for Machine Learning applications, such as data merging, randomization, and decision map.
--   Sample data and examples.
+
+- Baseline removal functions.
+- Normalization methods.
+- Low and high-pass filters and trimming tools.
+- Combinatorial analysis tools, such as Spearman, Pearson, and n-dimensional correlation coefficients.
+- Tools for Machine Learning applications, such as data merging, randomization, and decision map.
+- Sample data and examples.
+
+* Baseline removal functions.
+* Normalization methods.
+* Low and high-pass filters and trimming tools.
+* Combinatorial analysis tools, such as Spearman, Pearson, and n-dimensional correlation coefficients.
+* Tools for Machine Learning applications, such as data merging, randomization, and decision map.
+* Sample data and examples.
 
 
 # Acknowledgements
