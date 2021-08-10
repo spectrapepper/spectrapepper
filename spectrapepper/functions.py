@@ -1,6 +1,6 @@
 """
-This main module contains all the functions available in spectrapepper. Please use the search function to look up
-specific functionalities with key words.
+This main module contains all the functions available in spectrapepper. Please
+use the search function to look up specific functionalities with keywords.
 """
 
 import math
@@ -59,90 +59,90 @@ def load_mapp2():
 def load_spectras():
     """
     Load sample specrtal data, axis included in the first line.
-
+    
     :returns: Sample spectral data.
     :rtype: list[float]
     """
     # path = os.getcwd()
     # parent = os.path.abspath(os.path.join(path, os.pardir))
     # data = load(parent+'\spectrapepper\datasets\spectras.txt')
-
+    
     # module_path = os.path.dirname(__file__)
     # data = load(module_path+'\\datasets\\spectras.txt')
-
+    
     # path = str(PACKAGEDIR)+'spectrapepper\datasets\spectras.txt'
     # print(path)
     # text = load(path)
     # print(text)
-
+    
     location = os.path.dirname(os.path.realpath(__file__))
     my_file = os.path.join(location, 'datasets', 'spectras.txt')
     data = load(my_file)
-
+    
     return data
 
 
 def load_targets():
     """
     Load sample targets data for the spectras.
-
+    
     :returns: Sample targets.
     :rtype: list[float]
     """
     # path = os.getcwd()
     # parent = os.path.abspath(os.path.join(path, os.pardir))
-    # data = load(parent+'\spectrapepper\datasets\targets.txt')
-
+    # data = load(parent+'\spectrapepper\datasets\targets.txt')    
+    
     # module_path = os.path.dirname(__file__)
     # data = load(module_path+'\\datasets\\targets.txt')
-
+    
     location = os.path.dirname(os.path.realpath(__file__))
     my_file = os.path.join(location, 'datasets', 'targets.txt')
     data = load(my_file)
-
+    
     return data
 
 
 def load_params(transpose=False):
     """
     Load sample parameters data for the spectras.
-
+    
     :returns: Sample parameters.
     :rtype: list[float]
     """
     # path = os.getcwd()
     # parent = os.path.abspath(os.path.join(path, os.pardir))
-    # data = load(parent+'\spectrapepper\datasets\params.txt')
-
+    # data = load(parent+'\spectrapepper\datasets\params.txt')   
+    
     # module_path = os.path.dirname(__file__)
     # data = load(module_path+'\\datasets\\params.txt')
-
+    
     location = os.path.dirname(os.path.realpath(__file__))
     my_file = os.path.join(location, 'datasets', 'params.txt')
     data = load(my_file)
-
+    
     if transpose:
         data = np.transpose(data)
-
+    
     return data
 
 
 def load(file, fromline=0, transpose=False, dtype=float):
     """
     Load data from a standard text file obtained from LabSpec and other
-    spectroscopy instruments. Normally, when single measurement these come in
+    spectroscopy instruments. Normally, when single measurement these come in 
     columns with the first one being the x-axis. When it is a mapping, the
     first row is the x-axis and the following are the measurements.
 
     :type file: str
     :param file: Url of data file. Must not have headers and separated by 'spaces' (LabSpec).
-
+    
     :type fromline: int
     :param fromline: Line of file from which to start loading data. The default is 0.
-
+    
     :type transpose: boolean
     :param transpose: If True transposes the data. Default is False.
-
+    
     :returns: List of the data.
     :rtype: list[float]
     """
@@ -185,7 +185,7 @@ def loadline(file, line=0, dtype='float', split=False):
         Default is 'float'.
 
     :type split: boolean
-    :param split: True to make a list of strings when 'tp' is 'string',
+    :param split: True to make a list of strings when 'tp' is 'string', 
         separated by space. The default is False.
 
     :returns: Array with the desired line.
@@ -194,7 +194,7 @@ def loadline(file, line=0, dtype='float', split=False):
     line = int(line) + 1
     file = str(file)
     info = linecache.getline(file, line)
-
+    
     if dtype == 'float':
         info = info.replace("NaN", "-1")
         info = info.replace("nan", "-1")
@@ -213,46 +213,46 @@ def loadline(file, line=0, dtype='float', split=False):
 def test_loads():
     """
     Only for tests purposes. Ingroed in documentation.
-
+    
     :returns: A True is test is succesful.
     :rtype: bool
     """
     default = False
-
+    
     location = os.path.dirname(os.path.realpath(__file__))
-
+    
     my_file = os.path.join(location, 'datasets', 'spectras.txt')
     data = loadline(my_file,2)
     r = round(sum(data), 0)
     print(r)
     if r == 1461:
         default = True
-
+    
     my_file = os.path.join(location, 'datasets', 'headers.txt')
     data = loadline(my_file, 1, dtype='string', split=True)
     r = data[2]
     if r != 'second':
         default = False
-
+    
     return default
 
 
 def lowpass(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
     """
     Butter low pass filter for a single or spectra or a list of them.
-
+        
     :type data: list[float]
     :param data: List of vectors in line format (each line is a vector).
-
+    
     :type cutoff: float
     :param cutoff: Desired cutoff frequency of the filter. The default is 0.25.
-
+    
     :type fs: int
-    :param fs: Sample rate in Hz . The default is 30.
-
+    :param fs: Sample rate in Hz. The default is 30.
+    
     :type order: int
     :param order: Sin wave can be approx represented as quadratic. The default is 2.
-
+    
     :type nyq: float
     :param nyq: Nyquist frequency, 0.75*fs is a good value to start. The default is 0.75*30.
 
@@ -277,18 +277,18 @@ def normtomax(data, zeromin=False):
 
     :type data: list[float]
     :param data: Single or multiple vectors to normalize.
-
+        
     :type zeromin: boolean
     :param zeromin: If `True`, the minimum value is traslated to 0. Default
         values is `False`
-
+    
     :returns: Normalized data.
     :rtype: list[float]
     """
     y = copy.deepcopy(data)  # so it does not chamge the input list
     dims = len(np.array(y).shape)  # detect dimensions
     if dims > 1:
-        for i in range(len(y)):
+        for i in range(len(y)):           
             if zeromin:
                 min_data = min(y[i])
                 y[i] = y[i] - min_data
@@ -327,8 +327,7 @@ def alsbaseline(data, lam=100, p=0.001, niter=10):
     """
     Calculation of the baseline using Asymmetric Least Squares Smoothing. This
     script only makes the calculation but it does not remove it. Original idea of
-    this algorithm by P. Eilers and H. Boelens (2005), and available details at:
-    https://stackoverflow.com/a/29185844/2898619
+    this algorithm by P. Eilers and H. Boelens (2005):
 
     :type data: list[float]
     :param data: Spectra to calculate the baseline from.
@@ -346,8 +345,8 @@ def alsbaseline(data, lam=100, p=0.001, niter=10):
     :rtype: list[float]
     """
     data = copy.deepcopy(data)
-    dims = len(np.array(data).shape)  # detect dimensions
-
+    dims = len(np.array(data).shape)  # detect dimensions    
+    
     if dims > 1:
         l = len(data[0])
         d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
@@ -355,11 +354,11 @@ def alsbaseline(data, lam=100, p=0.001, niter=10):
         for i in range(len(data)):
             for _ in range(niter):
                 W = sparse.spdiags(w, 0, l, l)
-                Z = W + lam * d.dot(d.transpose())
+                Z = W + lam * d.dot(d.transpose())       
                 z = spsolve(Z, w * data[i])
                 w = p * (data[i] > z) + (1 - p) * (data[i] < z)
-            data[i] = data[i] - z
-
+            data[i] = data[i] - z  
+            
     else:
         l = len(data)
         d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
@@ -375,8 +374,7 @@ def alsbaseline(data, lam=100, p=0.001, niter=10):
 
 def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
     """
-    Calcuates the baseline using b-spline. Find useful details and guidelines
-    in https://stackoverflow.com/a/34807513/2898619.
+    Calcuates the baseline using b-spline.
 
     :type data: list[float]
     :param data: Single or several spectras to remove the baseline from.
@@ -394,7 +392,7 @@ def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
     :param remove: if True, calculates and returns (data - baseline).
 
     :type plot: bool
-    :param plot: if True, calculates and returns (data - baseline).
+    :param plot: if True, calculates and returns (data - baseline).    
 
     :returns: The baseline.
     :rtype: list[float]
@@ -408,15 +406,15 @@ def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
 
     if dims >= 2:
         baseline = []
-
+        
         for j in range(len(data)):
             y = []  # y values for the selected x
             for i in range(len(pos)):
                 temp = np.mean(data[j][pos[i] - avg: pos[i] + avg + 1])
                 y.append(temp)
-
+        
             spl = splrep(x, y)
-
+                
             if remove:
                 baseline.append(data[j] - splev(x_axis, spl))
             else:
@@ -427,16 +425,16 @@ def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
         for i in range(len(pos)):
             temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
             y.append(temp)
-
+    
         spl = splrep(x, y)
         baseline = splev(x_axis, spl)
-
-        if plot:
+        
+        if plot:        
             plt.plot(x_axis, data)
             plt.plot(x_axis, baseline)
             plt.plot(x, y, 'o', color='red')
             plt.show()
-
+    
         if remove:
             baseline = data - baseline
 
@@ -466,18 +464,18 @@ def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
     :param remove: if True, calculates and returns (data - baseline).
 
     :type plot: bool
-    :param plot: if True, calculates and returns (data - baseline).
+    :param plot: if True, calculates and returns (data - baseline).    
 
     :returns: The baseline.
     :rtype: list[float]
     """
-    data = copy.deepcopy(data)
+    data = copy.deepcopy(data)  
     x_axis = list(x_axis)
     x = list(points)
     avg = int(avg)
     pos = cortopos(x, x_axis)
     dims = len(np.array(data).shape)  # detect dimensions
-
+    
     if dims > 1:
         baseline = []
         for j in range(len(data)):
@@ -486,36 +484,36 @@ def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
             for i in range(len(pos)):
                 temp = np.mean(data[j][pos[i] - avg: pos[i] + avg + 1])
                 y.append(temp)
-
+                        
             z = np.polyfit(x, y, deg)  # polinomial fit
             f = np.poly1d(z)  # 1d polinomial
             temp = f(x_axis)  # y values
-            if plot and j == 0:
+            if plot and j == 0:        
                 plt.plot(x_axis, data[j])
                 plt.plot(x_axis, temp)
                 plt.plot(x, y, 'o', color='red')
                 plt.show()
-
+        
             if remove:
                 temp = data[j] - temp
             baseline.append(temp)
-
+    
     else:
         y = []  # y values for the selected x
         for i in range(len(pos)):
             temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
             y.append(temp)
-
+    
         z = np.polyfit(x, y, deg)  # polinomial fit
         f = np.poly1d(z)  # 1d polinomial
         baseline = f(x_axis)  # y values
-
-        if plot:
+    
+        if plot:        
             plt.plot(x_axis, data)
             plt.plot(x_axis, baseline)
             plt.plot(x, y, 'o', color='red')
             plt.show()
-
+    
         if remove:
             baseline = data - baseline
 
@@ -524,19 +522,18 @@ def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
 
 def lorentzfit(y, x, wid=4, it=100, plot=False):
     """
-    Fit a Lorentz distributed curve for a single spectra. Good guidelines
-    for similar structures can be found at http://emilygraceripka.com/blog/16.
+    Fit a Lorentz distributed curve for a single spectra.
 
-    :type y: TYPE
+    :type y: list[float]
     :param y: single spectra.
 
-    :type x: TYPE
+    :type x: list[float]
     :param x: x-axis.
 
-    :type wid: TYPE, optional
+    :type wid: float, optional
     :param wid: fitted curve width. The default is 4.
 
-    :type it: TYPE, optional
+    :type it: int, optional
     :param it: number of iterations. The default is 100.
 
     :type plot: boolean
@@ -693,8 +690,8 @@ def areacalculator(data, limits, norm=False):
     :param data: Data to calculate area from
 
     :type limits: list[int]
-    :param limits: Limits that define the areas to be calculated.
-
+    :param limits: Limits that define the areas to be calculated. Axis position.
+    
     :type norm: bool
     :param norm: If True, normalized the area to the sum under all the curve.
 
@@ -1081,35 +1078,35 @@ def normtopeak(data, x_axis, peak, shift=10):
     """
     y = copy.deepcopy(data)
     dims = len(np.array(y).shape)
-
+    
     x_axis = list(x_axis)
     # peak = [int(peak)]
     shift = int(shift)
     pos = cortopos([int(peak)], x_axis)
-
+    
     if dims > 1:
         for j in range(len(y)):
             section = y[j][pos[0] - shift:pos[0] + shift]
             highest = peakfinder(section, look=int(shift / 2))
-
+        
             c = 0
             for i in range(len(highest)):
                 if highest[i] == 1:
                     c = i
                     break
-
+        
             local_max = y[j][pos[0] - shift + c]
             y[j] = y[j] / local_max
     else:
         section = y[pos[0] - shift:pos[0] + shift]
         highest = peakfinder(section, look=int(shift / 2))
-
+    
         c = 0
         for i in range(len(highest)):
             if highest[i] == 1:
                 c = i
                 break
-
+    
         local_max = y[pos[0] - shift + c]
         y = y / local_max
     return y
@@ -1152,7 +1149,7 @@ def peakfinder(data, look=10):
     return is_max
 
 
-def confusionmatrix(tt, tp, groupnames=['', '', ''], plot=False, title='',
+def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='', 
                     cmm='Blues', fontsize=20, ylabel='True', xlabel='Prediction'):
     """
     Calculates and/or plots the confusion matrix for machine learning algorithm results.
@@ -1166,8 +1163,8 @@ def confusionmatrix(tt, tp, groupnames=['', '', ''], plot=False, title='',
     :type plot: boolean
     :param plot: If true, plots the matrix. The default is False
 
-    :type groupnames: list[str]
-    :param groupnames: Names, or lables , of the classification groups. Default is empty.
+    :type gn: list[str]
+    :param gn: Names, or lables , of the classification groups. Default is empty.
 
     :type title: str
     :param title: Name of the matrix. Default is empty.
@@ -1180,17 +1177,17 @@ def confusionmatrix(tt, tp, groupnames=['', '', ''], plot=False, title='',
 
     :type ylabel: str
     :param ylabel: Label for y axis. Default is `True`.
-
+    
     :type xlabel: str
     :param xlabel: Label for x axis. Default is `Prediction`.
-
+    
     :returns: The confusion matrix
     :rtype: list[float]
     """
     tt = list(tt)
     tp = list(tp)
     plot = bool(plot)
-    group_names = list(groupnames)
+    group_names = list(gn)
     gn = len(group_names)
     title = str(title)
     cmm = str(cmm)
@@ -1229,9 +1226,9 @@ def confusionmatrix(tt, tp, groupnames=['', '', ''], plot=False, title='',
         for i in range(gn):
             for j in range(gn):
                 ax.text(j, i, round(m[i][j], 2), ha='center', va='center', color='black')
-
+        
         plt.show()
-
+        
     return m
 
 
@@ -1277,22 +1274,22 @@ def sdev(data):
 def median(data):
     """
     Calculates the median vector of a list of vectors.
-
+    
     :type data: list[float]
     :param data: List of vectors.
 
     :returns: median curve
-    :rtype: list[float]
+    :rtype: list[float]    
     """
     median = []
     length = len(data[0])
     meas = len(data)
-
+    
     for j in range(length):
         temp = []
         for i in range(meas):
             temp.append(data[i][j])
-        median.append(np.median(temp))
+        median.append(np.median(temp))    
     return median
 
 
@@ -1518,12 +1515,12 @@ def decdensity(lims, x_points, y_points, groups, divs=0.5):
                             y_cords[j] < y_p[k] <= y_cords[j+1] and
                             groups[k] == l):
                         count += 1
-
-
-                if count > 1:    ###############
+                        
+              
+                if count > 1:  ###############    
                     pmap[j][i] = count
                 else:
-                    pmap[j][i] = 0#########
+                    pmap[j][i] = 0  #########
 
 
         maximum = max(np.array(pmap).flatten())
@@ -1542,12 +1539,12 @@ def colormap(colors, name='my_name', n=100):
     :type name: string, optional
     :param name: Name of the colormap. The default is 'my_name'.
 
-    :type n: TYPE, optional
+    :type n: int, optional
     :param n: Divisions. The default is 100.
 
     :returns: Colormap in Matplotlib format.
     :rtype: cmap
-    """
+    """    
     return LinearSegmentedColormap.from_list(name, colors, N=n)
 
 
@@ -1595,23 +1592,23 @@ def trim(data, start=0, finish=0):
         final = []
         if finish == 0 or finish > len(data[0]):
             finish = len(data[0])
-        t = finish - start
+        t = finish - start    
         for j in data:
             temp = j
             for i in range(t):
-                temp = np.delete(temp, start, 0)
+                temp = np.delete(temp, start, 0)   
             final.append(list(temp))
         data = final
-
+        
     else:
         if finish == 0 or finish > len(data):
             finish = len(data)
-
+    
         t = finish - start
-
+    
         for i in range(t):
             data = np.delete(data, start, 0)
-
+            
     return data
 
 
@@ -1655,16 +1652,15 @@ def shuffle(arrays, delratio=0):
             lengths.append(np.array(all_list[i]).shape[1])  # save the length
         else:
             lengths.append(1)  # otherwise is only 1 number
-
+        
     for i in range(len(all_list)):
         start = sum(lengths[0:i])
         finish = sum(lengths[0:i+1])
-        # print(str(start) + ' - ' + str(finish))
         for j in range(len(features)):
-            # if i == 0:
-            #     new_list[i].append(features[j][0:lengths[i]])
-            # else:
-            new_list[i].append(features[j][start:finish])
+            if lengths[i] == 1:
+                new_list[i].append(float(features[j][start:finish]))
+            else:
+                new_list[i].append(features[j][start:finish])
 
     return new_list
 
@@ -1727,7 +1723,7 @@ def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, it=100, plot=True):
 
     fit = []  # fit curves(s), if selected
     shift = []  # axis shift array
-
+    
     dims = len(np.array(ref_data).shape)
     if dims > 1:
         for i in range(len(ref_data)):  # depending on the mode chosen...
@@ -1790,7 +1786,7 @@ def classify(data, gnumber=3, glimits=[], var='x'):
 
     :type glimits: list[float]
     :param glimits: Defined group limits. The default is [].
-
+    
     :type var: string
     :param glimits: Name of the variable that is being classified.
 
@@ -1829,16 +1825,16 @@ def classify(data, gnumber=3, glimits=[], var='x'):
                 group_limits[i][1] = df_targets['T'].iloc[df_targets['T'].size - 1]
             else:
                 group_limits[i][1] = df_targets['T'].iloc[int(temp + g_s[i])]
-            temp = temp + g_s[i]
-
+            temp = temp + g_s[i]   
+        
         group_names.append(str(var)+' < ' + str(group_limits[0][1]))
         for i in range(0, len(group_limits) - 2):
             group_names.append(str(group_limits[i][1]) + ' <= '+str(var)+' < ' + str(group_limits[i + 1][1]))
         group_names.append(str(group_limits[len(group_limits)-1][0]) + ' <= '+str(var))
-
+        
         df_targets.sort_index(inplace=True)
         class_targets = list(df_targets['NT'])
-
+        
         # if I set the limits
     if len(group_limits) >= 1 and group_number <= 1:
         class_targets = [-1 for _ in range(len(targets))]
@@ -1895,25 +1891,25 @@ def subtractref(data, ref, axis=0, alpha=0.9, sample=0, plot_lim=[0, 0], plot=Fa
     ref = list(ref)
     sample = int(sample)  # spectrum chosen to work with. 0 is the first
     alpha = float(alpha)  # multiplication factor to delete the ref spectrum on the sample
-
+    
     dims = len(np.array(data).shape)
-
+    
     if dims > 1:
         for i in range(len(data)):
-            data[i] = np.array(data[i]) - np.array(ref) * alpha
+            data[i] = np.array(data[i]) - np.array(ref) * alpha  
         toplot = data[sample]
         final =  np.array(toplot) -  np.array(ref) * alpha
     else:
         toplot = copy.deepcopy(data)
-        final = np.array(data) - np.array(ref) * alpha
+        final = np.array(data) - np.array(ref) * alpha    
         data = final
-
+        
     if plot:
         if axis == 0:
                 axis = [i for i in range(len(ref))]
         else:
             axis = list(axis)
-
+        
         plt.plot(axis, toplot, linewidth=1, label='Original', linestyle='--')
         plt.plot(axis, ref, linewidth=1, label='Air', linestyle='--')
         plt.plot(axis, final, linewidth=1, label='Final')
@@ -1927,7 +1923,7 @@ def subtractref(data, ref, axis=0, alpha=0.9, sample=0, plot_lim=[0, 0], plot=Fa
     return list(data)
 
 
-def pearson(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25,
+def pearson(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25, 
             ti="Pearson", plot=True):
     """
     Calculates Pearson matrix and plots it.
@@ -1996,7 +1992,7 @@ def pearson(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25,
     ticks = mpl.ticker.FixedLocator(y)
     formatt = mpl.ticker.FixedFormatter(labels)
     if plot:
-        fig = plt.figure(tight_layout=True, figsize=figsize)
+        fig = plt.figure(tight_layout=True, figsize=figsize)    
         ax = fig.add_subplot(gs[0, 0])
         pcm = ax.pcolormesh(pears, cmap=cm, vmin=-1, vmax=1)
         fig.colorbar(pcm, ax=ax)
@@ -2089,7 +2085,7 @@ def spearman(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="
         ax.yaxis.set_major_formatter(formatt)
         plt.xticks(rotation='90')
         plt.show()
-
+    
     return spear
 
 
@@ -2179,7 +2175,7 @@ def grau(data, labels=[], cm="seismic", fons=20, figs=(25, 15),
 
 
     gs = gridspec.GridSpec(2, 2, height_ratios=[1, 1])
-    plt.rc('font', size=fontsize)
+    plt.rc('font', size=fontsize)   
     cm = plt.cm.get_cmap(cm)
     y_ticks = [i for i in range(int(min(g3)), int(max(g3)) + 1)]
     x_ticks = [i for i in range(int(max(g2_shift)) + 2)]
@@ -2204,7 +2200,7 @@ def grau(data, labels=[], cm="seismic", fons=20, figs=(25, 15),
         ax.set_ylim(min(y_ticks) - 0.5, max(y_ticks) + 0.5)
         ax.set_yticklabels(ytick_labels, fontsize=20)
         ax.grid(linestyle='--')
-
+    
         temp = 0
         for i in range(len(t_c)):
             temp += t_c[i] + 1
@@ -2214,7 +2210,7 @@ def grau(data, labels=[], cm="seismic", fons=20, figs=(25, 15),
             ax.get_xticklabels()[temp].set_fontweight('bold')
 
     plt.show()
-
+    
     return g2_shift
 
 
@@ -2259,65 +2255,80 @@ def moveavg(data, move=2):
     return avg
 
 
-def plot2dml(train, names=['D1', 'D2', 'T'], train_pred=[], labels=[],
-             title='', xax='x', yax='y', fs=20, lfs=15, loc='best', size=20,
-             xlim=[], ylim=[], plot=True):
+def plot2dml(train, test=[], names=['D1', 'D2', 'T'], train_pred=[], 
+             test_pred=[], labels=[],title='', xax='x', yax='y', fs=15, 
+             lfs=10, loc='best', size=20, xlim=[], ylim=[], plot=True):
     """
     Plots 2-dimensional results from LDA, PCA, NCA, or similar machine learning
     algoruthms where the output has 2 features per sample.
-
+    
     :type train: pandas frame
     :param train: Results for the training set. Pandas frame with the 2 dimensions
         and target columns.
 
-    :type names: list[str]
-    :param names: Name of the lables in the dataframe. For example, for LDA:
-        D1, D2 and T.
-
-    :type train_pred: list
-    :param train_pred: Prediction of the training set.
-
     :type test: pandas frame
     :param test: Results for the test set. Pandas frame with the 2 dimensions
         and target columns.
+    
+    :type names: list[str]
+    :param names: Name of the lables in the dataframe. For example, for LDA:
+        D1, D2 and T.    
+    
+    :type train_pred: list
+    :param train_pred: Prediction of the training set.
+
+    :type test_pred: list
+    :param test_pred: Prediction of the test set.
 
     :type labels: list
     :param labels: Names for the classification groups, if any.
-
+        
     :type title: str
     :param title: Title of the plot.
-
+        
     :type xax: str
     :param xax: Name ox x-axis
-
+        
     :type yax: str
-    :param yax: NAme of y-axis
-
+    :param yax: Name of y-axis
+        
     :type lfs: int
     :param lfs: Legend font size. Default is 15.
-
+        
     :type loc: str
     :param loc: Location of legend. Default is best.
-
+    
+    :type size: int
+    :param size: Size of the markers. Default is 20.
+    
+    :type xlim: list
+    :param xlim: Limits of the x axis.
+    
+    :type ylim: list
+    :param ylim: Limits of the y axis.
+    
     :type plot: bool
     :param plot: If True it plot. Only for test purposes.
-
+        
     :returns: Plot
     """
-    marker = ['o', 'v', 's', 'd', '*', '^', 'x', '+', '.']
-    color = ["red", "green","blue","grey","yellow","orange", "lime", "springgreen", "mediumspringgreen", "cyan", "royalblue", "red"]
-
+    marker = ['o', 'v', 's', 'd', '*', '^', 'x', '+', '.',
+              'o', 'v', 's', 'd', '*', '^', 'x', '+', '.']
+    color = ['orange', 'green', 'blue', 'grey', 'yellow', 'olive', 'lime',
+             'springgreen', 'mediumspringgreen', 'cyan', 'teal', 'royalblue', 
+             'turquoise', 'indigo', 'purple', 'deeppink', 'crimson']
+    
     legend_elements = []
     if len(labels) > 0:
-
+        
         for j in range(int(max(train['T'])+1)):
-            legend_elements.append(Line2D([0], [0], marker=marker[j], color='w',
-                                   label=labels[j], markerfacecolor=color[j], markersize=5))
-
-    for i in range(len(train)):
+            legend_elements.append(Line2D([0], [0], marker=marker[j], color='w', 
+                                   label=labels[j], markerfacecolor=color[j], markersize=5)) 
+        
+    for i in range(len(train)):  
         group = int(train['T'][i])
         ec = 'none'
-
+        
         if len(train_pred) > 1:
             if train_pred[i] != train[names[2]][i]:
                 ec = 'red'
@@ -2325,6 +2336,21 @@ def plot2dml(train, names=['D1', 'D2', 'T'], train_pred=[], labels=[],
             plt.scatter(train[names[0]][i], train[names[1]][i], alpha=0.7, s=size,
                         linewidths=1, color=color[group], marker=marker[group],
                         edgecolor=ec)
+            
+    for i in range(len(test)):        
+        group = int(test['T'][i])
+        ec = 'black'
+        
+        
+        if len(test_pred) > 1:
+            if test_pred[i] != test[names[2]][i]:
+                ec = 'fuchsia'
+                
+        if plot:
+            plt.scatter(test[names[0]][i], test[names[1]][i], alpha=0.5, s=size,
+                        linewidths=1, color=color[group], marker=marker[group],
+                        edgecolor=ec)
+            
     if plot:
         plt.rc('font', size=fs)
         plt.xlabel(xax)
@@ -2332,15 +2358,15 @@ def plot2dml(train, names=['D1', 'D2', 'T'], train_pred=[], labels=[],
         plt.title(title)
         if len(xlim) > 0:
             plt.xlim(xlim[0],xlim[1])
-        if len(ylim) > 0:
+        if len(ylim) > 0:    
             plt.ylim(ylim[0],ylim[1])
         plt.legend(handles=legend_elements, loc=loc, fontsize=lfs)
         plt.show()
-
+    
     return plot
 
-
-def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral',
+    
+def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', 
               figsize=(3, 4.5), lw=1, plot=True):
     """
     Plots a stack plot of selected spectras.
@@ -2371,15 +2397,15 @@ def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral',
 
     :returns: plot
     :rtype: bool
-    """
-
+    """      
+       
     base = [add for _ in range(len(data[0]))]
-
+    
     cmap = plt.cm.get_cmap(cmap)
     color = []
     for i in range(len(data)):
         color.append(cmap(i/(len(data)-1)))
-
+    
     if plot:
         plt.figure(figsize=figsize)
         for i in range(len(data)):
@@ -2387,8 +2413,8 @@ def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral',
         plt.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        plt.show()
-
+        plt.show()  
+        
     return plot
 
 
@@ -2397,7 +2423,7 @@ def cosmicmp(ndata, alpha=1, avg=2):
     https://doi.org/10.1177/0003702819839098
     It identifies CRs by comparing similar spectras and paring in matching
     pairs. Uses randomnes of CRs.
-
+    
     :type ndata: list[float]
     :param ndata: List of spectras to remove cosmic rays.
 
@@ -2419,7 +2445,7 @@ def cosmicmp(ndata, alpha=1, avg=2):
             if sim_specs[j] == i:  # if it is
                 n_cov = j  # claculate nothing and just save it
                 paired = 1  # set as paired
-
+        
         if paired == 0:  # if not paired, then calculate
             b = np.dot(data[i], data[i])  # first term of equation
             for j in range(len(data)):  # search in all spectras
@@ -2429,11 +2455,11 @@ def cosmicmp(ndata, alpha=1, avg=2):
                 if temp > cov and j != i:  # the highest value (covariance) wins
                     n_cov = j  # save the best
                     cov = temp  # save the best to compare
-
+        
         sim_specs.append(n_cov)  # save the similar curve
-
+        
         mavg = moveavg(data[i], avg)
-
+        
         sigma = 0
         for j in range(len(data[i])):
             sigma += math.sqrt((data[i][j] - mavg[j])**2)
@@ -2442,7 +2468,7 @@ def cosmicmp(ndata, alpha=1, avg=2):
         for j in range(len(data[0])):  # search in all the spectra
             if data[i][j] - data[sim_specs[i]][j] > sigma*alpha:  # if res. is higher than the stdev
                 data[i][j] = data[sim_specs[i]][j]  # must be CR, change the value
-
+                        
     return data
 
 
@@ -2451,16 +2477,16 @@ def cosmicdd(ndata, th=100, asy=0.6745, m=5):
     https://doi.org/10.1016/j.chemolab.2018.06.009
     It identifies CRs by detrended differences, the differences between a
     value and the next.
-
+    
     :type ndata: list[float]
     :param ndata: List of spectras to remove cosmic rays.
 
     :type th: float
     :param th: Factor to modify the criteria to identify a cosmic ray.
-
+    
     :type asy: float
     :param asy: Asymptotic bias correction
-
+    
     :type m: float
     :param m: Number of neighbor values to use for average.
 
@@ -2468,32 +2494,32 @@ def cosmicdd(ndata, th=100, asy=0.6745, m=5):
     :rtype: list[float]
     """
     data = copy.deepcopy(ndata)
-
+    
     diff = list(np.array(data))  # diff data
-
+     
     for i in range(len(data)):  # for each spectra
         for j in range(len(data[0])-1):  # for each step
             diff[i][j] = abs(data[i][j]-data[i][j+1])  # diff with the next one
-
+    
     zt = []  # Z scores
     for i in diff:  # for each diff. vector
         z = []  # temporal z score
         temp = []  # temporal MAD (median absolute deviation)
         med = np.median(i)  # just median
-
+        
         for j in i:  # for each step in each diff. spectra
             temp.append(abs(j-med))  # calculate MAD
         mad = np.median(temp)  # save MAD
-
+        
         for j in i:  # for each step in each diff. spectra
             z.append(asy*(j - med)/mad)  # calculate Z score
         zt.append(z)  # save Z score
-
+    
     for i in range(len(data)):  # for each spectra
         for j in range(len(data[i])-1):  # in all its len. except the last (range)
             if abs(zt[i][j]) > th:  # if it is larger than the th. then it is CR
                 data[i][j] = (sum(data[i][j-m:j]) + sum(data[i][j+1:j+m+1]))/(2*m)  # avg, of neighbors
-
+    
     return data
 
 
@@ -2501,7 +2527,7 @@ def cosmicmed(data, sigma=1.5):
     """
     Precise cosmic ray elimination for measurements of the same point or very
     similar spectras.
-
+    
     :type data: list[float]
     :param data: List of spectras to remove cosmic rays.
 
@@ -2512,42 +2538,42 @@ def cosmicmed(data, sigma=1.5):
     :returns: Data with removed cosmic rays.
     :rtype: list[float]
     """
-    solved = copy.deepcopy(data)
+    solved = copy.deepcopy(data)     
     acq = len(solved)
     length = len(solved[0])
-
+    
     med = median(solved)
-
+    
     for i in range(acq):
         for j in range(length):
             if data[i][j] > sigma*med[j]:
                 solved[i][j] = med[j]
-
+    
     return solved
 
 
 def makeaxisstep(start=0, step=1.00, length=1000, adjust=False, rounded=-1):
     """
-    Creates an axis, or vector, from 'start' with bins of length 'step'
+    Creates an axis, or vector, from 'start' with bins of length 'step' 
     for a distance of 'length'.
-
-    :type start: float
+    
+    :type start: float 
     :param start: first value of the axis. Default is 0.
-
+        
     :type step: float
     :param step: Step size for the axis. Default is 1.00.
-
+        
     :type length: int
     :param length: LEngth of axis. Default is 1000.
-
+    
     :type adjust: boolean
     :param adjust: If True, rounds (adjusts) the deimals points to the same
         as the step has. Default is False.
-
-    :type rounded: int
+        
+    :type rounded: int 
     :param rounded: Number of decimals to consider. If -1 then no rounding is
         performed.
-
+        
     :returns: Axis with the set parameters.
     :rtype: list[float]
     """
@@ -2564,21 +2590,21 @@ def makeaxisstep(start=0, step=1.00, length=1000, adjust=False, rounded=-1):
 
 def makeaxisdivs(start, finish, divs, rounded=-1):
     """
-    Creates an axis, or vector, from 'start' to 'finish' with 'divs' divisions.
-
-    :type start: float
+    Creates an axis, or vector, from 'start' to 'finish' with 'divs' divisions. 
+    
+    :type start: float 
     :param start: First value of the axis.
-
+        
     :type finish: float
     :param finish: Last value of the axis.
-
+        
     :type divs: int
     :param divs: Number of divisions
-
-    :type rounded: int
+        
+    :type rounded: int 
     :param rounded: Number of decimals to consider. If -1 then no rounding is
         performed.
-
+        
     :returns: Axis with the set parameters.
     :rtype: list[float]
     """
@@ -2594,10 +2620,10 @@ def minmax(data):
     """
     Calculates the vectors that contain the minimum and maximum values of each
     bin from a list of vectors.
-
-    :type data: list
+    
+    :type data: list 
     :param data: List of vectors to calculate the minimum and maximum vectors.
-
+                
     :returns: minimum and maximum vectors.
     :rtype: list[float]
     """
@@ -2610,7 +2636,7 @@ def minmax(data):
             if data[j][i] < temp_min:
                 temp_min = data[j][i]
             if data[j][i] > temp_max:
-                temp_max = data[j][i]
+                temp_max = data[j][i] 
         minimum.append(temp_min)
         maximum.append(temp_max)
     return minimum, maximum

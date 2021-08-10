@@ -159,8 +159,8 @@
             
   <h1>Source code for functions</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This main module contains all the functions available in spectrapepper. Please use the search function to look up</span>
-<span class="sd">specific functionalities with key words.</span>
+<span class="sd">This main module contains all the functions available in spectrapepper. Please</span>
+<span class="sd">use the search function to look up specific functionalities with keywords.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">math</span>
@@ -389,7 +389,7 @@
         <span class="n">default</span> <span class="o">=</span> <span class="kc">True</span>
     
     <span class="n">my_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="s1">&#39;datasets&#39;</span><span class="p">,</span> <span class="s1">&#39;headers.txt&#39;</span><span class="p">)</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">loadline</span><span class="p">(</span><span class="n">my_file</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tp</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">loadline</span><span class="p">(</span><span class="n">my_file</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">r</span> <span class="o">!=</span> <span class="s1">&#39;second&#39;</span><span class="p">:</span>
         <span class="n">default</span> <span class="o">=</span> <span class="kc">False</span>
@@ -408,7 +408,7 @@
 <span class="sd">    :param cutoff: Desired cutoff frequency of the filter. The default is 0.25.</span>
 <span class="sd">    </span>
 <span class="sd">    :type fs: int</span>
-<span class="sd">    :param fs: Sample rate in Hz . The default is 30.</span>
+<span class="sd">    :param fs: Sample rate in Hz. The default is 30.</span>
 <span class="sd">    </span>
 <span class="sd">    :type order: int</span>
 <span class="sd">    :param order: Sin wave can be approx represented as quadratic. The default is 2.</span>
@@ -487,8 +487,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculation of the baseline using Asymmetric Least Squares Smoothing. This</span>
 <span class="sd">    script only makes the calculation but it does not remove it. Original idea of</span>
-<span class="sd">    this algorithm by P. Eilers and H. Boelens (2005), and available details at:</span>
-<span class="sd">    https://stackoverflow.com/a/29185844/2898619</span>
+<span class="sd">    this algorithm by P. Eilers and H. Boelens (2005):</span>
 
 <span class="sd">    :type data: list[float]</span>
 <span class="sd">    :param data: Spectra to calculate the baseline from.</span>
@@ -535,8 +534,7 @@
 
 <div class="viewcode-block" id="bspbaseline"><a class="viewcode-back" href="../functions.html#functions.bspbaseline">[docs]</a><span class="k">def</span> <span class="nf">bspbaseline</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">avg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calcuates the baseline using b-spline. Find useful details and guidelines</span>
-<span class="sd">    in https://stackoverflow.com/a/34807513/2898619.</span>
+<span class="sd">    Calcuates the baseline using b-spline.</span>
 
 <span class="sd">    :type data: list[float]</span>
 <span class="sd">    :param data: Single or several spectras to remove the baseline from.</span>
@@ -684,19 +682,18 @@
 
 <div class="viewcode-block" id="lorentzfit"><a class="viewcode-back" href="../functions.html#functions.lorentzfit">[docs]</a><span class="k">def</span> <span class="nf">lorentzfit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">wid</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">it</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Fit a Lorentz distributed curve for a single spectra. Good guidelines</span>
-<span class="sd">    for similar structures can be found at http://emilygraceripka.com/blog/16.</span>
+<span class="sd">    Fit a Lorentz distributed curve for a single spectra.</span>
 
-<span class="sd">    :type y: TYPE</span>
+<span class="sd">    :type y: list[float]</span>
 <span class="sd">    :param y: single spectra.</span>
 
-<span class="sd">    :type x: TYPE</span>
+<span class="sd">    :type x: list[float]</span>
 <span class="sd">    :param x: x-axis.</span>
 
-<span class="sd">    :type wid: TYPE, optional</span>
+<span class="sd">    :type wid: float, optional</span>
 <span class="sd">    :param wid: fitted curve width. The default is 4.</span>
 
-<span class="sd">    :type it: TYPE, optional</span>
+<span class="sd">    :type it: int, optional</span>
 <span class="sd">    :param it: number of iterations. The default is 100.</span>
 
 <span class="sd">    :type plot: boolean</span>
@@ -853,7 +850,7 @@
 <span class="sd">    :param data: Data to calculate area from</span>
 
 <span class="sd">    :type limits: list[int]</span>
-<span class="sd">    :param limits: Limits that define the areas to be calculated.</span>
+<span class="sd">    :param limits: Limits that define the areas to be calculated. Axis position.</span>
 <span class="sd">    </span>
 <span class="sd">    :type norm: bool</span>
 <span class="sd">    :param norm: If True, normalized the area to the sum under all the curve.</span>
@@ -1312,7 +1309,7 @@
     <span class="k">return</span> <span class="n">is_max</span></div>
 
 
-<div class="viewcode-block" id="confusionmatrix"><a class="viewcode-back" href="../functions.html#functions.confusionmatrix">[docs]</a><span class="k">def</span> <span class="nf">confusionmatrix</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span> <span class="n">tp</span><span class="p">,</span> <span class="n">groupnames</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">],</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> 
+<div class="viewcode-block" id="confusionmatrix"><a class="viewcode-back" href="../functions.html#functions.confusionmatrix">[docs]</a><span class="k">def</span> <span class="nf">confusionmatrix</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span> <span class="n">tp</span><span class="p">,</span> <span class="n">gn</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">],</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> 
                     <span class="n">cmm</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Prediction&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates and/or plots the confusion matrix for machine learning algorithm results.</span>
@@ -1326,8 +1323,8 @@
 <span class="sd">    :type plot: boolean</span>
 <span class="sd">    :param plot: If true, plots the matrix. The default is False</span>
 
-<span class="sd">    :type groupnames: list[str]</span>
-<span class="sd">    :param groupnames: Names, or lables , of the classification groups. Default is empty.</span>
+<span class="sd">    :type gn: list[str]</span>
+<span class="sd">    :param gn: Names, or lables , of the classification groups. Default is empty.</span>
 
 <span class="sd">    :type title: str</span>
 <span class="sd">    :param title: Name of the matrix. Default is empty.</span>
@@ -1350,7 +1347,7 @@
     <span class="n">tt</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tt</span><span class="p">)</span>
     <span class="n">tp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span>
     <span class="n">plot</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
-    <span class="n">group_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">groupnames</span><span class="p">)</span>
+    <span class="n">group_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gn</span><span class="p">)</span>
     <span class="n">gn</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_names</span><span class="p">)</span>
     <span class="n">title</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
     <span class="n">cmm</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmm</span><span class="p">)</span>
@@ -1680,10 +1677,10 @@
                         <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
                         
               
-                <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>    <span class="c1">###############    </span>
+                <span class="k">if</span> <span class="n">count</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>  <span class="c1">###############    </span>
                     <span class="n">pmap</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">pmap</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="c1">#########</span>
+                    <span class="n">pmap</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#########</span>
 
 
         <span class="n">maximum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pmap</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
@@ -1702,7 +1699,7 @@
 <span class="sd">    :type name: string, optional</span>
 <span class="sd">    :param name: Name of the colormap. The default is &#39;my_name&#39;.</span>
 
-<span class="sd">    :type n: TYPE, optional</span>
+<span class="sd">    :type n: int, optional</span>
 <span class="sd">    :param n: Divisions. The default is 100.</span>
 
 <span class="sd">    :returns: Colormap in Matplotlib format.</span>
@@ -1815,16 +1812,15 @@
             <span class="n">lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>  <span class="c1"># save the length</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lengths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># otherwise is only 1 number</span>
-
+        
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_list</span><span class="p">)):</span>
         <span class="n">start</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="p">])</span>
         <span class="n">finish</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lengths</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
-        <span class="c1"># print(str(start) + &#39; - &#39; + str(finish))</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">features</span><span class="p">)):</span>
-            <span class="c1"># if i == 0:</span>
-            <span class="c1">#     new_list[i].append(features[j][0:lengths[i]])</span>
-            <span class="c1"># else:</span>
-            <span class="n">new_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">start</span><span class="p">:</span><span class="n">finish</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">lengths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">new_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">start</span><span class="p">:</span><span class="n">finish</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">new_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">features</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">start</span><span class="p">:</span><span class="n">finish</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">new_list</span></div>
 
@@ -2419,15 +2415,19 @@
     <span class="k">return</span> <span class="n">avg</span></div>
 
 
-<div class="viewcode-block" id="plot2dml"><a class="viewcode-back" href="../functions.html#functions.plot2dml">[docs]</a><span class="k">def</span> <span class="nf">plot2dml</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">],</span> <span class="n">train_pred</span><span class="o">=</span><span class="p">[],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[],</span>
-             <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">xax</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">yax</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">lfs</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-             <span class="n">xlim</span><span class="o">=</span><span class="p">[],</span> <span class="n">ylim</span><span class="o">=</span><span class="p">[],</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="plot2dml"><a class="viewcode-back" href="../functions.html#functions.plot2dml">[docs]</a><span class="k">def</span> <span class="nf">plot2dml</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="p">[],</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">],</span> <span class="n">train_pred</span><span class="o">=</span><span class="p">[],</span> 
+             <span class="n">test_pred</span><span class="o">=</span><span class="p">[],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[],</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">xax</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">yax</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> 
+             <span class="n">lfs</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;best&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">xlim</span><span class="o">=</span><span class="p">[],</span> <span class="n">ylim</span><span class="o">=</span><span class="p">[],</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plots 2-dimensional results from LDA, PCA, NCA, or similar machine learning</span>
 <span class="sd">    algoruthms where the output has 2 features per sample.</span>
 <span class="sd">    </span>
 <span class="sd">    :type train: pandas frame</span>
 <span class="sd">    :param train: Results for the training set. Pandas frame with the 2 dimensions</span>
+<span class="sd">        and target columns.</span>
+
+<span class="sd">    :type test: pandas frame</span>
+<span class="sd">    :param test: Results for the test set. Pandas frame with the 2 dimensions</span>
 <span class="sd">        and target columns.</span>
 <span class="sd">    </span>
 <span class="sd">    :type names: list[str]</span>
@@ -2436,10 +2436,9 @@
 <span class="sd">    </span>
 <span class="sd">    :type train_pred: list</span>
 <span class="sd">    :param train_pred: Prediction of the training set.</span>
-<span class="sd">        </span>
-<span class="sd">    :type test: pandas frame</span>
-<span class="sd">    :param test: Results for the test set. Pandas frame with the 2 dimensions</span>
-<span class="sd">        and target columns.</span>
+
+<span class="sd">    :type test_pred: list</span>
+<span class="sd">    :param test_pred: Prediction of the test set.</span>
 
 <span class="sd">    :type labels: list</span>
 <span class="sd">    :param labels: Names for the classification groups, if any.</span>
@@ -2451,7 +2450,7 @@
 <span class="sd">    :param xax: Name ox x-axis</span>
 <span class="sd">        </span>
 <span class="sd">    :type yax: str</span>
-<span class="sd">    :param yax: NAme of y-axis</span>
+<span class="sd">    :param yax: Name of y-axis</span>
 <span class="sd">        </span>
 <span class="sd">    :type lfs: int</span>
 <span class="sd">    :param lfs: Legend font size. Default is 15.</span>
@@ -2459,18 +2458,33 @@
 <span class="sd">    :type loc: str</span>
 <span class="sd">    :param loc: Location of legend. Default is best.</span>
 <span class="sd">    </span>
+<span class="sd">    :type size: int</span>
+<span class="sd">    :param size: Size of the markers. Default is 20.</span>
+<span class="sd">    </span>
+<span class="sd">    :type xlim: list</span>
+<span class="sd">    :param xlim: Limits of the x axis.</span>
+<span class="sd">    </span>
+<span class="sd">    :type ylim: list</span>
+<span class="sd">    :param ylim: Limits of the y axis.</span>
+<span class="sd">    </span>
 <span class="sd">    :type plot: bool</span>
 <span class="sd">    :param plot: If True it plot. Only for test purposes.</span>
 <span class="sd">        </span>
 <span class="sd">    :returns: Plot</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">marker</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">]</span>
-    <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span><span class="s2">&quot;yellow&quot;</span><span class="p">,</span><span class="s2">&quot;orange&quot;</span><span class="p">,</span> <span class="s2">&quot;lime&quot;</span><span class="p">,</span> <span class="s2">&quot;springgreen&quot;</span><span class="p">,</span> <span class="s2">&quot;mediumspringgreen&quot;</span><span class="p">,</span> <span class="s2">&quot;cyan&quot;</span><span class="p">,</span> <span class="s2">&quot;royalblue&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">]</span>
+    <span class="n">marker</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">]</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="s1">&#39;olive&#39;</span><span class="p">,</span> <span class="s1">&#39;lime&#39;</span><span class="p">,</span>
+             <span class="s1">&#39;springgreen&#39;</span><span class="p">,</span> <span class="s1">&#39;mediumspringgreen&#39;</span><span class="p">,</span> <span class="s1">&#39;cyan&#39;</span><span class="p">,</span> <span class="s1">&#39;teal&#39;</span><span class="p">,</span> <span class="s1">&#39;royalblue&#39;</span><span class="p">,</span> 
+             <span class="s1">&#39;turquoise&#39;</span><span class="p">,</span> <span class="s1">&#39;indigo&#39;</span><span class="p">,</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;deeppink&#39;</span><span class="p">,</span> <span class="s1">&#39;crimson&#39;</span><span class="p">]</span>
     
     <span class="n">legend_elements</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
-        <span class="n">legend_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> 
-                               <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">markerfacecolor</span><span class="o">=</span><span class="n">color</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span>    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">])</span><span class="o">+</span><span class="mi">1</span><span class="p">)):</span>
+            <span class="n">legend_elements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Line2D</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> 
+                                   <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">markerfacecolor</span><span class="o">=</span><span class="n">color</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span> 
+        
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">)):</span>  
         <span class="n">group</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
         <span class="n">ec</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
@@ -2482,6 +2496,21 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">i</span><span class="p">],</span> <span class="n">train</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">i</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
                         <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">[</span><span class="n">group</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">group</span><span class="p">],</span>
                         <span class="n">edgecolor</span><span class="o">=</span><span class="n">ec</span><span class="p">)</span>
+            
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">)):</span>        
+        <span class="n">group</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">ec</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+        
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_pred</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">test_pred</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">test</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="mi">2</span><span class="p">]][</span><span class="n">i</span><span class="p">]:</span>
+                <span class="n">ec</span> <span class="o">=</span> <span class="s1">&#39;fuchsia&#39;</span>
+                
+        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">i</span><span class="p">],</span> <span class="n">test</span><span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="mi">1</span><span class="p">]][</span><span class="n">i</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">size</span><span class="p">,</span>
+                        <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">[</span><span class="n">group</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">[</span><span class="n">group</span><span class="p">],</span>
+                        <span class="n">edgecolor</span><span class="o">=</span><span class="n">ec</span><span class="p">)</span>
+            
     <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">fs</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">xax</span><span class="p">)</span>
