@@ -103,22 +103,22 @@ class TestSpectrapepper(unittest.TestCase):
         print('polybaseline_multi: ' + str(r))
         self.assertEqual(r, 88)
 
-        data2 = spep.lorentzfit(data, axis, plot=False)
+        data2 = spep.lorentzfit(data, 170)
         r = np.floor(sum(data2))
         print('lorentzfit: ' + str(r))
-        self.assertEqual(r, 187)
+        self.assertEqual(r, 860)
 
-        data2 = spep.gaussfit(data, axis, plot=False)
+        data2 = spep.gaussfit(data, 170)
         r = np.floor(sum(data2))
         print('gaussfit: ' + str(r))
-        self.assertEqual(r, 166)
+        self.assertEqual(r, 169)
 
-        data2 = spep.cortopos([50,100,121,400], axis)
+        data2 = spep.valtopos([50,100,121,400], axis)
         r = sum(data2)
         print('cortopos: ' + str(r))
         self.assertEqual(r, 523)
 
-        data2 = spep.cortopos([[50,100,121,400],[60,120,141,300]], axis)
+        data2 = spep.valtopos([[50,100,121,400],[60,120,141,300]], axis)
         r = np.sum(data2)
         print('cortopos_multi: ' + str(r))
         self.assertEqual(r, 992)
@@ -158,14 +158,10 @@ class TestSpectrapepper(unittest.TestCase):
         print('normtoglobalmax_multi: ' + str(r))
         self.assertEqual(r, 200.22)
 
-        data1 = spep.load_mapp1()
-        axis1 = data1[0]
-        data2 = spep.load_mapp2()
-        axis2 = data2[0]
-        interpol = spep.interpolation([data1[1:],data2[1:]],[axis1,axis2])
-        r = np.floor(sum(interpol[0][0]))
+        inter1, inter2 = spep.interpolation(data, axis)
+        r = np.floor(sum(inter1))
         print('interpolation: ' + str(r))
-        self.assertEqual(r, 424112)
+        self.assertEqual(r, 1347)
 
         data2 = spep.evalgrau([params[0],params[1],params[2]])[0]
         r = np.floor(sum(data2))
@@ -222,11 +218,6 @@ class TestSpectrapepper(unittest.TestCase):
         print('median: ' + str(r))
         self.assertEqual(r, 1462)
 
-        data2 = spep.peakfit(data,axis,200)
-        r = np.floor(sum(data2))
-        print('peakfit: ' + str(r))
-        self.assertEqual(r, 2834)
-
         data2 = spep.decbound([1,2,3],[3,4,5],[0,5],[0,5])
         r = np.floor(sum(data2[3]))
         print('decbound: ' + str(r))
@@ -282,10 +273,11 @@ class TestSpectrapepper(unittest.TestCase):
         print('mergedata: ' + str(r))
         self.assertEqual(r, 125)
 
-        data2 = spep.shiftref([data,data],[axis,axis],plot=False)
+        data2 = spep.shiftref(data, axis, ref_peak=200, plot=False)
         r = np.floor(data2)
+        print(data2)
         print('shiftref: ' + str(r))
-        self.assertEqual(r, 314)
+        self.assertEqual(r, -6)
 
         data2 = spep.classify(t, gnumber=4)
         r = sum(data2[0])

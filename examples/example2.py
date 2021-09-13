@@ -1,39 +1,40 @@
 """
-This example shows typical processing of Raman spectras.
+This example shows simple processing of Raman spectras. Do not use this procedure for formal processing.
 """
 
-#import the library
-import my_functions as spep
+# import the library
+import spectrapepper as spep
 
-#load data
-data = spep.load('data/spectras.txt', fromline=1)
+# load data
+data = spep.load_spectras()
 
-#load the axis
-axis = spep.loadline('data/spectras.txt', line=1)
+# get the axis
+axis = data[0]
+data = data[1:]
 
-#norm the sum to 1
-newdata = spep.normsum(data)
+# remove baseline
+newdata = spep.alsbaseline(data)
 
-#remove noise
-newdata = spep.moveavg(newdata,5)
+# norm the sum to 1
+newdata = spep.normsum(newdata)
 
-#remove baseline
-newdata = spep.alsbaseline(newdata)
+# remove noise
+newdata = spep.moveavg(newdata, 5)
 
 
-#visualization
+# visualization
 import matplotlib.pyplot as plt
 
 for i in data:
     plt.plot(axis,i)
 plt.title('Original spectras')
-plt.xlabel('Shift (cm-1)')
+plt.xlabel('Shift ($cm^{-1}$)')
 plt.ylabel('Counts (a.u.)')
 plt.show()
 
 for i in newdata:
     plt.plot(axis,i)
 plt.title('Processed spectras')
-plt.xlabel('Shift (cm-1)')
+plt.xlabel('Shift ($cm^{-1}$)')
 plt.ylabel('Counts (a.u.)')
-plt.show()  
+plt.show()

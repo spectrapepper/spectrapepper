@@ -53,8 +53,12 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/enricgrau/spectrapepper',
-    version='0.0.12',
+    version='0.0.13',
     zip_safe=False,
-    package_data={'spectrapepper': ['datasets/*.txt']},
-    data_files=[('', ['spectrapepper/datasets/*.txt'])]
+    package_data={'spectrapepper': ['datasets/headers.txt',
+                                    'datasets/mapping1.txt',
+                                    'datasets/mapping2.txt',
+                                    'datasets/params.txt',
+                                    'datasets/spectras.txt',
+                                    'datasets/targets.txt']}
 )

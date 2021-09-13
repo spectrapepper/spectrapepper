@@ -1,6 +1,6 @@
 """
 This main module contains all the functions available in spectrapepper. Please
-use the search function to look up specific functionalities with keywords.
+use the search function to look up specific functionalities and keywords.
 """
 
 import math
@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 from scipy import sparse
 from scipy import interpolate
+from scipy.special import gamma, factorial
 from scipy.stats import stats
 from scipy.signal import butter, filtfilt
 from scipy.optimize import minimize
@@ -63,17 +64,6 @@ def load_spectras():
     :returns: Sample spectral data.
     :rtype: list[float]
     """
-    # path = os.getcwd()
-    # parent = os.path.abspath(os.path.join(path, os.pardir))
-    # data = load(parent+'\spectrapepper\datasets\spectras.txt')
-    
-    # module_path = os.path.dirname(__file__)
-    # data = load(module_path+'\\datasets\\spectras.txt')
-    
-    # path = str(PACKAGEDIR)+'spectrapepper\datasets\spectras.txt'
-    # print(path)
-    # text = load(path)
-    # print(text)
     
     location = os.path.dirname(os.path.realpath(__file__))
     my_file = os.path.join(location, 'datasets', 'spectras.txt')
@@ -89,12 +79,6 @@ def load_targets():
     :returns: Sample targets.
     :rtype: list[float]
     """
-    # path = os.getcwd()
-    # parent = os.path.abspath(os.path.join(path, os.pardir))
-    # data = load(parent+'\spectrapepper\datasets\targets.txt')    
-    
-    # module_path = os.path.dirname(__file__)
-    # data = load(module_path+'\\datasets\\targets.txt')
     
     location = os.path.dirname(os.path.realpath(__file__))
     my_file = os.path.join(location, 'datasets', 'targets.txt')
@@ -110,12 +94,6 @@ def load_params(transpose=False):
     :returns: Sample parameters.
     :rtype: list[float]
     """
-    # path = os.getcwd()
-    # parent = os.path.abspath(os.path.join(path, os.pardir))
-    # data = load(parent+'\spectrapepper\datasets\params.txt')   
-    
-    # module_path = os.path.dirname(__file__)
-    # data = load(module_path+'\\datasets\\params.txt')
     
     location = os.path.dirname(os.path.realpath(__file__))
     my_file = os.path.join(location, 'datasets', 'params.txt')
@@ -151,7 +129,7 @@ def load(file, fromline=0, transpose=False, dtype=float):
     i = 0
     for row in raw_data:
         if i >= fromline:
-            row = row.replace(",", ".")
+            # row = row.replace(",", ".")
             row = row.replace(";", " ")
             row = row.replace("NaN", "-1")
             row = row.replace("nan", "-1")
@@ -372,15 +350,15 @@ def alsbaseline(data, lam=100, p=0.001, niter=10):
     return data
 
 
-def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
+def bspbaseline(data, axis, points, avg=5, remove=True, plot=False):
     """
     Calcuates the baseline using b-spline.
 
     :type data: list[float]
     :param data: Single or several spectras to remove the baseline from.
 
-    :type x_axis: list[float]
-    :param x_axis: x axis of the data, to interpolate the baseline function.
+    :type axis: list[float]
+    :param axis: x axis of the data, to interpolate the baseline function.
 
     :type points: list[int]
     :param points: axis values of points to calculate the bspine.
@@ -398,10 +376,10 @@ def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
     :rtype: list[float]
     """
     data = copy.deepcopy(data)
-    x_axis = list(x_axis)
+    axis = list(axis)
     x = list(points)
     avg = int(avg)
-    pos = cortopos(x, x_axis)
+    pos = valtopos(x, axis)
     dims = len(np.array(data).shape)  # detect dimensions
 
     if dims >= 2:
@@ -416,9 +394,9 @@ def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
             spl = splrep(x, y)
                 
             if remove:
-                baseline.append(data[j] - splev(x_axis, spl))
+                baseline.append(data[j] - splev(axis, spl))
             else:
-                baseline.append(splev(x_axis, spl))
+                baseline.append(splev(axis, spl))
 
     else:
         y = []  # y values for the selected x
@@ -427,11 +405,11 @@ def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
             y.append(temp)
     
         spl = splrep(x, y)
-        baseline = splev(x_axis, spl)
+        baseline = splev(axis, spl)
         
         if plot:        
-            plt.plot(x_axis, data)
-            plt.plot(x_axis, baseline)
+            plt.plot(axis, data)
+            plt.plot(axis, baseline)
             plt.plot(x, y, 'o', color='red')
             plt.show()
     
@@ -441,15 +419,15 @@ def bspbaseline(data, x_axis, points, avg=5, remove=True, plot=False):
     return baseline
 
 
-def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
+def polybaseline(data, axis, points, deg=2, avg=5, remove=True, plot=False):
     """
     Calcuates the baseline using polynomial fit.
 
     :type data: list[float]
     :param data: Single or several spectras to remove the baseline from.
 
-    :type x_axis: list[float]
-    :param x_axis: x axis of the data, to interpolate the baseline function.
+    :type axis: list[float]
+    :param axis: x axis of the data, to interpolate the baseline function.
 
     :type points: list[int]
     :param points: positions in axis of points to calculate baseline.
@@ -470,10 +448,10 @@ def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
     :rtype: list[float]
     """
     data = copy.deepcopy(data)  
-    x_axis = list(x_axis)
+    axis = list(axis)
     x = list(points)
     avg = int(avg)
-    pos = cortopos(x, x_axis)
+    pos = valtopos(x, axis)
     dims = len(np.array(data).shape)  # detect dimensions
     
     if dims > 1:
@@ -487,10 +465,10 @@ def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
                         
             z = np.polyfit(x, y, deg)  # polinomial fit
             f = np.poly1d(z)  # 1d polinomial
-            temp = f(x_axis)  # y values
+            temp = f(axis)  # y values
             if plot and j == 0:        
-                plt.plot(x_axis, data[j])
-                plt.plot(x_axis, temp)
+                plt.plot(axis, data[j])
+                plt.plot(axis, temp)
                 plt.plot(x, y, 'o', color='red')
                 plt.show()
         
@@ -506,11 +484,11 @@ def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
     
         z = np.polyfit(x, y, deg)  # polinomial fit
         f = np.poly1d(z)  # 1d polinomial
-        baseline = f(x_axis)  # y values
+        baseline = f(axis)  # y values
     
         if plot:        
-            plt.plot(x_axis, data)
-            plt.plot(x_axis, baseline)
+            plt.plot(axis, data)
+            plt.plot(axis, baseline)
             plt.plot(x, y, 'o', color='red')
             plt.show()
     
@@ -520,65 +498,65 @@ def polybaseline(data, x_axis, points, deg=2, avg=5, remove=True, plot=False):
     return baseline
 
 
-def lorentzfit(y, x, wid=4, it=100, plot=False):
-    """
-    Fit a Lorentz distributed curve for a single spectra.
+# def lorentzfit(y, x, wid=4, it=100, plot=False):
+#     """
+#     Fit a Lorentz distributed curve for a single spectra.
 
-    :type y: list[float]
-    :param y: single spectra.
+#     :type y: list[float]
+#     :param y: single spectra.
 
-    :type x: list[float]
-    :param x: x-axis.
+#     :type x: list[float]
+#     :param x: x-axis.
 
-    :type wid: float, optional
-    :param wid: fitted curve width. The default is 4.
+#     :type wid: float, optional
+#     :param wid: fitted curve width. The default is 4.
 
-    :type it: int, optional
-    :param it: number of iterations. The default is 100.
+#     :type it: int, optional
+#     :param it: number of iterations. The default is 100.
 
-    :type plot: boolean
-    :param plot: fF 'True' then plots the data and the fit.
+#     :type plot: boolean
+#     :param plot: fF 'True' then plots the data and the fit.
 
-    :returns: Lorentz fit.
-    :rtype: list[float]
-    """
-    cen = 0  # position (wavelength, x value)
-    peak_i_pos = 0  # position (axis position, i value)
-    amp = max(y)  # maximum value of function, peak value, amplitud of the fit
-    #  fit = []  # fit function
-    err = []  # error log to choose the optimum
-    for i in range(len(y)):  # for all the data
-        if amp == y[i]:  # if it is the maximum
-            cen = x[i]  # save the axis value x
-            peak_i_pos = int(i)  # also save the position i
-            break
-    for i in range(it):  # search "it" iterations
-        temp = 0  # reset temporal error
-        fit = []  # reset lorentz fit array
-        p = cen - 0.5 + (0.01 * i)  # pos of the peak respect to the reference measured peak
-        for j in range(len(x)):  # for all the points
-            fit.append(amp * wid ** 2 / ((x[j] - p) ** 2 + wid ** 2))
-        for j in range(peak_i_pos - 25, peak_i_pos + 25):  # error between -25 and +25 of the peak position
-            temp = temp + (fit[j] - y[j]) ** 2  # total error
-        err.append(temp)  # log error
-    fit = []  # reset array
-    for i in range(len(err)):  # look for the minimum error
-        if min(err) == err[i]:  # if it is the minimum error
-            p = cen - 0.5 + (0.01 * i)  # then calculate the fit again
-            for j in range(len(y)):
-                fit.append(amp * wid ** 2 / ((x[j] - p) ** 2 + wid ** 2))
-            break
+#     :returns: Lorentz fit.
+#     :rtype: list[float]
+#     """
+#     cen = 0  # position (wavelength, x value)
+#     peak_i_pos = 0  # position (axis position, i value)
+#     amp = max(y)  # maximum value of function, peak value, amplitud of the fit
+#     #  fit = []  # fit function
+#     err = []  # error log to choose the optimum
+#     for i in range(len(y)):  # for all the data
+#         if amp == y[i]:  # if it is the maximum
+#             cen = x[i]  # save the axis value x
+#             peak_i_pos = int(i)  # also save the position i
+#             break
+#     for i in range(it):  # search "it" iterations
+#         temp = 0  # reset temporal error
+#         fit = []  # reset lorentz fit array
+#         p = cen - 0.5 + (0.01 * i)  # pos of the peak respect to the reference measured peak
+#         for j in range(len(x)):  # for all the points
+#             fit.append(amp * wid ** 2 / ((x[j] - p) ** 2 + wid ** 2))
+#         for j in range(peak_i_pos - 25, peak_i_pos + 25):  # error between -25 and +25 of the peak position
+#             temp = temp + (fit[j] - y[j]) ** 2  # total error
+#         err.append(temp)  # log error
+#     fit = []  # reset array
+#     for i in range(len(err)):  # look for the minimum error
+#         if min(err) == err[i]:  # if it is the minimum error
+#             p = cen - 0.5 + (0.01 * i)  # then calculate the fit again
+#             for j in range(len(y)):
+#                 fit.append(amp * wid ** 2 / ((x[j] - p) ** 2 + wid ** 2))
+#             break
 
-    if plot:
-        plt.plot(x, y, label='Data')
-        plt.plot(x, fit, label='Fit')
-        plt.legend(loc=0)
-        plt.show()
+#     if plot:
+#         plt.plot(x, y, label='Data')
+#         plt.plot(x, fit, label='Fit')
+#         plt.legend(loc=0)
+#         plt.show()
 
-    return fit
+#     return fit
 
 
-def gaussfit(y, x, sigma=4.4, it=100, plot=False):
+def gaussfit0(y, x, sigma=4.4, it=100, plot=False):
     """
     Fit a Gaussian distributed curve for a single spectra. Good guidelines
     for similar structures can be found at http://emilygraceripka.com/blog/16.
@@ -640,11 +618,10 @@ def gaussfit(y, x, sigma=4.4, it=100, plot=False):
     return fit
 
 
-def cortopos(vals, axis):
+def valtopos(vals, axis):
     """
-    To translate values to a position in an axis, basically searching for
-    the position of a value. Normally they don't fit perfectly, so it is useful
-    to use this tool that approximates to the closest.
+    To translate the value in an axis to its position in the axis, basically
+    searches for the position of the value. It approximates to the closest.
 
     :type vals: list[float]
     :param vals: List of values to be searched and translated.
@@ -655,29 +632,44 @@ def cortopos(vals, axis):
     :returns: Position in the axis of the values in vals
     :rtype: list[int]
     """
-    if len(np.array(vals).shape) > 1:
+    
+    shape = len(np.array(vals).shape)
+    
+    if shape > 1:
         pos = [[0 for _ in range(len(vals[0]))] for _ in range(len(vals))]  # i position of area limits
         for i in range(len(vals)):  # this loop takes the approx. x and takes its position
             for j in range(len(vals[0])):
                 dif_temp = 999  # safe initial difference
                 temp_pos = 0  # temporal best position
-                for k in range(len(axis)):  # search in x_axis
+                for k in range(len(axis)):  # search in axis
                     if abs(vals[i][j] - axis[k]) < dif_temp:  # compare if better
                         temp_pos = k  # save best value
                         dif_temp = abs(vals[i][j] - axis[k])  # calculate new diff
                 vals[i][j] = axis[temp_pos]  # save real value in axis
                 pos[i][j] = temp_pos  # save the position
-    else:
-        pos = []  # i position of area limits
+                
+    if shape == 1:
+        pos = [0 for _ in range(len(vals))]  # i position of area limits
         for i in range(len(vals)):  # this loop takes the approx. x and takes its position
             dif_temp = 999  # safe initial difference
             temp_pos = 0  # temporal best position
-            for k in range(len(axis)):
-                if abs(vals[i] - axis[k]) < dif_temp:
-                    temp_pos = k
-                    dif_temp = abs(vals[i] - axis[k])
+            for k in range(len(axis)):  # search in axis
+                if abs(vals[i] - axis[k]) < dif_temp:  # compare if better
+                    temp_pos = k  # save best value
+                    dif_temp = abs(vals[i] - axis[k])  # calculate new diff
             vals[i] = axis[temp_pos]  # save real value in axis
-            pos.append(temp_pos)  # save the position
+            pos[i] = temp_pos  # save the position           
+                
+    if shape == 0:
+        pos = []  # i position of area limits
+        dif_temp = 9999999  # safe initial difference
+        temp_pos = 0  # temporal best position
+        for k in range(len(axis)):
+            if abs(vals - axis[k]) < dif_temp:
+                temp_pos = k
+                dif_temp = abs(vals - axis[k])
+        vals = axis[temp_pos]  # save real value in axis
+        pos = temp_pos
     return pos
 
 
@@ -813,45 +805,70 @@ def normtoglobalmax(data):
     return y
 
 
-def interpolation(data, x_axis):
+def interpolation(data, axis, new_step=1, integer=True):
     """
-    Returns an array with the first item being the interpolated
-    data and the second item being the axis.
+    Interpolates data to a new axis. If there are multiple datasets with 
+    different axises in can interpolate to a common axis.
 
     :type data: list[float]
-    :param data: data to interpolate
+    :param data: List of data to interpolate
 
-    :type x_axis: list[float]
-    :param x_axis: axis of data
+    :type axis: list[list[float]]
+    :param axis: list of the axises of the data
+    
+    :type new_step: float
+    :param new_step: new step for the new axis
+    
+    :type integer: bool
+    :param integer: 
 
     :returns: Interpolated data and the new axis
-    :rtype: list[list[float],list[float]]
+    :rtype: list[float], list[float]
     """
-    temp_y = list(data)  # data, no axis
-    master_x = list(x_axis)  # axis
-
-    # NEW AXIS
-    new_step = 1
-    new_start = -1
-    new_end = 99999999
-    for i in range(len(master_x)):
-        if min(master_x[i]) > new_start:
-            new_start = math.ceil(min(master_x[i]))
-        if max(master_x[i]) < new_end:
-            new_end = math.floor(max(master_x[i]))
-    x_new = np.arange(new_start, new_end + new_step, new_step)
-
-    # MASTER DATA
-    master_y = []
-    for i in range(len(temp_y)):
-        for j in range(len(temp_y[i])):
-            this = interpolate.interp1d(master_x[i], temp_y[i][j])
-            master_y.append(this)
-
-    # INTERPOLATIONS
-    for i in range(len(master_y)):
-        master_y[i] = master_y[i](x_new)
-
+    temp_y = list(data)
+    axis = list(axis)
+    dims = len(np.array(data).shape)
+    
+    if dims > 1:
+        # NEW AXIS
+        new_start = -9999999
+        new_end = 99999999
+        for i in range(len(axis)):
+            if min(axis[i]) > new_start:
+                new_start = math.ceil(min(axis[i]))
+            if max(axis[i]) < new_end:
+                new_end = math.floor(max(axis[i]))
+        x_new = np.arange(new_start, new_end + new_step, new_step)
+    
+        # MASTER DATA
+        master_y = []
+        for i in range(len(temp_y)):
+            for j in range(len(temp_y[i])):
+                this = np.interp()
+                master_y.append(this)
+    
+        # INTERPOLATIONS
+        for i in range(len(master_y)):
+            master_y[i] = master_y[i](x_new)
+            
+    else:
+        # NEW AXIS
+        new_start = -9999999
+        new_end = 99999999
+        if min(axis) > new_start:
+            new_start = math.ceil(min(axis))
+        if max(axis) < new_end:
+            new_end = math.floor(max(axis))
+        x_new = np.arange(new_start, new_end + new_step, new_step)
+    
+        # MASTER DATA
+        master_y = []
+        
+        this = interpolate.interp1d(axis, temp_y)
+    
+        # INTERPOLATIONS
+        master_y = this(x_new)
+        
     return master_y, x_new
 
 
@@ -901,7 +918,8 @@ def groupscores(all_targets, used_targets, predicted_targets):
     Calculates the individual scores for a ML algorithm (i.e.: LDA, PCA, etc).
 
     :type all_targets: list[int]
-    :param all_targets: List of all real targets (making sure all groups are here).
+    :param all_targets: List of all real targets (making sure all groups are 
+        here).
 
     :type used_targets: list[int]
     :param used_targets: Targets to score on.
@@ -940,8 +958,8 @@ def cmscore(x_points, y_points, target):
     :type target: list[int]
     :param target: Targets of each point.
 
-    :returns: Score by comparing CM distances. Prediction using CM distances. X-axis coords of ths CMs.
-        Y-axis coords of the Cms.
+    :returns: Score by comparing CM distances. Prediction using CM distances. 
+        X-axis coords of ths CMs. Y-axis coords of the Cms.
     :rtype: list[float, list[int],list[float],list[float]]
     """
     x_p = list(x_points)
@@ -1006,8 +1024,8 @@ def mdscore(x_p, y_p, tar):
     :type tar: list[int]
     :param tar: Targets of each point.
 
-    :returns: Score by comparing MD distances. Prediction using MD distances. X-axis coords of ths CMs.
-        Y-axis coords of the Cms.
+    :returns: Score by comparing MD distances. Prediction using MD distances. 
+        X-axis coords of ths CMs. Y-axis coords of the Cms.
     :rtype: list[float, list[int],list[float],list[float]]
     """
     x_p = list(x_p)
@@ -1057,15 +1075,15 @@ def mdscore(x_p, y_p, tar):
     return score, p, a, b
 
 
-def normtopeak(data, x_axis, peak, shift=10):
+def normtopeak(data, axis, peak, shift=10):
     """
     Normalizes the spectras to a particular peak.
 
     :type data: list[float]
     :param data: Data to be normalized.
 
-    :type x_axis: list[float]
-    :param x_axis: X-axis of the data
+    :type axis: list[float]
+    :param axis: X-axis of the data
 
     :type peak: int
     :param peak: Peak position in x-axis values.
@@ -1079,10 +1097,10 @@ def normtopeak(data, x_axis, peak, shift=10):
     y = copy.deepcopy(data)
     dims = len(np.array(y).shape)
     
-    x_axis = list(x_axis)
+    axis = list(axis)
     # peak = [int(peak)]
     shift = int(shift)
-    pos = cortopos([int(peak)], x_axis)
+    pos = valtopos([int(peak)], axis)
     
     if dims > 1:
         for j in range(len(y)):
@@ -1120,9 +1138,11 @@ def peakfinder(data, look=10):
     :param data: Data to find a peak in.
 
     :type look: int
-    :param look: Amount of position to each side to decide if it is a local maximum. The default is 10.
+    :param look: Amount of position to each side to decide if it is a local 
+        maximum. The default is 10.
 
-    :returns: A vector of same length with 1 or 0 if it finds or not a peak in that position
+    :returns: A vector of same length with 1 or 0 if it finds or not a peak in 
+        that position
     :rtype: list[int]
     """
     y = copy.deepcopy(data)
@@ -1152,7 +1172,8 @@ def peakfinder(data, look=10):
 def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='', 
                     cmm='Blues', fontsize=20, ylabel='True', xlabel='Prediction'):
     """
-    Calculates and/or plots the confusion matrix for machine learning algorithm results.
+    Calculates and/or plots the confusion matrix for machine learning algorithm
+    results.
 
     :type tt: list[float]
     :param tt: Real targets.
@@ -1170,7 +1191,8 @@ def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='',
     :param title: Name of the matrix. Default is empty.
 
     :type cmm: str
-    :param cmm: Nam eof the colormap (matplotlib) to use for the plot. Default is Blue.
+    :param cmm: Nam eof the colormap (matplotlib) to use for the plot. Default
+        is Blue.
 
     :type fontsize: int
     :param fontsize: Font size for the labels. The default is 20.
@@ -1293,9 +1315,9 @@ def median(data):
     return median
 
 
-def peakfit(data, ax, pos, look=20, shift=5, wid=5.0):
+def lorentzfit(data, pos, ax=[0], look=10, shift=5, wid=5):
     """
-    Feats peak as an optimization problem.
+    Fits peak as an optimization problem.
 
     :type data: list[float]
     :param data: Data to fit. Single vector.
@@ -1304,13 +1326,13 @@ def peakfit(data, ax, pos, look=20, shift=5, wid=5.0):
     :param ax: x axis.
 
     :type pos: int
-    :param pos: Peak position to fit to.
+    :param pos: X axis position of the peak.
 
     :type look: int
-    :param look: positions to look to each side. The default is 20.
+    :param look: index positions to look to each side. The default is 20.
 
     :type shift: int
-    :param shift: Possible shift of the peak. The default is 5.
+    :param shift: Possible index shift of the peak. The default is 5.
 
     :type wid: float
     :param wid: Initial width of fit. The default is 5.
@@ -1320,39 +1342,199 @@ def peakfit(data, ax, pos, look=20, shift=5, wid=5.0):
     """
     # initial guesses
     ax = list(ax)
-    y = list(data)
+    y = list(data)      
     look = int(look)
     s = int(shift)
-    pos = int(pos)
-    amp = max(y) / 2
+    pos = int(valtopos(pos, ax))
+    amp = max(y)/2
     wid = float(wid)
+    
+    if ax == [0]: # if no axis is passed
+        ax = [i for i in range(len(y))]
+    
+    for k in range(pos - s, pos + s):
+            if y[k] > y[pos]:
+                pos = k
+    p = ax[pos]
 
     def objective(x):
         fit = []
         error = 0
         for i in range(len(ax)):  # for all the points
-            fit.append(x[0] * x[1] ** 2 / ((ax[i] - ax[pos]) ** 2 + x[1] ** 2))
+            # fit.append(x[0] * x[1] ** 2 / ((ax[i] - x[2])**2 + x[1] ** 2)) 
+            
+            fit.append(x[0] * (1/np.pi) * (0.5*x[1])/((ax[i]-x[2])**2 + (0.5*x[1])**2))
+            
         for j in range(pos - look, pos + look):  # error between +-look of the peak position
             error += (fit[j] - y[j]) ** 2  # total error
         return error
 
     def constraint1(x):
         return 0
-
-    for k in range(pos - s, pos + s):
-        if y[k] > y[pos]:
-            pos = k
-
-    x0 = np.array([amp, wid])  # master vector to optimize, initial values
-    bnds = [[0, max(y)], [1, 1000]]
+    
+    x0 = np.array([amp, wid, p])  # master vector to optimize, initial values
+    bnds = [[0, max(y)*200], [1, 1000], [(p-s), (p+s)]]
     con1 = {'type': 'ineq', 'fun': constraint1}
     cons = ([con1])
     solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
     x = solution.x
 
     fit = []
+
     for l in range(len(ax)):  # for all the points
-        fit.append(x[0] * x[1] ** 2 / ((ax[l] - ax[int(pos)]) ** 2 + x[1] ** 2))
+        # fit.append(x[0] * x[1] ** 2 / ((ax[l] - x[2]) ** 2 + x[1] ** 2))
+        fit.append(x[0] * (1/np.pi) * (0.5*x[1])/((ax[l]-x[2])**2 + (0.5*x[1])**2))
+    return fit
+
+
+def gaussfit(data, pos, ax=[0], look=10, shift=5, sigma=4.4):
+    """
+    Fits peak as an optimization problem.
+
+    :type data: list[float]
+    :param data: Data to fit. Single vector.
+
+    :type ax: list[float]
+    :param ax: x axis.
+
+    :type pos: int
+    :param pos: Peak index to fit to.
+
+    :type look: int
+    :param look: index positions to look to each side. The default is 20.
+
+    :type shift: int
+    :param shift: Possible index shift of the peak. The default is 5.
+   
+    :type sigma: float
+    :param sigma: Sigma value for Gaussian fit. The default is 4.4.
+
+    :returns: Fitted curve.
+    :rtype: list[float]
+    """
+    # initial guesses
+    ax = list(ax)
+    y = list(data)      
+    look = int(look)
+    s = int(shift)
+    pos = int(pos)
+    amp = max(y)
+    sigma = float(sigma)
+    
+    if ax == [0]: # if no axis is passed
+        ax = [i for i in range(len(y))]
+    
+    for k in range(pos - s, pos + s):
+            if y[k] > y[pos]:
+                pos = k
+    p = ax[pos]
+
+    def objective(x):
+        fit = []
+        error = 0
+        for i in range(len(ax)):  # for all the points
+        
+            fit.append((11*x[0])*(1/(x[1]*(np.sqrt(2*np.pi))))*(np.exp(-0.5*(((ax[i]-x[2])/x[1])**2))))
+        
+            # fit.append(x[0] * x[1] ** 2 / ((ax[i] - x[2]) ** 2 + x[1] ** 2))            
+        for j in range(pos - look, pos + look):  # error between +-look of the peak position
+            error += (fit[j] - y[j]) ** 2  # total error
+        return error
+
+    def constraint1(x):
+        return 0
+    
+    x0 = np.array([amp, sigma, p])  # master vector to optimize, initial values
+    bnds = [[0, max(y)*2], [0, 1000], [(p-s), (p+s)]]
+    con1 = {'type': 'ineq', 'fun': constraint1}
+    cons = ([con1])
+    solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
+    x = solution.x
+
+    fit = []
+
+    for l in range(len(ax)):  # for all the points
+        # fit.append(x[0] * x[1] ** 2 / ((ax[l] - x[2]) ** 2 + x[1] ** 2))
+        fit.append((11*x[0])*(1/(x[1]*(np.sqrt(2*np.pi))))*(np.exp(-0.5*(((ax[l]-x[2])/x[1])**2))))
+    return fit
+
+
+def studentfit(data, pos, ax=[0], look=10, shift=5, v=4.4):
+    """
+    Fits peak as an optimization problem.
+
+    :type data: list[float]
+    :param data: Data to fit. Single vector.
+
+    :type ax: list[float]
+    :param ax: x axis.
+
+    :type pos: int
+    :param pos: Peak index to fit to.
+
+    :type look: int
+    :param look: index positions to look to each side. The default is 20.
+
+    :type shift: int
+    :param shift: Possible index shift of the peak. The default is 5.
+   
+    :type sigma: float
+    :param sigma: Sigma value for Gaussian fit. The default is 4.4.
+
+    :returns: Fitted curve.
+    :rtype: list[float]
+    """
+    # initial guesses
+    ax = list(ax)
+    y = list(data)      
+    look = int(look)
+    s = int(shift)
+    pos = int(pos)
+    amp = max(y)
+    v = float(v)
+    
+    if ax == [0]: # if no axis is passed
+        ax = [i for i in range(len(y))]
+    
+    for k in range(pos - s, pos + s):
+            if y[k] > y[pos]:
+                pos = k
+    p = ax[pos]
+
+    def objective(x):
+        fit = []
+        error = 0
+        for i in range(len(ax)):  # for all the points
+
+            a = gamma((x[1]+1)/2)
+            b = np.sqrt(np.pi*x[1])*gamma(x[1]/2)
+            c = 1+((ax[i]-x[2])**2)/x[1]
+            d = -(x[1]+1)/2
+            
+            fit.append(x[0]*((a/b)*(c**d)))       
+        for j in range(pos - look, pos + look):  # error between +-look of the peak position
+            error += (fit[j] - y[j]) ** 2  # total error
+        return error
+
+    def constraint1(x):
+        return 0
+    
+    x0 = np.array([amp, v, p])  # master vector to optimize, initial values
+    bnds = [[0, max(y)*5], [0, 10000], [(p-s), (p+s)]]
+    con1 = {'type': 'ineq', 'fun': constraint1}
+    cons = ([con1])
+    solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
+    x = solution.x
+
+    fit = []
+
+    for l in range(len(ax)):  # for all the points
+        a = gamma((x[1]+1)/2)
+        b = np.sqrt(np.pi*x[1])*gamma(x[1]/2)
+        c = 1+((ax[l]-x[2])**2)/x[1]
+        d = -(x[1]+1)/2
+        
+        fit.append(x[0]*(a/b*(c**d))) 
     return fit
 
 
@@ -1561,9 +1743,9 @@ def isaxis(data):
     features = list(data)
 
     is_axis = True  # there is axis by default
-    x_axis = features[0]  # axis should be the first
-    for i in range(len(x_axis) - 1):  # check all the vector
-        if x_axis[i] > x_axis[i + 1]:
+    axis = features[0]  # axis should be the first
+    for i in range(len(axis) - 1):  # check all the vector
+        if axis[i] > axis[i + 1]:
             is_axis = False
             break
     return is_axis
@@ -1689,7 +1871,7 @@ def mergedata(data):
     return master
 
 
-def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, it=100, plot=True):
+def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, plot=True):
     """
     Shifts the x-axis according to a shift calculated prior.
 
@@ -1705,9 +1887,6 @@ def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, it=100, plot=True):
     :type mode: int
     :param mode: Fitting method, Lorentz, Gaussian, or none (1,2,3). The default is 1.
 
-    :type it: int
-    :param it: Fitting iterations. The default is 100.
-
     :type plot: bool
     :param plot: If True plots a visual aid. The default is True.
 
@@ -1716,9 +1895,8 @@ def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, it=100, plot=True):
     """
     ref_data = list(ref_data)
     ref_axis = list(ref_axis)
-    ref_peak = float(ref_peak)
+    # ref_peak = valtopos(ref_peak, ref_axis)
     mode = int(mode)
-    it = int(it)
     plot = bool(plot)
 
     fit = []  # fit curves(s), if selected
@@ -1728,16 +1906,16 @@ def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, it=100, plot=True):
     if dims > 1:
         for i in range(len(ref_data)):  # depending on the mode chosen...
             if mode == 1:
-                fit.append(lorentzfit(ref_data[i], ref_axis[i], 4, it))
+                fit.append(lorentzfit(ref_data[i], ref_peak, ax=ref_axis[i]))
             if mode == 2:
-                fit.append(gaussfit(ref_data[i], ref_axis[i], 4.4, it))
+                fit.append(gaussfit(ref_data[i], ref_peak, ax=ref_axis[i]))
             if mode == 0:
                 fit.append(ref_data[i])
     else:
         if mode == 1:
-            fit.append(lorentzfit(ref_data, ref_axis, 4, it))
+            fit.append(lorentzfit(ref_data, ref_peak, ref_axis))
         if mode == 2:
-            fit.append(gaussfit(ref_data, ref_axis, 4.4, it))
+            fit.append(gaussfit(ref_data, ref_peak, ref_axis))
         if mode == 0:
             fit.append(ref_data)
 
@@ -1756,14 +1934,21 @@ def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, it=100, plot=True):
     peakshift = -temp / len(shift)
 
     if plot:
-        plt.figure()  # figsize = (16,9)
-        for i in range(len(ref_data)):
-            plt.plot(ref_axis[i], ref_data[i], linewidth=2, label='Original' + str(i))
-            plt.plot(ref_axis[i], fit[i], linewidth=2, label='Fit' + str(i), linestyle='--')
-        plt.axvline(x=ref_peak, ymin=0, ymax=max(ref_data[0]), linewidth=2, color="red", label=ref_peak)
-        plt.axvline(x=ref_peak - peakshift, ymin=0, ymax=max(ref_data[0]), linewidth=2, color="yellow",
-                    label="Meas. Max.")
-        plt.gca().set_xlim(ref_peak - 15, ref_peak + 15)
+        if dims > 1:
+            plt.figure()  # figsize = (16,9)
+            for i in range(len(ref_data)):
+                plt.plot(ref_axis[i], ref_data[i], linewidth=2, label='Original' + str(i))
+                plt.plot(ref_axis[i], fit[i], linewidth=2, label='Fit' + str(i), linestyle='--')
+            plt.axvline(x=ref_peak, ymin=0, ymax=max(ref_data[0]), linewidth=2, color="red", label=ref_peak)
+            plt.axvline(x=ref_peak - peakshift, ymin=0, ymax=max(ref_data[0]), linewidth=2, color="yellow",
+                        label="Meas. Max.")
+        else:
+            plt.plot(ref_axis, ref_data, linewidth=2, label='Original' + str(i))
+            plt.plot(ref_axis, fit[0], linewidth=2, label='Fit', linestyle='--')
+            plt.axvline(x=ref_peak, ymin=0, ymax=max(ref_data), linewidth=2, color="red", label=ref_peak)
+            plt.axvline(x=ref_peak - peakshift, ymin=0, ymax=max(ref_data), linewidth=2, color="yellow",
+                        label="Meas. Max.")
+        # plt.gca().set_xlim(ref_peak - 15, ref_peak + 15)
         # plt.gca().set_ylim(0, 2)
         plt.legend(loc=0)
         plt.ylabel('a.u.')
@@ -2640,3 +2825,146 @@ def minmax(data):
         minimum.append(temp_min)
         maximum.append(temp_max)
     return minimum, maximum
+
+
+def fwhm(data, peaks, axis, step=0.001, s=10):
+    """
+    Calculates the Full Width Half Maximum of an indeicated peak or groups of
+    peaks for a single or multiple spectras.
+    
+    :type data: list
+    :param data: spectrocopic data to calculate the fwhm from. Single vector or
+        list of vectors.    
+    
+    :type peaks: float or list[float]
+    :param peaks: Aproximate axis value of the position of the peak. If sinlge
+        peak then a float is needed. If many peaks are requierd then a list of
+        them.
+        
+    :type axis: list
+    :param axis: Axis of the data. If none, then the axis will be 0..N where N
+        is the length of the spectra or spectras.
+
+    :type res: float
+    :param res: Resolution in wich to calculate the width. Must be a power of 
+        10. If 'res=1' the the axis resolution (step) is used.
+
+    :type s: int
+    :param s: Shift to sides to check real peak. The default is 5.   
+        
+    :returns: A list, or single float value, of the fwhm.
+    :rtype: float or list[float]
+    """
+    s = int(s/step)
+    dims_data = len(np.array(data).shape)
+    if dims_data > 1:
+        y, axis_0 = interpolation(data[0], axis, new_step=step)
+        length = len(data)
+    else:
+        y, axis_0 = interpolation(data, axis, new_step=step)
+        length = 1
+        
+    ind = valtopos(peaks, axis_0)
+    
+    dims_peaks = len(np.array(peaks).shape)
+    if dims_peaks < 1:
+        ind = [ind]
+    
+    r_fwhm = []
+    for h in range(length):
+        if dims_data > 1:
+            y_0 = data[h]
+            y_0, axis_0 = interpolation(y_0, axis, new_step=step)
+        else:
+            y_0 = y
+        
+        fwhm = []
+        for j in range(len(ind)):
+            for i in range(ind[j] - s, ind[j] + s):
+                if y_0[i] > y_0[ind[j]]:
+                    ind[j] = i
+                    
+            h_m = y_0[ind[j]]/2 # half maximum 
+            
+            temp = 999999999
+            left = 0
+            for i in range(ind[j]):
+                delta = abs(y_0[ind[j]-i] - h_m)
+                if temp > delta:
+                    temp = delta
+                    left = ind[j]-i
+                if temp < delta:
+                    break
+            
+            temp = 999999999
+            right = 0
+            for i in range(len(axis_0)-ind[j]):
+                delta = abs(y_0[ind[j]+i] - h_m)
+                if temp > delta:
+                    temp = delta
+                    right = ind[j]+i
+                if temp < delta:
+                    break
+            
+            if dims_peaks < 1:
+                fwhm = axis_0[right] - axis_0[left]
+            else:
+                fwhm.append(axis_0[right] - axis_0[left])
+        
+        if dims_data > 1:
+            r_fwhm.append(fwhm)
+        else:
+            r_fwhm = fwhm
+
+    return r_fwhm   
+
+
+def asymmetry(data, peak, axis, res= 0.001, s=5, limit=10):
+    """
+    Calculates the Full Width Half Maximum of an indeicated peak or groups of
+    peaks for a single or multiple spectras.
+    
+    :type data: list
+    :param data: spectrocopic data to calculate the fwhm from. Single vector or
+        list of vectors.    
+    
+    :type peak: float, list[float]
+    :param peak: Aproximate axis value of the position of the peak. If sinlge
+        peak then a float is needed. If many peaks are requierd then a list of
+        them.
+        
+    :type axis: list
+    :param axis: Axis of the data. If none, then the axis will be 0..N where N
+        is the length of the spectra or spectras.
+
+    :type res: float
+    :param res: Resolution in wich to calculate the width. Must be a power of 
+        10. If 'res=1' the the axis resolution (step) is used.
+
+    :type s: int
+    :param s: Shift to sides to check real peak. The default is 5.   
+        
+    :returns: R2 value comparing both sides of the peak and a sign to tell if
+        either left side is smaller (negative) or tight side is smaller
+        (positive, no sign included).
+    :rtype: list[float]
+    """
+    x = axis
+    y = data
+    
+    index = valtopos(peak, x)
+        
+    for i in range(index - s, index + s):
+                    if y[i] > y[index]:
+                        index = i
+    
+    diff_nom = 0
+    diff_abs = 0
+    for i in range(limit):
+        diff_nom += y[index - i] - y[index + i]
+        diff_abs += (y[index - i] - y[index + i])**2
+    
+    if diff_nom < 0: # left side is smaller -> right larger
+        diff_abs = np.sqrt(diff_abs)*(-1)
+    
+    return diff_abs
