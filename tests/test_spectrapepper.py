@@ -24,11 +24,11 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(spep.load_mapp1()[0][0], 54.5611)
         self.assertEqual(spep.load_mapp2()[0][0], 54.8098)
 
-    def test_loaders(self):
-        data2 = spep.test_loads()
-        r = data2
-        print('test_loads: ' + str(r))
-        self.assertEqual(r, True)
+    # def test_loaders(self):
+    #     data2 = spep.test_loads()
+    #     r = data2
+    #     print('test_loads: ' + str(r))
+    #     self.assertEqual(r, True)
 
     def test_functions(self):
         spectras = spep.load_spectras()
@@ -275,7 +275,6 @@ class TestSpectrapepper(unittest.TestCase):
 
         data2 = spep.shiftref(data, axis, ref_peak=200, plot=False)
         r = np.floor(data2)
-        print(data2)
         print('shiftref: ' + str(r))
         self.assertEqual(r, -6)
 
