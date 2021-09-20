@@ -2,9 +2,9 @@
 
 site_name: spectrapepper
 
-site_url: https://enricgrau.github.io/spectrapepper
+site_url: https://spectrapepper.github.io/spectrapepper
 
-repo_url: https://github.com/enricgrau/spectrapepper
+repo_url: https://github.com/spectrapepper/spectrapepper
 
  # theme produces error. It is because custom_dir:"docs/overrides" is not on the library. Docs work properly.
 theme:
@@ -44,6 +44,6 @@ nav:
     - Home: docs/index.rst
     - Installation: docs/quickstart.rst
     - Contributing: docs/contributions.rst
-    - Report Issues: https://github.com/enricgrau/spectrapepper/issues
+    - Report Issues: https://github.com/spectrapepper/spectrapepper/issues
     - API Reference:
           - spectrapepper module: docs/functions.rst

@@ -9,11 +9,11 @@ SpectraPepper
 .. image:: https://img.shields.io/badge/License-MIT-yellow.svg
         :target: https://opensource.org/licenses/MIT
 .. image:: https://img.shields.io/lgtm/grade/python/g/enricgrau/spectrapepper.svg?logo=lgtm&logoWidth=18
-        :target: https://lgtm.com/projects/g/enricgrau/spectrapepper/context:python
+        :target: https://lgtm.com/projects/g/spectrapepper/spectrapepper/context:python
 .. image:: https://github.com/enricgrau/spectrapepper/workflows/docs/badge.svg
-        :target: https://enricgrau.github.io/spectrapepper
+        :target: https://spectrapepper.github.io/spectrapepper
 .. image:: https://codecov.io/gh/enricgrau/spectrapepper/branch/main/graph/badge.svg?token=IVM5BFGYHV
-        :target: https://codecov.io/gh/enricgrau/spectrapepper
+        :target: https://codecov.io/gh/spectrapepper/spectrapepper
 .. image:: https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?color=blue&label=conda%20downloads
         :target: https://pepy.tech/project/spectrapepper
 .. image:: https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=none&left_color=grey&left_text=pypi%20downloads&right_color=blue
@@ -23,8 +23,8 @@ SpectraPepper
 
 **A Python package to simplify and accelerate analysis of spectroscopy data.**
 
-* GitHub repo: https://github.com/enricgrau/spectrapepper
-* Documentation: https://enricgrau.github.io/spectrapepper
+* GitHub repo: https://github.com/spectrapepper/spectrapepper
+* Documentation: https://spectrapepper.github.io/spectrapepper
 * PyPI: https://pypi.python.org/pypi/spectrapepper
 * Conda-forge: https://anaconda.org/conda-forge/spectrapepper
 * Free software: MIT license
@@ -60,12 +60,6 @@ Quickstart
 2. Install this library using ``conda-forge``::
 
         conda install -c conda-forge spectrapepper
-
-3. Test it by printing the logo!::
-
-        import spectrapepper as spep
-        spep.logo()
-
 
 Credits
 -------

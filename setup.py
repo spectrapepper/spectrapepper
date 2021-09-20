@@ -25,8 +25,8 @@ setup_requirements = [ ]
 test_requirements = [ ]
 
 setup(
-    author="Enric Tomas Grau-Luque",
-    author_email='patenric@gmail.com',
+    author="spectrapepper",
+    author_email='spectrapepper@gmail.com',
     python_requires='>=3.5',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
@@ -52,8 +52,8 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/enricgrau/spectrapepper',
-    version='0.0.13',
+    url='https://github.com/spectrapepper/spectrapepper',
+    version='0.0.14',
     zip_safe=False,
     package_data={'spectrapepper': ['datasets/headers.txt',
                                     'datasets/mapping1.txt',

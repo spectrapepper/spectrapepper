@@ -14,14 +14,10 @@ targets = spep.load_targets()
 targets = np.array(targets).flatten()
 
 # shuffle data
-shuffled = spep.shuffle([features, targets], delratio=0.1)
-features = shuffled[0]
-targets = shuffled[1]
+features, targets = spep.shuffle([features, targets], delratio=0.1)
 
 # target classification
-classification = spep.classify(targets, glimits=[1.05, 1.15], gnumber=0)
-classtargets = classification[0]
-labels = classification[1]
+classtargets, labels = spep.classify(targets, glimits=[1.05, 1.15], gnumber=0)
 
 # machine learning
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis

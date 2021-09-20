@@ -14,8 +14,8 @@
 
 **A Python package to simplify and accelerate analysis of spectroscopy data.**
 
-* GitHub repo: https://github.com/enricgrau/spectrapepper
-* Documentation: https://enricgrau.github.io/spectrapepper
+* GitHub repo: https://github.com/spectrapepper/spectrapepper
+* Documentation: https://spectrapepper.github.io/spectrapepper
 * PyPI: https://pypi.python.org/pypi/spectrapepper
 * Conda-forge: https://anaconda.org/conda-forge/spectrapepper
 * Free software: MIT license
