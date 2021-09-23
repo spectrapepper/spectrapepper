@@ -11,7 +11,6 @@ features = spep.load_spectras()[1:]
 
 # load targets
 targets = spep.load_targets()
-targets = np.array(targets).flatten()
 
 # shuffle data
 features, targets = spep.shuffle([features, targets], delratio=0.1)

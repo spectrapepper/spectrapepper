@@ -57,7 +57,6 @@ The following is a short list of some of the main procedures that **SpectraPeppe
 * Noise filters, trimming, and other pre-processing tools.
 * Combinatorial analysis tools, including Spearman, Pearson, and n-dimensional correlation coefficients.
 * Tools for Machine Learning applications, such as data merging, randomization, and decision map.
-* Easy export of data to text files to use visualization software, such as Origin.
 
 Credits
 -------

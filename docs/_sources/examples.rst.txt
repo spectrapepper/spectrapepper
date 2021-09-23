@@ -4,188 +4,23 @@ Examples
 Example 1: Normalization methods
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Thie example show the use of some of the normalization techniques included in spectrapepper::
-
-        """
-        This example shows some of the normalization functions available.
-        """
-
-        # import the library
-        import spectrapepper as spep
-
-        # load data
-        data = spep.load_spectras()
-
-        # get the axis
-        axis = data[0]
-        data = data[1:]
-
-        # normalize each spectra to its maximum value
-        norm1 = spep.normtomax(data)
-
-        # normalize to a particular value (10)
-        norm2 = spep.normtovalue(data, val=10)
-
-        # normalize to the global maximum of all the data
-        norm3 = spep.normtoglobalmax(data)
-
-
-        # visualization
-        import matplotlib.pyplot as plt
-
-        for i in data:
-            plt.plot(axis, i)
-        plt.title('Raw Spectras')
-        plt.xlabel('Shift ($cm^{-1}$)')
-        plt.ylabel('Counts (a.u.)')
-        plt.show()
-
-        for i in norm1:
-            plt.plot(axis, i)
-        plt.title('Spectras with maximum normalized to 1')
-        plt.xlabel('Shift ($cm^{-1}$)')
-        plt.ylabel('Counts (a.u.)')
-        plt.show()
-
-        for i in norm2:
-            plt.plot(axis, i)
-        plt.title('Spectras with 10 normalized to 1')
-        plt.xlabel('Shift ($cm^{-1}$)')
-        plt.ylabel('Counts (a.u.)')
-        plt.show()
-
-        for i in norm3:
-            plt.plot(axis, i)
-        plt.title('Spectras with global maximum normalized to 1')
-        plt.xlabel('Shift ($cm^{-1}$)')
-        plt.ylabel('Counts (a.u.)')
-        plt.show()
-
+.. literalinclude:: ../examples/example1.py
 
 
 Examples 2: Spectral pre-processing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Pre-processing is an important step when analyzing spectral data. This examples shows how to use spectrapepper to perform
-important processing tasks::
-
-        """
-        This example shows simple processing of Raman spectras. Do not use this procedure for formal processing.
-        """
-
-        # import the library
-        import spectrapepper as spep
-
-        # load data
-        data = spep.load_spectras()
-
-        # get the axis
-        axis = data[0]
-        data = data[1:]
-
-        # remove baseline
-        newdata = spep.alsbaseline(data)
-
-        # norm the sum to 1
-        newdata = spep.normsum(newdata)
-
-        # remove noise
-        newdata = spep.moveavg(newdata, 5)
-
-
-        # visualization
-        import matplotlib.pyplot as plt
-
-        for i in data:
-            plt.plot(axis,i)
-        plt.title('Original spectras')
-        plt.xlabel('Shift ($cm^{-1}$)')
-        plt.ylabel('Counts (a.u.)')
-        plt.show()
-
-        for i in newdata:
-            plt.plot(axis,i)
-        plt.title('Processed spectras')
-        plt.xlabel('Shift ($cm^{-1}$)')
-        plt.ylabel('Counts (a.u.)')
-        plt.show()
+.. literalinclude:: ../examples/example2.py
 
 
 Example 3: Pearson, Spearman, and Grau analyses
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Pearson, Spearman, and Grau plots allow to visualize possible correlations of several variables at the same time.
-Spectrapepper enables these techniques with simple code, as this examples shows::
-
-        """
-        This example shows how to use pearson and spearman matrices and grau plot.
-        """
-
-        # import the library
-        import spectrapepper as spep
-        import numpy as np
-
-        # load data
-        data = np.transpose(spep.load_params())
-
-        # labels
-        labels = ['T', 'A1', 'A2', 'A3', 'A4', 'A5', 'S1', 'R1', 'R2', 'ETA', 'FF', 'JSC', 'ISC', 'VOC']
-
-        print(1)
-        # plot spearman
-        spep.spearman(data, labels)
-
-        print(2)
-        # plot pearson
-        spep.pearson(data, labels)
-
-        print(3)
-        # plot grau
-        spep.grau(data, labels)
-
+.. literalinclude:: ../examples/example3.py
 
 
 Example 4: Machine learning preparation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Spectrappeper includes useful functions to use along machine learning libraries, like scikit-learn::
-
-        """
-        This example shows how to use Scikit-learn for spectral data with spectrapepper.
-        """
-
-        # import libraries
-        import spectrapepper as spep
-        import numpy as np
-
-        # load features
-        features = spep.load_spectras()[1:]
-
-        # load targets
-        targets = spep.load_targets()
-        targets = np.array(targets).flatten()
-
-        # shuffle data
-        shuffled = spep.shuffle([features, targets], delratio=0.1)
-        features = shuffled[0]
-        targets = shuffled[1]
-
-        # target classification
-        classification = spep.classify(targets, glimits=[1.05, 1.15], gnumber=0)
-        classtargets = classification[0]
-        labels = classification[1]
-
-        # machine learning
-        from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-        import pandas as pd
-
-        lda = LinearDiscriminantAnalysis(n_components=2)
-        LDs = lda.fit(features, classtargets).transform(features)
-        df1 = pd.DataFrame(data=LDs, columns=['D1', 'D2'])
-        df2 = pd.DataFrame(data=classtargets, columns=['T'])
-        final = pd.concat([df1, df2], axis=1)
-        prediction = lda.predict(features)
-
-        # visualization
-        spep.plot2dml(final, labels=labels, title='LDA', xax='D1', yax='D2')
+.. literalinclude:: ../examples/example4.py
 

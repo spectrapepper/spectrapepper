@@ -53,7 +53,7 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/spectrapepper/spectrapepper',
-    version='0.0.14',
+    version='0.1.0',
     zip_safe=False,
     package_data={'spectrapepper': ['datasets/headers.txt',
                                     'datasets/mapping1.txt',

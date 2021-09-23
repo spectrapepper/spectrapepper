@@ -19,10 +19,8 @@ class TestSpectrapepper(unittest.TestCase):
 
     def test_datasets(self):
         self.assertEqual(spep.load_spectras()[0][0], 47.0712)
-        self.assertEqual(spep.load_targets()[0][0], 1.0155)
+        self.assertEqual(spep.load_targets()[0], 1.0155)
         self.assertEqual(spep.load_params()[0][0], 300)
-        self.assertEqual(spep.load_mapp1()[0][0], 54.5611)
-        self.assertEqual(spep.load_mapp2()[0][0], 54.8098)
 
     def test_functions(self):
         spectras = spep.load_spectras()
@@ -105,7 +103,7 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.gaussfit(data, 170)
         r = np.floor(sum(data2))
         print('gaussfit: ' + str(r))
-        self.assertEqual(r, 169)
+        self.assertEqual(r, 57)
 
         data2 = spep.valtopos([50,100,121,400], axis)
         r = sum(data2)
@@ -370,6 +368,21 @@ class TestSpectrapepper(unittest.TestCase):
         r = round(np.sum(data2), 2)
         print('minmax: ' + str(r))
         self.assertEqual(r, 532470.08)
+
+        data2 = spep.fwhm(spectras, 250, axis)
+        r = round(np.sum(data2), 2)
+        print('fwhm: ' + str(r))
+        self.assertEqual(r, 2502.00)
+        
+        data2 = spep.fwhm(data, 250, axis)
+        r = round(np.sum(data2), 2)
+        print('fwhm_single: ' + str(r))
+        self.assertEqual(r, 1.84)
+        
+        data2 = spep.asymmetry(data, 250, axis)
+        r = round(np.sum(data2), 2)
+        print('asymmetry: ' + str(r))
+        self.assertEqual(r, -0.6)
 
 if __name__ == '__main__':
     unittest.main()

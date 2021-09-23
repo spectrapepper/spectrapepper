@@ -15,12 +15,11 @@ data = data[1:]
 # remove baseline
 newdata = spep.alsbaseline(data)
 
-# norm the sum to 1
-newdata = spep.normsum(newdata)
-
-# remove noise
+# remove noise with moving average
 newdata = spep.moveavg(newdata, 5)
 
+# norm the sum to 1
+newdata = spep.normsum(newdata)
 
 # visualization
 import matplotlib.pyplot as plt

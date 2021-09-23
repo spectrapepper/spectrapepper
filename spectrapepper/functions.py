@@ -29,34 +29,6 @@ import os.path
 import os
 
 
-def load_mapp1():
-    """
-    Load sample specrtal data, axis included in the first line.
-
-    :returns: Sample spectral data.
-    :rtype: list[float]
-    """
-    location = os.path.dirname(os.path.realpath(__file__))
-    my_file = os.path.join(location, 'datasets', 'mapping1.txt')
-    data = load(my_file)
-
-    return data
-
-
-def load_mapp2():
-    """
-    Load sample specrtal data, axis included in the first line.
-
-    :returns: Sample spectral data.
-    :rtype: list[float]
-    """
-    location = os.path.dirname(os.path.realpath(__file__))
-    my_file = os.path.join(location, 'datasets', 'mapping2.txt')
-    data = load(my_file)
-
-    return data
-
-
 def load_spectras():
     """
     Load sample specrtal data, axis included in the first line.
@@ -72,7 +44,7 @@ def load_spectras():
     return data
 
 
-def load_targets():
+def load_targets(flatten=True):
     """
     Load sample targets data for the spectras.
     
@@ -84,10 +56,13 @@ def load_targets():
     my_file = os.path.join(location, 'datasets', 'targets.txt')
     data = load(my_file)
     
+    if flatten:
+        data = np.array(data).flatten()
+    
     return data
 
 
-def load_params(transpose=False):
+def load_params(transpose=True):
     """
     Load sample parameters data for the spectras.
     
@@ -186,33 +161,6 @@ def loadline(file, line=0, dtype='float', split=False):
         info = np.array(info, dtype=str)
 
     return info
-
-
-def test_loads():
-    """
-    Only for tests purposes. Ingroed in documentation.
-    
-    :returns: A True is test is succesful.
-    :rtype: bool
-    """
-    default = False
-    
-    location = os.path.dirname(os.path.realpath(__file__))
-    
-    my_file = os.path.join(location, 'datasets', 'spectras.txt')
-    data = loadline(my_file,2)
-    r = round(sum(data), 0)
-    print(r)
-    if r == 1461:
-        default = True
-    
-    my_file = os.path.join(location, 'datasets', 'headers.txt')
-    data = loadline(my_file, 1, dtype='string', split=True)
-    r = data[2]
-    if r != 'second':
-        default = False
-    
-    return default
 
 
 def lowpass(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
@@ -496,126 +444,6 @@ def polybaseline(data, axis, points, deg=2, avg=5, remove=True, plot=False):
             baseline = data - baseline
 
     return baseline
-
-
-# def lorentzfit(y, x, wid=4, it=100, plot=False):
-#     """
-#     Fit a Lorentz distributed curve for a single spectra.
-
-#     :type y: list[float]
-#     :param y: single spectra.
-
-#     :type x: list[float]
-#     :param x: x-axis.
-
-#     :type wid: float, optional
-#     :param wid: fitted curve width. The default is 4.
-
-#     :type it: int, optional
-#     :param it: number of iterations. The default is 100.
-
-#     :type plot: boolean
-#     :param plot: fF 'True' then plots the data and the fit.
-
-#     :returns: Lorentz fit.
-#     :rtype: list[float]
-#     """
-#     cen = 0  # position (wavelength, x value)
-#     peak_i_pos = 0  # position (axis position, i value)
-#     amp = max(y)  # maximum value of function, peak value, amplitud of the fit
-#     #  fit = []  # fit function
-#     err = []  # error log to choose the optimum
-#     for i in range(len(y)):  # for all the data
-#         if amp == y[i]:  # if it is the maximum
-#             cen = x[i]  # save the axis value x
-#             peak_i_pos = int(i)  # also save the position i
-#             break
-#     for i in range(it):  # search "it" iterations
-#         temp = 0  # reset temporal error
-#         fit = []  # reset lorentz fit array
-#         p = cen - 0.5 + (0.01 * i)  # pos of the peak respect to the reference measured peak
-#         for j in range(len(x)):  # for all the points
-#             fit.append(amp * wid ** 2 / ((x[j] - p) ** 2 + wid ** 2))
-#         for j in range(peak_i_pos - 25, peak_i_pos + 25):  # error between -25 and +25 of the peak position
-#             temp = temp + (fit[j] - y[j]) ** 2  # total error
-#         err.append(temp)  # log error
-#     fit = []  # reset array
-#     for i in range(len(err)):  # look for the minimum error
-#         if min(err) == err[i]:  # if it is the minimum error
-#             p = cen - 0.5 + (0.01 * i)  # then calculate the fit again
-#             for j in range(len(y)):
-#                 fit.append(amp * wid ** 2 / ((x[j] - p) ** 2 + wid ** 2))
-#             break
-
-#     if plot:
-#         plt.plot(x, y, label='Data')
-#         plt.plot(x, fit, label='Fit')
-#         plt.legend(loc=0)
-#         plt.show()
-
-#     return fit
-
-
-def gaussfit0(y, x, sigma=4.4, it=100, plot=False):
-    """
-    Fit a Gaussian distributed curve for a single spectra. Good guidelines
-    for similar structures can be found at http://emilygraceripka.com/blog/16.
-
-    :type y: list[float]
-    :param x: single spectra.
-
-    :type x: list[float]
-    :param x: x-axis.
-
-    :type sigma: float
-    :param sigma: sigma parameter of distribution. The default is 4.4.
-
-    :type it: int
-    :param it: number of iterations. The default is 100.
-
-    :type plot: boolean
-    :param plot: fF 'True' then plots the data and the fit.
-
-    :returns: Gaussian fit.
-    :rtype: list[float]
-    """
-    # x = list(ax)  # change the variable so it doesnt change the original
-    # y = list(data_x)  # change the variable so it doesnt change the original
-    cen = 0  # position (wavelength, x value)
-    peak_i_pos = 0  # position (axis position, i value)
-    amp = max(y)  # maximum value of function, peak value, amplitude of the fit
-    # fit = []  # fit function
-    err = []  # error log to choose the optimum
-    for i in range(len(y)):  # for all the data
-        if amp == y[i]:  # if it is the maximum
-            cen = x[i]  # save the axis value x
-            peak_i_pos = int(i)  # also save the position i
-            break
-    for i in range(it):  # search "it" iterations
-        temp = 0  # reset temporal error
-        fit = []  # reset lorentz fit array
-        p = cen - 0.5 + (0.01 * i)  # pos of the peak respect to the reference measured peak
-        for j in range(len(x)):  # for all the points
-            fit.append((11 * amp) * (1 / (sigma * (np.sqrt(2 * np.pi)))) * (np.exp(-0.5 * (((x[j] - p) / sigma) ** 2))))
-        for j in range(peak_i_pos - 25, peak_i_pos + 25):  # error between -25 and +25 of the peak position
-            temp = temp + (fit[j] - y[j]) ** 2  # total error
-        err.append(temp)  # log error
-    fit = []  # reset array
-    for i in range(len(err)):  # look for the minimum error
-        if min(err) == err[i]:  # if it is the minimum error
-            p = cen - 0.5 + (0.01 * i)  # then calculate the fit again
-            for j in range(len(y)):
-                fit.append(
-                    (11 * amp) * (1 / (sigma * (np.sqrt(2 * np.pi)))) * (np.exp(-0.5 * (((x[j] - p) / sigma) ** 2))))
-            break
-
-    if plot:
-        plt.plot(x, y, label='Data')
-        plt.plot(x, fit, label='Fit')
-        plt.legend(loc=0)
-        plt.show()
-
-    return fit
 
 
 def valtopos(vals, axis):
@@ -1417,7 +1245,8 @@ def gaussfit(data, pos, ax=[0], look=10, shift=5, sigma=4.4):
     y = list(data)      
     look = int(look)
     s = int(shift)
-    pos = int(pos)
+    # pos = int(pos)
+    pos = int(valtopos(pos, ax))
     amp = max(y)
     sigma = float(sigma)
     
@@ -1459,83 +1288,85 @@ def gaussfit(data, pos, ax=[0], look=10, shift=5, sigma=4.4):
     return fit
 
 
-def studentfit(data, pos, ax=[0], look=10, shift=5, v=4.4):
-    """
-    Fits peak as an optimization problem.
+# def studentfit(data, pos, ax=None, look=5, shift=5, v=0.01):
+#     """
+#     Fits peak as an optimization problem.
 
-    :type data: list[float]
-    :param data: Data to fit. Single vector.
+#     :type data: list[float]
+#     :param data: Data to fit. Single vector.
 
-    :type ax: list[float]
-    :param ax: x axis.
+#     :type ax: list[float]
+#     :param ax: x axis.
 
-    :type pos: int
-    :param pos: Peak index to fit to.
+#     :type pos: int
+#     :param pos: Peak index to fit to.
 
-    :type look: int
-    :param look: index positions to look to each side. The default is 20.
+#     :type look: int
+#     :param look: index positions to look to each side. The default is 20.
 
-    :type shift: int
-    :param shift: Possible index shift of the peak. The default is 5.
+#     :type shift: int
+#     :param shift: Possible index shift of the peak. The default is 5.
    
-    :type sigma: float
-    :param sigma: Sigma value for Gaussian fit. The default is 4.4.
+#     :type v: float
+#     :param v: . The default is 4.4.
 
-    :returns: Fitted curve.
-    :rtype: list[float]
-    """
-    # initial guesses
-    ax = list(ax)
-    y = list(data)      
-    look = int(look)
-    s = int(shift)
-    pos = int(pos)
-    amp = max(y)
-    v = float(v)
+#     :returns: Fitted curve.
+#     :rtype: list[float]
+#     """
+#     # initial guesses
+#     ax = list(ax)
+#     y = list(data)      
+#     look = int(look)
+#     s = int(shift)
+#     pos = int(valtopos(pos, ax))
+#     amp = 1000
+#     v = float(v)
     
-    if ax == [0]: # if no axis is passed
-        ax = [i for i in range(len(y))]
+#     if ax == None: # if no axis is passed
+#         ax = [i for i in range(len(y))]
     
-    for k in range(pos - s, pos + s):
-            if y[k] > y[pos]:
-                pos = k
-    p = ax[pos]
+#     for k in range(pos - s, pos + s):
+#             if y[k] > y[pos]:
+#                 pos = k
+#     p = ax[pos]
 
-    def objective(x):
-        fit = []
-        error = 0
-        for i in range(len(ax)):  # for all the points
-
-            a = gamma((x[1]+1)/2)
-            b = np.sqrt(np.pi*x[1])*gamma(x[1]/2)
-            c = 1+((ax[i]-x[2])**2)/x[1]
-            d = -(x[1]+1)/2
+#     def objective(x):
+#         fit = []
+#         error = 0
+#         for i in range(len(ax)):  # for all the points
+#             a = gamma((x[1]+1)/2)
+#             b = np.sqrt(np.pi*x[1])*gamma(x[1]/2)
+#             c = 1+((ax[i]-x[2])**2)/x[1]
+#             d = -(x[1]+1)/2
+#             fit.append(x[0]*((a/b)*(c**d)))
             
-            fit.append(x[0]*((a/b)*(c**d)))       
-        for j in range(pos - look, pos + look):  # error between +-look of the peak position
-            error += (fit[j] - y[j]) ** 2  # total error
-        return error
+#         for j in range(pos - look, pos + look):  # error between +-look of the peak position
+#             error += (fit[j] - y[j]) ** 2  # total 
+#         return error
 
-    def constraint1(x):
-        return 0
+#     def constraint1(x):
+#         return x[0]*x[1]*x[2]
     
-    x0 = np.array([amp, v, p])  # master vector to optimize, initial values
-    bnds = [[0, max(y)*5], [0, 10000], [(p-s), (p+s)]]
-    con1 = {'type': 'ineq', 'fun': constraint1}
-    cons = ([con1])
-    solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
-    x = solution.x
+#     x0 = np.array([amp, v, p])  # master vector to optimize, initial values
 
-    fit = []
+#     bnds = [[0, max(y)*100], [0.01, 10], [p-s, p+s]]
+#     con1 = {'type': 'ineq', 'fun': constraint1}
+#     cons = ([con1])
+#     solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
+#     x = solution.x
 
-    for l in range(len(ax)):  # for all the points
-        a = gamma((x[1]+1)/2)
-        b = np.sqrt(np.pi*x[1])*gamma(x[1]/2)
-        c = 1+((ax[l]-x[2])**2)/x[1]
-        d = -(x[1]+1)/2
+#     print(solution)
+
+#     fit = []
+
+#     for i in range(len(ax)):  # for all the points
+#         a = gamma((x[1]+1)/2)
+#         b = np.sqrt(np.pi*x[1])*gamma(x[1]/2)
+#         c = 1+((ax[i]-x[2])**2)/x[1]
+#         d = -(x[1]+1)/2
         
-        fit.append(x[0]*(a/b*(c**d))) 
-    return fit
+#         fit.append(x[0]*((a/b)*(c**d)))
+#     return fit
 
 
 def decbound(xx, yy, xlims, ylims, divs=0.5):
@@ -1713,7 +1544,7 @@ def decdensity(lims, x_points, y_points, groups, divs=0.5):
 
 def colormap(colors, name='my_name', n=100):
     """
-    Just to simplify a bit the creation of colormaps.
+    Simplify the creation of colormaps.
 
     :type colors: list
     :param colors: List of colors thaat you ant on the colormap
@@ -2046,7 +1877,7 @@ def classify(data, gnumber=3, glimits=[], var='x'):
 
 def subtractref(data, ref, axis=0, alpha=0.9, sample=0, plot_lim=[0, 0], plot=False):
     """
-    Subtracts a reference spectra (i.e.: air) from the measurements.
+    Subtracts a reference spectra from the measurements.
 
     :type data: list[float]
     :param data: List of or single vector.
@@ -2070,7 +1901,7 @@ def subtractref(data, ref, axis=0, alpha=0.9, sample=0, plot_lim=[0, 0], plot=Fa
     :param plot: To plot or not a visual aid. The default is True.
 
     :returns: Data with the subtracted reference.
-    :rtype: list`[float]
+    :rtype: list[float]
     """
     data = copy.deepcopy(data)
     ref = list(ref)
@@ -2136,6 +1967,9 @@ def pearson(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25,
 
     :type ti: str
     :param ti: Plot title/name. The default is "spearman".
+    
+    :returns: Pearson plot in a 2d list.
+    :rtype: list[float]
     """
     labels = list(labels)
     cm = str(cm)
@@ -2218,6 +2052,9 @@ def spearman(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="
 
     :type ti: str
     :param ti: Plot title/name. The default is "spearman".
+    
+    :returns: Spearman plot in a 2d list.
+    :rtype: list[float]
     """
     labels = list(labels)
     cm = str(cm)
@@ -2307,7 +2144,10 @@ def grau(data, labels=[], cm="seismic", fons=20, figs=(25, 15),
     :param plot: If True plots the matrix. The default is True.
 
     :type marks: int
-    :param marks: DESCRIPTION. The default is 100.
+    :param marks: Marker size. The default is 100.
+    
+    :returns: Grau plot in a 2d list.
+    :rtype: list[float]
     """
     labels = list(labels)
     cm = str(cm)
@@ -2316,7 +2156,7 @@ def grau(data, labels=[], cm="seismic", fons=20, figs=(25, 15),
     titlefs = float(tfs)  # title font size
     title = str(ti)  # plot name
     marker = str(marker)  # market style
-    markersize = float(marks)  # marker size
+    marks = float(marks)  # marker size
 
     if len(labels) < 1:
         labels = [i for i in range(len(data))]
@@ -2374,7 +2214,7 @@ def grau(data, labels=[], cm="seismic", fons=20, figs=(25, 15),
         ax = fig.add_subplot(gs[0, 0])
         ax.set_title(title, fontsize=titlefs)
         sc = ax.scatter(g2_shift, g3, alpha=1, edgecolors='none',
-                        c=mse, cmap=cm, s=markersize, marker=marker)
+                        c=mse, cmap=cm, s=marks, marker=marker)
         plt.colorbar(sc)
         ax.set_xticks(x_ticks)
         ax.set_xticklabels(xtick_labels, fontsize=9)
@@ -2605,9 +2445,8 @@ def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral',
 
 def cosmicmp(ndata, alpha=1, avg=2):
     """
-    https://doi.org/10.1177/0003702819839098
     It identifies CRs by comparing similar spectras and paring in matching
-    pairs. Uses randomnes of CRs.
+    pairs. Uses randomnes of CRs (S. J. Barton, B. M. Hennelly, https://doi.org/10.1177/0003702819839098)
     
     :type ndata: list[float]
     :param ndata: List of spectras to remove cosmic rays.
@@ -2659,9 +2498,8 @@ def cosmicmp(ndata, alpha=1, avg=2):
 
 def cosmicdd(ndata, th=100, asy=0.6745, m=5):
     """
-    https://doi.org/10.1016/j.chemolab.2018.06.009
     It identifies CRs by detrended differences, the differences between a
-    value and the next.
+    value and the next (D. A. Whitaker and K. Hayes, https://doi.org/10.1016/j.chemolab.2018.06.009).
     
     :type ndata: list[float]
     :param ndata: List of spectras to remove cosmic rays.

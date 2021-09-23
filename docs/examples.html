@@ -171,7 +171,6 @@
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="example-1-normalization-methods">
 <h2>Example 1: Normalization methods<a class="headerlink" href="#example-1-normalization-methods" title="Permalink to this headline">¶</a></h2>
-<p>Thie example show the use of some of the normalization techniques included in spectrapepper:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This example shows some of the normalization functions available.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -231,10 +230,8 @@
 </div>
 <div class="section" id="examples-2-spectral-pre-processing">
 <h2>Examples 2: Spectral pre-processing<a class="headerlink" href="#examples-2-spectral-pre-processing" title="Permalink to this headline">¶</a></h2>
-<p>Pre-processing is an important step when analyzing spectral data. This examples shows how to use spectrapepper to perform
-important processing tasks:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This example shows simple processing of Raman spectras. Do not use this procedure for formal processing.</span>
+<span class="sd">This example shows simple processing of Raman spectras.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1"># import the library</span>
@@ -250,25 +247,24 @@ important processing tasks:</p>
 <span class="c1"># remove baseline</span>
 <span class="n">newdata</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">alsbaseline</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-<span class="c1"># norm the sum to 1</span>
-<span class="n">newdata</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normsum</span><span class="p">(</span><span class="n">newdata</span><span class="p">)</span>
-
-<span class="c1"># remove noise</span>
+<span class="c1"># remove noise with moving average</span>
 <span class="n">newdata</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">moveavg</span><span class="p">(</span><span class="n">newdata</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 
+<span class="c1"># norm the sum to 1</span>
+<span class="n">newdata</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normsum</span><span class="p">(</span><span class="n">newdata</span><span class="p">)</span>
 
 <span class="c1"># visualization</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original spectras&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts (a.u.)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">newdata</span><span class="p">:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Processed spectras&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts (a.u.)&#39;</span><span class="p">)</span>
@@ -278,8 +274,6 @@ important processing tasks:</p>
 </div>
 <div class="section" id="example-3-pearson-spearman-and-grau-analyses">
 <h2>Example 3: Pearson, Spearman, and Grau analyses<a class="headerlink" href="#example-3-pearson-spearman-and-grau-analyses" title="Permalink to this headline">¶</a></h2>
-<p>Pearson, Spearman, and Grau plots allow to visualize possible correlations of several variables at the same time.
-Spectrapepper enables these techniques with simple code, as this examples shows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This example shows how to use pearson and spearman matrices and grau plot.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -289,28 +283,24 @@ Spectrapepper enables these techniques with simple code, as this examples shows:
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="c1"># load data</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">spep</span><span class="o">.</span><span class="n">load_params</span><span class="p">())</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_params</span><span class="p">()</span>
 
 <span class="c1"># labels</span>
 <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">,</span> <span class="s1">&#39;A5&#39;</span><span class="p">,</span> <span class="s1">&#39;S1&#39;</span><span class="p">,</span> <span class="s1">&#39;R1&#39;</span><span class="p">,</span> <span class="s1">&#39;R2&#39;</span><span class="p">,</span> <span class="s1">&#39;ETA&#39;</span><span class="p">,</span> <span class="s1">&#39;FF&#39;</span><span class="p">,</span> <span class="s1">&#39;JSC&#39;</span><span class="p">,</span> <span class="s1">&#39;ISC&#39;</span><span class="p">,</span> <span class="s1">&#39;VOC&#39;</span><span class="p">]</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="c1"># plot spearman</span>
 <span class="n">spep</span><span class="o">.</span><span class="n">spearman</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 <span class="c1"># plot pearson</span>
 <span class="n">spep</span><span class="o">.</span><span class="n">pearson</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="c1"># plot grau</span>
+<span class="c1"># plot grau.</span>
 <span class="n">spep</span><span class="o">.</span><span class="n">grau</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="example-4-machine-learning-preparation">
 <h2>Example 4: Machine learning preparation<a class="headerlink" href="#example-4-machine-learning-preparation" title="Permalink to this headline">¶</a></h2>
-<p>Spectrappeper includes useful functions to use along machine learning libraries, like scikit-learn:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This example shows how to use Scikit-learn for spectral data with spectrapepper.</span>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -324,17 +314,12 @@ Spectrapepper enables these techniques with simple code, as this examples shows:
 
 <span class="c1"># load targets</span>
 <span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_targets</span><span class="p">()</span>
-<span class="n">targets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
 <span class="c1"># shuffle data</span>
-<span class="n">shuffled</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">shuffle</span><span class="p">([</span><span class="n">features</span><span class="p">,</span> <span class="n">targets</span><span class="p">],</span> <span class="n">delratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="n">features</span> <span class="o">=</span> <span class="n">shuffled</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">targets</span> <span class="o">=</span> <span class="n">shuffled</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">features</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">shuffle</span><span class="p">([</span><span class="n">features</span><span class="p">,</span> <span class="n">targets</span><span class="p">],</span> <span class="n">delratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 
 <span class="c1"># target classification</span>
-<span class="n">classification</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">glimits</span><span class="o">=</span><span class="p">[</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">1.15</span><span class="p">],</span> <span class="n">gnumber</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">classtargets</span> <span class="o">=</span> <span class="n">classification</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">labels</span> <span class="o">=</span> <span class="n">classification</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">classtargets</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">glimits</span><span class="o">=</span><span class="p">[</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">1.15</span><span class="p">],</span> <span class="n">gnumber</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
 <span class="c1"># machine learning</span>
 <span class="kn">from</span> <span class="nn">sklearn.discriminant_analysis</span> <span class="kn">import</span> <span class="n">LinearDiscriminantAnalysis</span>

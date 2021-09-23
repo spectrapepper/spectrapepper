@@ -52,4 +52,3 @@ plt.title('Spectras with global maximum normalized to 1')
 plt.xlabel('Shift ($cm^{-1}$)')
 plt.ylabel('Counts (a.u.)')
 plt.show()
-
