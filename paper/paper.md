@@ -13,6 +13,9 @@ authors:
     - name: Fabien Atlan
       orcid: 0000-0002-8357-5824
       affiliation: "1"
+    - name: Ignacio Becerril-Romero
+      orcid: 0000-0002-7087-6097
+      affiliation: "1"
     - name: Alejandro Perez-Rodriguez
       orcid: 0000-0002-8357-5824
       affiliation: "1, 2"
