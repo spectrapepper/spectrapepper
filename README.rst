@@ -8,11 +8,11 @@ SpectraPepper
         :target: https://anaconda.org/conda-forge/spectrapepper
 .. image:: https://img.shields.io/badge/License-MIT-yellow.svg
         :target: https://opensource.org/licenses/MIT
-.. image:: https://img.shields.io/lgtm/grade/python/g/enricgrau/spectrapepper.svg?logo=lgtm&logoWidth=18
+.. image:: https://img.shields.io/lgtm/grade/python/g/spectrapepper/spectrapepper.svg?logo=lgtm&logoWidth=18
         :target: https://lgtm.com/projects/g/spectrapepper/spectrapepper/context:python
-.. image:: https://github.com/enricgrau/spectrapepper/workflows/docs/badge.svg
+.. image:: https://github.com/spectrapepper/spectrapepper/workflows/docs/badge.svg
         :target: https://spectrapepper.github.io/spectrapepper
-.. image:: https://codecov.io/gh/enricgrau/spectrapepper/branch/main/graph/badge.svg?token=IVM5BFGYHV
+.. image:: https://codecov.io/gh/spectrapepper/spectrapepper/branch/main/graph/badge.svg?token=DC0QIwuYel
         :target: https://codecov.io/gh/spectrapepper/spectrapepper
 .. image:: https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?color=blue&label=conda%20downloads
         :target: https://pepy.tech/project/spectrapepper
@@ -32,7 +32,7 @@ SpectraPepper
 Introduction
 ============
 
-**SpectraPepper** is a Python package that makes advanced analysis of spectroscopic data easy and accessible
+**spectrapepper** is a Python package that makes advanced analysis of spectroscopic data easy and accessible
 through straightforward, simple, and intuitive code. This library contains functions for every stage of spectroscopic
 methodologies, including data acquisition, pre-processing, processing, and analysis. In particular, advanced and high
 statistic methods are intended to facilitate, namely combinatorial analysis and machine learning, allowing also
@@ -43,12 +43,13 @@ Features
 
 The following is a short list of some of the main procedures that **SpectraPepper** package enables.
 
-* Automatic and user-defined baseline removal.
-* Several normalization methods.
-* Noise filters, trimming, and other pre-processing tools.
-* Combinatorial analysis tools, including Spearman, Pearson, and n-dimensional correlation coefficients.
-* Tools for Machine Learning applications, such as data merging, randomization, and decision map.
-* Easy export of data to text files to use visualization software, such as Origin.
+- Baseline removal functions.
+- Normalization methods.
+- Noise filters, trimming tools, and despiking methods.
+- Chemometric algorithms to find peaks, fit curves, and deconvolution of spectra.
+- Combinatorial analysis tools, such as Spearman, Pearson, and n-dimensional correlation coefficients.
+- Tools for Machine Learning applications, such as data merging, randomization, and decision boundaries.
+- Sample data and examples.
 
 Quickstart
 ----------
@@ -60,6 +61,18 @@ Quickstart
 2. Install this library using ``conda-forge``::
 
         conda install -c conda-forge spectrapepper
+
+3. Test it by plotting some data!::
+
+        import spectrapepper as spep
+        import matplotlib.pyplot as plt
+
+        data = spep.load_spectras()
+        for i in data[1:]:
+            plt.plot(data[0], i)
+        plt.xlabel('Raman shift ($cm^{-1}$)')
+        plt.ylabel('Intensity (a.u.)')
+        plt.show()
 
 Credits
 -------
