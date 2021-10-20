@@ -26,7 +26,7 @@ authors:
       orcid: 0000-0002-8357-5824
       affiliation: "1"
 affiliations:
-    - name: Catalonia Institute for Energy Research, Sant Adrià de Besòs, Barcelona, Spain
+    - name: Catalonia Institute for Energy Research (IREC), Jardins de les Dones de Negre 1, 08930 Sant Adrià de Besòs, Spain
       index: 1
     - name: Departament d'Enginyeria Electrònica i Biomèdica, IN2UB, Universitat de Barcelona, C/ Martí i Franqués 1, 08028 Barcelona, Spain
       index: 2
@@ -96,12 +96,6 @@ A brief list of features include, but not limited to:
 
 # Acknowledgements
 
-This work has received funding from the European Union's Horizon 2020 research and innovation programme under grant
-agreements no 777968 (INFINITE-CELL project) and 952982 (Custom-Art project), and was partially supported by the Spanish
-Ministry of Science, Innovation and Universities under the WINCOST (ENE2016-80788-C5-1-R) project. Authors from IREC
-belong to the SEMS (Solar Energy Materials and Systems) Consolidated Research Group of the “Generalitat de Catalunya”
-(ref. 2017 SGR 862) and are grateful to European Regional Development Funds (ERDF, FEDER Programa Competitivitat de
-Catalunya 2007–2013). MG acknowledges the financial support from Spanish Ministry of Science, Innovation and Universities
-within the Juan de la Cierva fellowship (IJC2018-038199-I).
+This work has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement no. 952982 (Custom-Art project) and fast track to innovation programme under grant agreement no. 870004 (Solar-Win project). Authors from IREC belong to the SEMS (Solar Energy Materials and Systems) Consolidated Research Group of the “Generalitat de Catalunya” (ref. 2017 SGR 862) and are grateful to European Regional Development Funds (ERDF, FEDER Programa Competitivitat de Catalunya 2007–2013). MG acknowledges the financial support from Spanish Ministry of Science, Innovation and Universities within the Juan de la Cierva fellowship (IJC2018-038199-I).
 
 # References

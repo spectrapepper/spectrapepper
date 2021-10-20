@@ -7,7 +7,6 @@ import spectrapepper as spep
 import numpy as np
 import pandas as pd
 # import my_functions as spep
-# import sys
 
 class TestSpectrapepper(unittest.TestCase):
     """Tests for `spectrapepper` package."""
@@ -373,12 +372,12 @@ class TestSpectrapepper(unittest.TestCase):
         r = round(np.sum(data2), 2)
         print('fwhm: ' + str(r))
         self.assertEqual(r, 2502.00)
-        
+
         data2 = spep.fwhm(data, 250, axis)
         r = round(np.sum(data2), 2)
         print('fwhm_single: ' + str(r))
         self.assertEqual(r, 1.84)
-        
+
         data2 = spep.asymmetry(data, 250, axis)
         r = round(np.sum(data2), 2)
         print('asymmetry: ' + str(r))
