@@ -72,7 +72,7 @@ universal adoption of them and ultimately shorten the development times of new m
 **spectrapepper** is a Python package that aims to ease and accelerate the use of advanced tools such as machine learning
 and combinatorial analysis, through simple, straightforward, and intuitive code and functions. This library includes a
 wide range of tools for spectroscopic data analysis in every step, including data acquisition, processing, analysis,
-results, and visualization. Ultimately, **spectrappeper** enables the design of automated measurement systems for
+results, and visualization. Ultimately, **spectrapepper** enables the design of automated measurement systems for
 spectroscopy and the combinatorial analysis of big data through high statistics, artificial intelligence, and machine
 learning. **spectrapepper** is built in Python 3 [@VanRossumGuidoDrake2009], and also uses third-party packages
 including numpy [@Harris2020], pandas [@Reback2021], scipy [@Virtanen2020], and matpotlib [@Caswell2021], and encourages
