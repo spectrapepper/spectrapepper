@@ -382,6 +382,13 @@ class TestSpectrapepper(unittest.TestCase):
         r = round(np.sum(data2), 2)
         print('asymmetry: ' + str(r))
         self.assertEqual(r, -0.6)
+        
+        data3 = np.vstack((spectras[2],spectras[1],spectras[0]))
+        data2 = spep.running_median_nd(data3, (3,3))
+        r = round(np.sum(data2), 2)
+        print('running_median_nd: ' + str(r))
+        self.assertEqual(r,1510.57)
+
 
 if __name__ == '__main__':
     unittest.main()
