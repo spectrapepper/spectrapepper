@@ -75,7 +75,7 @@ wide range of tools for spectroscopic data analysis in every step, including dat
 results, and visualization. Ultimately, **spectrapepper** enables the design of automated measurement systems for
 spectroscopy and the combinatorial analysis of big data through high statistics, artificial intelligence, and machine
 learning. **spectrapepper** is built in Python 3 [@VanRossumGuidoDrake2009], and also uses third-party packages
-including numpy [@Harris2020], pandas [@Reback2021], scipy [@Virtanen2020], and matpotlib [@Caswell2021], and encourages
+including numpy [@Harris2020], pandas [@Reback2021], scipy [@Virtanen2020], and matpotlib [@Hunter2007], and encourages
 the user to use scikit-learn [@Pedregosa2011] for machine learning applications. **spectrapepper** comes with full
 documentation, including quick start, examples, and contribution guidelines. Source code and documentation can  be
 downloaded from https://github.com/spectrapepper/spectrapepper.
