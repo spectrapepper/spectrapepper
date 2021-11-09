@@ -52,7 +52,7 @@ providing a profound understanding of their properties, failure mechanisms, and 
 The latest advances in the application of spectroscopic methodologies for complex materials and devices include the
 implementation of combinatorial analysis (CA), artificial intelligence (AI) and machine learning (ML), that have been
 already used in few studies and are slowly becoming more common [@Chen2020]. Furthermore, the widespread use of this
-type of tool in both laboratory environments and on-line/in-line monitoring of production lines is predicted to shorten
+kind of tools in both laboratory environments and on-line/in-line monitoring of production lines is predicted to shorten
 development times by a factor of 10, from 10 to 20 years to just a few
 years [@Maine2006; @Mueller2016; @AlanAspuru-Guzik2018; @Correa-Baena2018]. Unfortunately, several barriers for
 researchers to implement CA, AI, and ML remain [@Mahmood2021; @Gu2019]. One of them is the proper
