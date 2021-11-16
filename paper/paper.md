@@ -11,19 +11,19 @@ authors:
       orcid: 0000-0002-8357-5824
       affiliation: "1"
     - name: Fabien Atlan
-      orcid: 0000-0002-8357-5824
+      orcid: 0000-0001-7233-4892
       affiliation: "1"
     - name: Ignacio Becerril-Romero
       orcid: 0000-0002-7087-6097
       affiliation: "1"
     - name: Alejandro Perez-Rodriguez
-      orcid: 0000-0002-8357-5824
+      orcid: 0000-0002-3634-1355
       affiliation: "1, 2"
     - name: Maxim Guc
-      orcid: 0000-0002-8357-5824
+      orcid: 0000-0002-2072-9566
       affiliation: "1"
     - name: Victor Izquierdo-Roca
-      orcid: 0000-0002-8357-5824
+      orcid: 0000-0002-5502-3133
       affiliation: "1"
 affiliations:
     - name: Catalonia Institute for Energy Research (IREC), Jardins de les Dones de Negre 1, 08930 Sant Adrià de Besòs, Spain
