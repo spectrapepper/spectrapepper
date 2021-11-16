@@ -1,0 +1,54 @@
+{
+    "description": "This library aims to enable researchers with little programming knowledge to implement artificial intelligence and machine learning in the analysis of spectroscopic data for photovoltaic and other novel materials and devices.", 
+    "license": "MIT", 
+    "title": "spectrapepper: A Python toolbox for advanced analysis of spectroscopic data for materials and devices", 
+    "version": "v0.1.1", 
+    "upload_type": "software", 
+    "publication_date": "2021-11-16", 
+    "creators": [
+        {
+	    "affiliation": "Catalonia Institute for Energy Research (IREC), Jardins de les Dones de Negre 1, 08930 Sant Adrià de Besòs, Spain",
+            "name": "Enric Grau-Luque",
+	    "orcid": "0000-0002-8357-5824"
+        }, 
+        {
+            "affiliation": "Catalonia Institute for Energy Research (IREC), Jardins de les Dones de Negre 1, 08930 Sant Adrià de Besòs, Spain", 
+            "name": "Fabien Atlan"
+	    "orcid": "0000-0001-7233-4892"
+        },
+        {
+            "affiliation": "Catalonia Institute for Energy Research (IREC), Jardins de les Dones de Negre 1, 08930 Sant Adrià de Besòs, Spain", 
+            "name": "Ignacio Becerril-Romero"
+	    "orcid": "0000-0002-7087-6097"
+        }, 
+        {
+            "affiliation": "Catalonia Institute for Energy Research (IREC), Jardins de les Dones de Negre 1, 08930 Sant Adrià de Besòs, Spain; Departament d'Enginyeria Electrònica i Biomèdica, IN2UB, Universitat de Barcelona, C/ Martí i Franqués 1, 08028 Barcelona, Spain", 
+            "name": "Alejandro Perez-Rodriguez"
+	    "orcid": "0000-0002-3634-1355"
+        }, 
+        {
+            "affiliation": "Catalonia Institute for Energy Research (IREC), Jardins de les Dones de Negre 1, 08930 Sant Adrià de Besòs, Spain", 
+            "name": "Maxim Guc"
+	    "orcid": "0000-0002-2072-9566"
+        }, 
+        {
+            "affiliation": "Catalonia Institute for Energy Research (IREC), Jardins de les Dones de Negre 1, 08930 Sant Adrià de Besòs, Spain", 
+            "name": "Victor Izquierdo-Roca"
+	    "orcid": "0000-0002-5502-3133"
+        }, 
+
+    ], 
+    "access_right": "open", 
+    "related_identifiers": [
+        {
+            "scheme": "url", 
+            "identifier": "https://github.com/spectrapepper/spectrapepper/tree/v0.1.1", 
+            "relation": "isSupplementTo"
+        }, 
+        {
+            "scheme": "doi", 
+            "identifier": "10.5281/zenodo.5705696", 
+            "relation": "isVersionOf"
+        }
+    ]
+}
