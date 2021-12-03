@@ -20,6 +20,8 @@ SpectraPepper
         :target: https://pepy.tech/project/spectrapepper
 .. image:: https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown
         :target: https://stackoverflow.com/questions/tagged/spectrapepper
+.. image:: https://joss.theoj.org/papers/10.21105/joss.03781/status.svg
+        :target: https://doi.org/10.21105/joss.03781
 
 **A Python package to simplify and accelerate analysis of spectroscopy data.**
 
