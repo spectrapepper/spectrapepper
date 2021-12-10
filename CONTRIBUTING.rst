@@ -71,24 +71,29 @@ your fork for local development::
 versions with tox::
 
         $ flake8 spectrapepper tests
-        $ python setup.py test or pytest
+        $ pytest
         $ tox
 
-6. Commit your changes and push your branch to GitHub::
+6. Run unittest, check the test coverage, and create a coverage report in the `tests` folder::
+
+        $ coverage run -m unittest test_spectrapepper.py
+        $ coverage xml
+
+7. Commit your changes and push your branch to GitHub::
 
         $ git add .
         $ git commit -m "Your detailed description of your changes."
         $ git push origin name-of-your-bugfix-or-feature
 
-7. Submit a pull request through the GitHub website.
+8. Submit a pull request through the GitHub website.
 
 Pull Request Guidelines
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 Before you submit a pull request, check that it meets these guidelines:
 
-1. The pull request should include tests. Coverage should not go below 80%.
-2. Code quality should be A+.
+1. The pull request should include tests. Coverage should not go below 80% with `Codecov`.
+2. Code quality should be A+ with `lgtm`.
 3. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring.
 4. The pull request should work for Python 3.6, 3.7 and 3.8.

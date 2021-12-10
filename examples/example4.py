@@ -4,7 +4,6 @@ This example shows how to use Scikit-learn for spectral data with spectrapepper.
 
 # import libraries
 import spectrapepper as spep
-import numpy as np
 
 # load features
 features = spep.load_spectras()[1:]
