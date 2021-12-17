@@ -2807,18 +2807,18 @@ def asymmetry(data, peak, axis, res= 0.001, s=5, limit=10):
     
     return diff_abs
 
-def running_median_nd(data, window_size,plot=False):
+def rwm(y, ws, plot=False):
     """
     Computes the median of an array in a running window defined by the user.
     The window size needs to be a 2D tuple or list, with the first element being the
     length of the spectra and the second the total width that will be taken into account
     for the statistics.
 
-    :type data: numpy array
-    :param data: The spectras 
+    :type y: numpy array
+    :param y: The spectras 
 
-    :type window_size: tuple/list
-    :param window_size: Window size parameters
+    :type ws: tuple/list
+    :param ws: Window size parameters
 
     :type plot: boolean
     :param plot: If you want to plot the new spectra change to True
@@ -2827,24 +2827,27 @@ def running_median_nd(data, window_size,plot=False):
     :rtype: numpy array[float]
     """
     # Check dimensions
-    if np.shape(window_size)[0] != 2:
+    if np.shape(ws)[0] != 2:
         raise ValueError("The window must be 2D")
-    if (window_size[1] % 2) == 0:
+    if (ws[1] % 2) == 0:
         raise ValueError("The width must be an odd number")
+        
     # First pad the end and the beginning by duplicating the first and last columns from the spectras
-    pad_length = int((window_size[1]-1)/2)
-    data_new = np.c_[data,data[:,-pad_length:]]
-    data_new2 = np.c_[data[:,:pad_length],data_new]
+    pad_length = int((ws[1]-1)/2)
+    data_new = np.c_[y, y[:,-pad_length:]]
+    data_new2 = np.c_[y[:,:pad_length], data_new]
     
     # Get the windows
-    window = np.lib.stride_tricks.sliding_window_view(data_new2,window_size)
+    window = np.lib.stride_tricks.sliding_window_view(data_new2, ws)
     
     # Create new spectra from the median of each window
     new_spectra = []
     for i in window[0]:
         new_spectra.append(np.median(i))
     new_spectra = np.asarray(new_spectra)
+    
     if plot:
         plt.plot(new_spectra)
-    
+        plt.show()
+        
     return new_spectra
