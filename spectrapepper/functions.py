@@ -2806,3 +2806,48 @@ def asymmetry(data, peak, axis, res= 0.001, s=5, limit=10):
         diff_abs = np.sqrt(diff_abs)*(-1)
     
     return diff_abs
+
+def rwm(y, ws, plot=False):
+    """
+    Computes the median of an array in a running window defined by the user.
+    The window size needs to be a 2D tuple or list, with the first element being the
+    length of the spectra and the second the total width that will be taken into account
+    for the statistics.
+
+    :type y: numpy array
+    :param y: The spectras 
+
+    :type ws: tuple/list
+    :param ws: Window size parameters
+
+    :type plot: boolean
+    :param plot: If you want to plot the new spectra change to True
+
+    :returns: Array containing the computed 1D spectra.
+    :rtype: numpy array[float]
+    """
+    # Check dimensions
+    if np.shape(ws)[0] != 2:
+        raise ValueError("The window must be 2D")
+    if (ws[1] % 2) == 0:
+        raise ValueError("The width must be an odd number")
+        
+    # First pad the end and the beginning by duplicating the first and last columns from the spectras
+    pad_length = int((ws[1]-1)/2)
+    data_new = np.c_[y, y[:,-pad_length:]]
+    data_new2 = np.c_[y[:,:pad_length], data_new]
+    
+    # Get the windows
+    window = np.lib.stride_tricks.sliding_window_view(data_new2, ws)
+    
+    # Create new spectra from the median of each window
+    new_spectra = []
+    for i in window[0]:
+        new_spectra.append(np.median(i))
+    new_spectra = np.asarray(new_spectra)
+    
+    if plot:
+        plt.plot(new_spectra)
+        plt.show()
+        
+    return new_spectra
