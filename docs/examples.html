@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html4" lang="en" >
 <head>
   <meta charset="utf-8" />
   
@@ -13,8 +13,6 @@
   
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
 
   
   
@@ -31,10 +29,10 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -97,6 +95,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#examples-2-spectral-pre-processing">Examples 2: Spectral pre-processing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-3-pearson-spearman-and-grau-analyses">Example 3: Pearson, Spearman, and Grau analyses</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-4-machine-learning-preparation">Example 4: Machine learning preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-5-curve-fittings">Example 5: Curve fittings</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
@@ -333,6 +332,82 @@
 
 <span class="c1"># visualization</span>
 <span class="n">spep</span><span class="o">.</span><span class="n">plot2dml</span><span class="p">(</span><span class="n">final</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;LDA&#39;</span><span class="p">,</span> <span class="n">xax</span><span class="o">=</span><span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="n">yax</span><span class="o">=</span><span class="s1">&#39;D2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-5-curve-fittings">
+<h2>Example 5: Curve fittings<a class="headerlink" href="#example-5-curve-fittings" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This example shows how to use different distribution fittings on experimental</span>
+<span class="sd">spectroscopic data. Student distribution is shown just as example, but it is</span>
+<span class="sd">not suitable for the particular peak tested. It is also important to notice </span>
+<span class="sd">that the fit greatly depends on the resolution of the curve. If needed,</span>
+<span class="sd">it is possible to first extrapolate to a greater resolution.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># import libraries</span>
+<span class="kn">import</span> <span class="nn">my_functions</span> <span class="k">as</span> <span class="nn">spep</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># load data to fit</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()[</span><span class="mi">10</span><span class="p">]</span> <span class="c1"># load 1 single spectra from the data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="c1"># Normalize the maximum value to 1</span>
+
+<span class="c1"># load axis</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># load the x axis from the dataset</span>
+
+<span class="c1"># select peak to fit to</span>
+<span class="n">peak</span> <span class="o">=</span> <span class="mi">206</span> <span class="c1"># aproximate position of the peak (in cm-1) to be evaulated</span>
+
+
+<span class="c1"># automatically fit the distributions to the peak in the data</span>
+<span class="n">gauss</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">gaussfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">lorentz</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">lorentzfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">student</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">studentfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Spectra&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">gauss</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Gauss fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">lorentz</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Lorentz fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">student</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Student fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">260</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Automatic fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="c1"># manually fit the distributions to the peak.</span>
+<span class="n">gauss</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">gaussfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">4.4</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">lorentz</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">lorentzfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="o">+</span><span class="mi">31</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">student</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">studentfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="o">+</span><span class="mi">31</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Spectra&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">gauss</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Gauss fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">lorentz</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Lorentz fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">student</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Student fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">260</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Manual fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="c1"># show how the distribution changes by the change in the parameters</span>
+<span class="n">gauss</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">lorentz</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">student</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">gauss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spep</span><span class="o">.</span><span class="n">gaussfit</span><span class="p">(</span><span class="n">sigma</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">lorentz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spep</span><span class="o">.</span><span class="n">lorentzfit</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">),</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">student</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spep</span><span class="o">.</span><span class="n">studentfit</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="o">*</span><span class="n">i</span><span class="p">),</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+<span class="c1"># the stackplot fuinction is a nice tool to show the evolution of data</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">gauss</span><span class="p">,</span> <span class="n">lorentz</span><span class="p">,</span> <span class="n">student</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;Gauss&#39;</span><span class="p">,</span><span class="s1">&#39;Lorentz&#39;</span><span class="p">,</span><span class="s1">&#39;Student&#39;</span><span class="p">]):</span>
+    <span class="n">spep</span><span class="o">.</span><span class="n">stackplot</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;$x$&#39;</span><span class="p">,</span>
+                    <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\varphi (x)$&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">j</span><span class="p">)</span>
+ 
 </pre></div>
 </div>
 </div>

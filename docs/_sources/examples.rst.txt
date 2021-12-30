@@ -24,3 +24,8 @@ Example 4: Machine learning preparation
 
 .. literalinclude:: ../examples/example4.py
 
+Example 5: Curve fittings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../examples/example5.py
+

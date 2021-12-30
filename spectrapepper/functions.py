@@ -298,15 +298,15 @@ def alsbaseline(data, lam=100, p=0.001, niter=10):
     return data
 
 
-def bspbaseline(data, axis, points, avg=5, remove=True, plot=False):
+def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
     """
     Calcuates the baseline using b-spline.
 
-    :type data: list[float]
-    :param data: Single or several spectras to remove the baseline from.
+    :type y: list[float]
+    :param y: Single or several spectras to remove the baseline from.
 
-    :type axis: list[float]
-    :param axis: x axis of the data, to interpolate the baseline function.
+    :type x: list[float]
+    :param x: x axis of the data, to interpolate the baseline function.
 
     :type points: list[int]
     :param points: axis values of points to calculate the bspine.
@@ -323,42 +323,53 @@ def bspbaseline(data, axis, points, avg=5, remove=True, plot=False):
     :returns: The baseline.
     :rtype: list[float]
     """
-    data = copy.deepcopy(data)
-    axis = list(axis)
-    x = list(points)
+    data = copy.deepcopy(y)
+    x = list(x)
+    points = list(points)
     avg = int(avg)
-    pos = valtopos(x, axis)
+    pos = valtoind(points, x)
     dims = len(np.array(data).shape)  # detect dimensions
 
     if dims >= 2:
         baseline = []
         
         for j in range(len(data)):
-            y = []  # y values for the selected x
+            y_p = []  # y values for the selected points
             for i in range(len(pos)):
                 temp = np.mean(data[j][pos[i] - avg: pos[i] + avg + 1])
-                y.append(temp)
+                y_p.append(temp)
         
-            spl = splrep(x, y)
-                
+            spl = splrep(points, y_p)
+
+            if plot and j == 0:        
+                plt.plot(x, data[0], label='Original')
+                plt.plot(x, baseline[0], label='Baseline')
+                plt.plot(points, y_p, 'o', color='red')
+                plt.ylim(min(data[0])*0.98, max(data[0])*1.02)
+                plt.legend()
+                plt.show()
+            
             if remove:
-                baseline.append(data[j] - splev(axis, spl))
+                baseline.append(data[j] - splev(x, spl))
             else:
-                baseline.append(splev(axis, spl))
+                baseline.append(splev(x, spl))
+
+
 
     else:
-        y = []  # y values for the selected x
+        y_p = []  # y values for the selected points
         for i in range(len(pos)):
             temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
-            y.append(temp)
+            y_p.append(temp)
     
-        spl = splrep(x, y)
-        baseline = splev(axis, spl)
+        spl = splrep(points, y_p)
+        baseline = splev(x, spl)
         
         if plot:        
-            plt.plot(axis, data)
-            plt.plot(axis, baseline)
-            plt.plot(x, y, 'o', color='red')
+            plt.plot(x, data)
+            plt.plot(x, baseline)
+            plt.plot(points, y_p, 'o', color='red')
+            plt.ylim(min(data), max(data))
             plt.show()
     
         if remove:
@@ -399,7 +410,7 @@ def polybaseline(data, axis, points, deg=2, avg=5, remove=True, plot=False):
     axis = list(axis)
     x = list(points)
     avg = int(avg)
-    pos = valtopos(x, axis)
+    pos = valtoind(x, axis)
     dims = len(np.array(data).shape)  # detect dimensions
     
     if dims > 1:
@@ -446,19 +457,19 @@ def polybaseline(data, axis, points, deg=2, avg=5, remove=True, plot=False):
     return baseline
 
 
-def valtopos(vals, axis):
+def valtoind(vals, x):
     """
-    To translate the value in an axis to its position in the axis, basically
+    To translate the value in an axis to its index in the axis, basically
     searches for the position of the value. It approximates to the closest.
 
     :type vals: list[float]
     :param vals: List of values to be searched and translated.
 
-    :type axis: list[float]
-    :param axis: Axis.
+    :type x: list[float]
+    :param x: Axis.
 
-    :returns: Position in the axis of the values in vals
-    :rtype: list[int]
+    :returns: Index, or position, in the axis of the values in vals
+    :rtype: list[int], int
     """
     
     shape = len(np.array(vals).shape)
@@ -469,11 +480,11 @@ def valtopos(vals, axis):
             for j in range(len(vals[0])):
                 dif_temp = 999  # safe initial difference
                 temp_pos = 0  # temporal best position
-                for k in range(len(axis)):  # search in axis
-                    if abs(vals[i][j] - axis[k]) < dif_temp:  # compare if better
+                for k in range(len(x)):  # search in axis
+                    if abs(vals[i][j] - x[k]) < dif_temp:  # compare if better
                         temp_pos = k  # save best value
-                        dif_temp = abs(vals[i][j] - axis[k])  # calculate new diff
-                vals[i][j] = axis[temp_pos]  # save real value in axis
+                        dif_temp = abs(vals[i][j] - x[k])  # calculate new diff
+                vals[i][j] = x[temp_pos]  # save real value in axis
                 pos[i][j] = temp_pos  # save the position
                 
     if shape == 1:
@@ -481,58 +492,62 @@ def valtopos(vals, axis):
         for i in range(len(vals)):  # this loop takes the approx. x and takes its position
             dif_temp = 999  # safe initial difference
             temp_pos = 0  # temporal best position
-            for k in range(len(axis)):  # search in axis
-                if abs(vals[i] - axis[k]) < dif_temp:  # compare if better
+            for k in range(len(x)):  # search in axis
+                if abs(vals[i] - x[k]) < dif_temp:  # compare if better
                     temp_pos = k  # save best value
-                    dif_temp = abs(vals[i] - axis[k])  # calculate new diff
-            vals[i] = axis[temp_pos]  # save real value in axis
+                    dif_temp = abs(vals[i] - x[k])  # calculate new diff
+            vals[i] = x[temp_pos]  # save real value in axis
             pos[i] = temp_pos  # save the position           
                 
     if shape == 0:
-        pos = []  # i position of area limits
+        pos = -1  # i position of area limits
         dif_temp = 9999999  # safe initial difference
         temp_pos = 0  # temporal best position
-        for k in range(len(axis)):
-            if abs(vals - axis[k]) < dif_temp:
+        for k in range(len(x)):
+            if abs(vals - x[k]) < dif_temp:
                 temp_pos = k
-                dif_temp = abs(vals - axis[k])
-        vals = axis[temp_pos]  # save real value in axis
+                dif_temp = abs(vals - x[k])
+        vals = x[temp_pos]  # save real value in axis
         pos = temp_pos
     return pos
 
 
-def areacalculator(data, limits, norm=False):
+def areacalculator(y, x, limits, norm=False):
     """
     Area calculator using the data (x_data) and the limits in position, not
     values.
 
-    :type data: list[float]
-    :param data: Data to calculate area from
+    :type y: list[float]
+    :param y: Data to calculate area from.
+    
+    :type x: list[float]
+    :param x: X axis of the data.
 
     :type limits: list[int]
-    :param limits: Limits that define the areas to be calculated. Axis position.
-    
+    :param limits: Limits that define the areas to be calculated. Axis value.
+
     :type norm: bool
     :param norm: If True, normalized the area to the sum under all the curve.
 
     :returns: A list of areas according to the requested limits.
     :rtype: list[float]
     """
-    dims = len(np.array(data).shape)
+    dims = len(np.array(y).shape)
+    limits = valtoind(limits, x)
 
     if dims >= 2:
-        areas = [[0 for _ in range(len(limits))] for _ in range(len(data))]  # final values of areas
-        for i in range(len(data)):  # calculate the areas for all the points
+        areas = [[0 for _ in range(len(limits))] for _ in range(len(y))]  # final values of areas
+        for i in range(len(y)):  # calculate the areas for all the points
             for j in range(len(limits)):  # for all the areas
-                areas[i][j] = np.sum(data[i][limits[j][0]:limits[j][1]])  # calculate the sum
+                areas[i][j] = np.sum(y[i][limits[j][0]:limits[j][1]])  # calculate the sum
                 if norm:
-                    areas[i][j] = areas[i][j] / np.sum(data[i])
+                    areas[i][j] = areas[i][j] / np.sum(y[i])
     else:
         areas = [0 for _ in range(len(limits))]  # final values of areas
         for j in range(len(limits)):  # for all the areas
-            areas[j] = np.sum(data[limits[j][0]:limits[j][1]])  # calculate the sum
+            areas[j] = np.sum(y[limits[j][0]:limits[j][1]])  # calculate the sum
             if norm:
-                areas[j] = areas[j] / np.sum(data)
+                areas[j] = areas[j] / np.sum(y)
     return areas
 
 
@@ -609,6 +624,45 @@ def normsum(data):
     return y
 
 
+def normtoratio(data, r1, r2, axis=None):
+    """
+    Normalizes a peak to the ratio vaue respect to another. That is, the peak
+    found in the range of r1 is normalized to the ratio r1/(r1+r2).
+
+    :type data: list[float]
+    :param data: Single spectra or a list of them.
+
+    :type r1: list[float, float]
+    :param r1: Range of the first area according to the axis.
+        
+    :type r2: list[float, float]
+    :param r2: Range of the second area according to the axis.
+        
+    :type axis: list[float]
+    :param axis: Axis of the data. If `None` then it goes from 0 to N, where
+        N is the length of the spectras.
+
+    :returns: Normalized data
+    :rtype: list[float]
+    """
+    y = copy.deepcopy(data)
+    dims = len(np.array(data).shape)
+    if dims > 1:
+        for i in range(len(y)):
+            a1 = max(y[i][r1[0]:r1[1]])
+            a2 = max(y[i][r2[0]:r2[1]])
+            ratio = a1/(a1+a2)
+            m = ratio/max(y[i])
+            y[i] = y[i]*m
+    else:
+        a1 = max(y[r1[0]:r1[1]])
+        a2 = max(y[r2[0]:r2[1]])
+        ratio = a1/(a1+a2)
+        m = ratio/max(y)
+        y = y*m
+    return y
+
+
 def normtoglobalmax(data):
     """
     Normalizes a list of spectras to the global max.
@@ -633,68 +687,50 @@ def normtoglobalmax(data):
     return y
 
 
-def interpolation(data, axis, new_step=1, integer=True):
+def interpolation(y, x, step=1, start=0, finish=0):
     """
     Interpolates data to a new axis. If there are multiple datasets with 
     different axises in can interpolate to a common axis.
 
-    :type data: list[float]
-    :param data: List of data to interpolate
+    :type y: list[float]
+    :param y: List of data to interpolate
 
-    :type axis: list[list[float]]
-    :param axis: list of the axises of the data
+    :type x: list[list[float]]
+    :param x: list of the axises of the data
     
-    :type new_step: float
-    :param new_step: new step for the new axis
-    
-    :type integer: bool
-    :param integer: 
+    :type step: float
+    :param step: new step for the new axis
 
     :returns: Interpolated data and the new axis
     :rtype: list[float], list[float]
     """
-    temp_y = list(data)
-    axis = list(axis)
-    dims = len(np.array(data).shape)
-    
-    if dims > 1:
-        # NEW AXIS
+    temp_y = list(y)
+    axis = list(x)
+    dims = len(np.array(y).shape)
+
+    # NEW AXIS
+    if start == 0 and start == finish:
         new_start = -9999999
         new_end = 99999999
-        for i in range(len(axis)):
-            if min(axis[i]) > new_start:
-                new_start = math.ceil(min(axis[i]))
-            if max(axis[i]) < new_end:
-                new_end = math.floor(max(axis[i]))
-        x_new = np.arange(new_start, new_end + new_step, new_step)
-    
-        # MASTER DATA
-        master_y = []
-        for i in range(len(temp_y)):
-            for j in range(len(temp_y[i])):
-                this = np.interp()
-                master_y.append(this)
-    
-        # INTERPOLATIONS
-        for i in range(len(master_y)):
-            master_y[i] = master_y[i](x_new)
-            
     else:
-        # NEW AXIS
-        new_start = -9999999
-        new_end = 99999999
-        if min(axis) > new_start:
-            new_start = math.ceil(min(axis))
-        if max(axis) < new_end:
-            new_end = math.floor(max(axis))
-        x_new = np.arange(new_start, new_end + new_step, new_step)
-    
-        # MASTER DATA
-        master_y = []
+        new_start = start
+        new_end = finish
         
-        this = interpolate.interp1d(axis, temp_y)
+    if min(axis) > new_start:
+        new_start = math.ceil(min(axis))
+    if max(axis) < new_end:
+        new_end = math.floor(max(axis))
+
+    x_new = np.arange(new_start, new_end + step, step)
+
+    master_y = []
     
-        # INTERPOLATIONS
+    if dims > 1:   
+        for i in range(len(temp_y)):
+            this = interpolate.interp1d(axis, temp_y[i])
+            master_y.append(this(x_new))            
+    else:
+        this = interpolate.interp1d(axis, temp_y)
         master_y = this(x_new)
         
     return master_y, x_new
@@ -767,7 +803,10 @@ def groupscores(all_targets, used_targets, predicted_targets):
                 if predicted_targets[j] == used_targets[j]:
                     g_scores[i] += 1
     for i in range(len(g_scores)):
-        g_scores[i] = round(g_scores[i] / g_count[i], 2)
+        if g_count[i] == 0:
+            print('No data with label (class) ' + str(i) + ' where found when calculating group scores. Check if the count is out of bounds or none samples of the class where included in the sample.\n')
+        else:
+            g_scores[i] = round(g_scores[i] / g_count[i], 2)
     return g_scores
 
 
@@ -786,7 +825,7 @@ def cmscore(x_points, y_points, target):
     :type target: list[int]
     :param target: Targets of each point.
 
-    :returns: Score by comparing CM distances. Prediction using CM distances. 
+    :returns: Score by comparing CM distances. Prediction using CM distances.
         X-axis coords of ths CMs. Y-axis coords of the Cms.
     :rtype: list[float, list[int],list[float],list[float]]
     """
@@ -809,8 +848,11 @@ def cmscore(x_points, y_points, target):
                 c[j] += 1
 
     for i in range(g_n):
-        a[i] = a[i] / c[i]
-        b[i] = b[i] / c[i]
+        if c[i] == 0:
+            print('No samples for group ' + str(i) + ' were found when calculating the center of mass. Check if limits are out of range or samples of that target are missing.')
+        else:
+            a[i] = a[i] / c[i]
+            b[i] = b[i] / c[i]
 
     correct = 0
     for i in range(len(tar)):
@@ -903,15 +945,15 @@ def mdscore(x_p, y_p, tar):
     return score, p, a, b
 
 
-def normtopeak(data, axis, peak, shift=10):
+def normtopeak(y, x, peak, shift=10):
     """
     Normalizes the spectras to a particular peak.
 
-    :type data: list[float]
-    :param data: Data to be normalized.
+    :type y: list[float]
+    :param y: Data to be normalized.
 
-    :type axis: list[float]
-    :param axis: X-axis of the data
+    :type x: list[float]
+    :param x: X-axis of the data
 
     :type peak: int
     :param peak: Peak position in x-axis values.
@@ -922,82 +964,114 @@ def normtopeak(data, axis, peak, shift=10):
     :returns: Normalized data.
     :rtype: list[float]
     """
-    y = copy.deepcopy(data)
+    y = copy.deepcopy(y)
     dims = len(np.array(y).shape)
-    
-    axis = list(axis)
-    # peak = [int(peak)]
     shift = int(shift)
-    pos = valtopos([int(peak)], axis)
-    
+
+    pos = valtoind(int(peak), x)
+
     if dims > 1:
         for j in range(len(y)):
-            section = y[j][pos[0] - shift:pos[0] + shift]
-            highest = peakfinder(section, look=int(shift / 2))
-        
-            c = 0
-            for i in range(len(highest)):
-                if highest[i] == 1:
-                    c = i
-                    break
-        
-            local_max = y[j][pos[0] - shift + c]
-            y[j] = y[j] / local_max
+            section = y[j][pos - shift:pos + shift]
+            highest = max(section)    
+            y[j] = y[j] / highest
     else:
-        section = y[pos[0] - shift:pos[0] + shift]
-        highest = peakfinder(section, look=int(shift / 2))
-    
-        c = 0
-        for i in range(len(highest)):
-            if highest[i] == 1:
-                c = i
-                break
-    
-        local_max = y[pos[0] - shift + c]
-        y = y / local_max
+        section = y[pos - shift:pos + shift]
+        highest = max(section)
+        y = y / highest
     return y
 
 
-def peakfinder(data, look=10):
+def peakfinder(y, x=None, between=False, ranges=None, look=10):
     """
-    Find the location of the peaks in a single vector.
+    Finds the location of the peaks in a single vector.
 
-    :type data: list[float]
-    :param data: Data to find a peak in.
+    :type y: list[float]
+    :param y: Data to find a peak in. Single spectra.
+
+    :type x: list[float]
+    :param x: X axis of the data. If no axis is passed then the axis goes 
+        from 0 to N, where N is the length of the spectras. Default is `None`.
+
+    :type between: list[float]
+    :param between: Range in x values 
+
+    :type ranges: list[[float, float]]
+    :param ranges: Aproximate ranges of known peaks, if any. If no ranges are 
+        known or defined, it will return all the peaks that comply with the 
+        `look` criteria. If ranges are defined, it wont use the `look` criteria,
+        but just for the absolute maximum within the range. Default is `None`.
 
     :type look: int
     :param look: Amount of position to each side to decide if it is a local 
         maximum. The default is 10.
 
-    :returns: A vector of same length with 1 or 0 if it finds or not a peak in 
-        that position
+    :returns: A list of the index of the peaks found.
     :rtype: list[int]
     """
-    y = copy.deepcopy(data)
-    is_max = [0 for _ in data]
-    is_min = [0 for _ in data]
-    for i in range(look, len(y) - look):  # start at "look" to avoid o.o.r
-        lower = 0  # negative if lower, positive if higher
-        higher = 0
-        for j in range(look):
-            if y[i] <= y[i - look + j] and y[i] <= y[i + j]:  # search all range lower
-                lower += 1  # +1 if lower
-            elif (y[i] >= y[i - look + j] and
-                  y[i] >= y[i + j]):  # search all range higher
-                higher += 1  # +1 if higher
-        if higher == look:  # if all higher then its local max
-            is_max[i] = 1
-            is_min[i] = 0
-        elif lower == look:  # if all lower then its local min
-            is_max[i] = 0
-            is_min[i] = 1
+    y = copy.deepcopy(y)
+    peaks = []
+    
+    if len(np.array(x).shape) < 1:
+        x = [i for i in range(len(y))]
+        
+    # if between:
+    #     between = valtoind(between, x)
+
+    if between:
+        start, finish = between
+    else:
+        start, finish = 0, len(y)
+    
+    if not ranges:
+        is_max = [0 for _ in y]
+        is_min = [0 for _ in y]
+        for i in range(start + look, finish - look):  # start at "look" to avoid o.o.r
+            lower = 0  # negative if lower, positive if higher
+            higher = 0
+            for j in range(look):
+                if y[i] <= y[i - look + j] and y[i] <= y[i + j]:  # search all range lower
+                    lower += 1  # +1 if lower
+                elif (y[i] >= y[i - look + j] and
+                      y[i] >= y[i + j]):  # search all range higher
+                    higher += 1  # +1 if higher
+            if higher == look:  # if all higher then its local max
+                is_max[i] = 1
+                is_min[i] = 0
+                peaks.append(int(i))
+            elif lower == look:  # if all lower then its local min
+                is_max[i] = 0
+                is_min[i] = 1
+            else:
+                is_max[i] = 0
+                is_min[i] = 0
+                
+    elif ranges:
+        ranges = valtoind(ranges, x)
+        if len(np.array(ranges).shape) > 1:
+            for i in ranges:
+                section = y[i[0]:i[1]]
+                m = max(section)
+                for j in range(i[0], i[1]):
+                    if y[j] == m:
+                        peaks.append(int(j))
         else:
-            is_max[i] = 0
-            is_min[i] = 0
-    return is_max
+            m = max(y[ranges[0]:ranges[1]])
+            for j in range(ranges[0], ranges[1]):
+                if y[j] == m:
+                    peaks.append(int(j))            
+
+    if len(peaks) == 0:
+        print('No peak was detected using the defined criteria. Change the parameters and try again.') 
+        peaks = []
+
+    if len(peaks) == 1:
+        peaks = int(peaks[0])
+    
+    return peaks
 
 
-def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='', 
+def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='',
                     cmm='Blues', fontsize=20, ylabel='True', xlabel='Prediction'):
     """
     Calculates and/or plots the confusion matrix for machine learning algorithm
@@ -1057,7 +1131,10 @@ def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='',
                     m[row][col] += 1
 
     for i in range(len(m)):
-        m[i] = np.array(m[i]) / p[i]
+        if p[i] == 0:
+            print('No data with label (class) ' + str(i) + ' where found when making the confusion matrix. Check if the count is out of bounds or none samples of the class where included in the sample.\n')
+        else:
+            m[i] = np.array(m[i]) / p[i]
 
     if plot:
         fig = plt.figure(tight_layout=True, figsize=(6, 7.5))
@@ -1092,7 +1169,7 @@ def avg(data):
     :returns: The average of the vectors in the list.
     :rtype: list[float]
     """
-    data = list(data)
+    data = copy.deepcopy(data)
     avg_data = np.array([0 for _ in range(len(data[0]))])
     for i in data:
         avg_data = avg_data + i
@@ -1143,15 +1220,18 @@ def median(data):
     return median
 
 
-def lorentzfit(data, pos, ax=[0], look=10, shift=5, wid=5):
+def lorentzfit(y=[0], x=[0], pos=0, look=10, shift=5, gamma=5, manual=False):
     """
-    Fits peak as an optimization problem.
+    Fits peak as an optimization problem or manual fit for Lorentz distirbution,
+    also known as Cauchy. A curve `y` is only mandatory if the optimixzation 
+    is needed (manual=False, default). If no axis 'x' is defined, then a 
+    default axis is generated for both options.
 
-    :type data: list[float]
-    :param data: Data to fit. Single vector.
+    :type y: list[float]
+    :param y: Data to fit. Single vector.
 
-    :type ax: list[float]
-    :param ax: x axis.
+    :type x: list[float]
+    :param x: x axis.
 
     :type pos: int
     :param pos: X axis position of the peak.
@@ -1162,68 +1242,84 @@ def lorentzfit(data, pos, ax=[0], look=10, shift=5, wid=5):
     :type shift: int
     :param shift: Possible index shift of the peak. The default is 5.
 
-    :type wid: float
-    :param wid: Initial width of fit. The default is 5.
+    :type gamma: float
+    :param gamma: Initial value of fit. The default is 5.
+    
+    :type sigma: boolean
+    :param sigma: If `True`, 1 curve will be generated using the declared 
+        parameter `gamma` and perform a manual fit. Default is `False`.
 
     :returns: Fitted curve.
     :rtype: list[float]
     """
-    # initial guesses
-    ax = list(ax)
-    y = list(data)      
+    ax = list(x)
+    y = list(y)      
     look = int(look)
     s = int(shift)
-    pos = int(valtopos(pos, ax))
     amp = max(y)/2
-    wid = float(wid)
     
-    if ax == [0]: # if no axis is passed
-        ax = [i for i in range(len(y))]
     
-    for k in range(pos - s, pos + s):
-            if y[k] > y[pos]:
-                pos = k
-    p = ax[pos]
-
-    def objective(x):
+    if manual:
+        if ax == [0]: # if no axis is passed
+            ax = [i for i in range(-100, 100)]
+            
+        pos = int(valtoind(pos, ax))
+        
         fit = []
-        error = 0
-        for i in range(len(ax)):  # for all the points
-            # fit.append(x[0] * x[1] ** 2 / ((ax[i] - x[2])**2 + x[1] ** 2)) 
-            
-            fit.append(x[0] * (1/np.pi) * (0.5*x[1])/((ax[i]-x[2])**2 + (0.5*x[1])**2))
-            
-        for j in range(pos - look, pos + look):  # error between +-look of the peak position
-            error += (fit[j] - y[j]) ** 2  # total error
-        return error
-
-    def constraint1(x):
-        return 0
+        for i in ax:
+            fit.append(1/(np.pi*gamma*(1+((i-pos)/gamma)**2)))
+        
+    else:
+        if ax == [0]: # if no axis is passed
+            ax = [i for i in range(len(y))]
+        
+        pos = int(valtoind(pos, ax))
+        
+        for k in range(pos-s, pos+s):
+                if y[k] > y[pos]:
+                    pos = k
+        p = ax[pos]
     
-    x0 = np.array([amp, wid, p])  # master vector to optimize, initial values
-    bnds = [[0, max(y)*200], [1, 1000], [(p-s), (p+s)]]
-    con1 = {'type': 'ineq', 'fun': constraint1}
-    cons = ([con1])
-    solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
-    x = solution.x
-
-    fit = []
-
-    for l in range(len(ax)):  # for all the points
-        # fit.append(x[0] * x[1] ** 2 / ((ax[l] - x[2]) ** 2 + x[1] ** 2))
-        fit.append(x[0] * (1/np.pi) * (0.5*x[1])/((ax[l]-x[2])**2 + (0.5*x[1])**2))
+        def objective(x):
+            fit = []
+            error = 0
+            for i in range(len(ax)):  # for all the points            
+                # fit.append(x[0]*(1/np.pi)*(0.5*x[1])/((ax[i]-x[2])**2+(0.5*x[1])**2))
+                fit.append(x[0]*(1/(np.pi*x[1]*(1+((ax[i]-x[2])/x[1])**2))))
+                
+            for j in range(pos-look, pos+look):  # error between +-look of the peak position
+                error += (fit[j]-y[j])**2  # total error
+            return error
+    
+        def constraint1(x):
+            return 0
+        
+        x0 = np.array([amp, gamma, p])  # master vector to optimize, initial values
+        bnds = [[0.00000001, max(y)*200], [1, 1000], [(p-s), (p+s)]]
+        con1 = {'type': 'ineq', 'fun': constraint1}
+        cons = ([con1])
+        solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
+        x = solution.x
+    
+        fit = []
+    
+        for l in range(len(ax)):  # for all the points
+            fit.append(x[0]*(1/(np.pi*x[1]*(1+((ax[l]-x[2])/x[1])**2))))
+        
     return fit
 
 
-def gaussfit(data, pos, ax=[0], look=10, shift=5, sigma=4.4):
+def gaussfit(y=[0], x=[0], pos=0, look=10, shift=5, sigma=4.4, manual=False):
     """
-    Fits peak as an optimization problem.
+    Fits peak as an optimization problem or manual fit. A curve `y` is only 
+    mandatory if the optimixzation is needed (manual=False, default). If no
+    axis 'ax' is defined, then a default axis is generated for both options. 
 
-    :type data: list[float]
-    :param data: Data to fit. Single vector.
+    :type y: list[float]
+    :param y: Data to fit. Single vector.
 
-    :type ax: list[float]
-    :param ax: x axis.
+    :type x: list[float]
+    :param x: x axis.
 
     :type pos: int
     :param pos: Peak index to fit to.
@@ -1237,153 +1333,180 @@ def gaussfit(data, pos, ax=[0], look=10, shift=5, sigma=4.4):
     :type sigma: float
     :param sigma: Sigma value for Gaussian fit. The default is 4.4.
 
+    :type manual: boolean
+    :param manual: If `True`, 1 curve will be generated using the declared 
+        parameter `sigma` and perform a manual fit. Default is `False`.
+
     :returns: Fitted curve.
     :rtype: list[float]
     """
     # initial guesses
-    ax = list(ax)
-    y = list(data)      
+    ax = list(x) # from now foreward, x is the variable for the optimization.
     look = int(look)
     s = int(shift)
-    # pos = int(pos)
-    pos = int(valtopos(pos, ax))
-    amp = max(y)
     sigma = float(sigma)
     
-    if ax == [0]: # if no axis is passed
-        ax = [i for i in range(len(y))]
     
-    for k in range(pos - s, pos + s):
-            if y[k] > y[pos]:
-                pos = k
-    p = ax[pos]
-
-    def objective(x):
+    if manual:
+        if ax == [0]: # if no axis is passed
+            ax = [i for i in range(-100, 100)]
+        
+        pos = int(valtoind(pos, ax))
+        
         fit = []
-        error = 0
-        for i in range(len(ax)):  # for all the points
+        for i in range(len(ax)):
+            fit.append((1/(sigma*(np.sqrt(2*np.pi))))*(np.exp(-0.5*(((ax[i]-pos)/sigma)**2))))    
+    else:
+        y = list(y)
+        amp = max(y)
         
-            fit.append((11*x[0])*(1/(x[1]*(np.sqrt(2*np.pi))))*(np.exp(-0.5*(((ax[i]-x[2])/x[1])**2))))
+        if ax == [0]: # if no axis is passed
+            ax = [i for i in range(len(y))]
         
-            # fit.append(x[0] * x[1] ** 2 / ((ax[i] - x[2]) ** 2 + x[1] ** 2))            
-        for j in range(pos - look, pos + look):  # error between +-look of the peak position
-            error += (fit[j] - y[j]) ** 2  # total error
-        return error
-
-    def constraint1(x):
-        return 0
+        pos = int(valtoind(pos, ax))
+        
+        for k in range(pos - s, pos + s):
+                if y[k] > y[pos]:
+                    pos = k
+        p = ax[pos]
     
-    x0 = np.array([amp, sigma, p])  # master vector to optimize, initial values
-    bnds = [[0, max(y)*2], [0, 1000], [(p-s), (p+s)]]
-    con1 = {'type': 'ineq', 'fun': constraint1}
-    cons = ([con1])
-    solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
-    x = solution.x
-
-    fit = []
-
-    for l in range(len(ax)):  # for all the points
-        # fit.append(x[0] * x[1] ** 2 / ((ax[l] - x[2]) ** 2 + x[1] ** 2))
-        fit.append((11*x[0])*(1/(x[1]*(np.sqrt(2*np.pi))))*(np.exp(-0.5*(((ax[l]-x[2])/x[1])**2))))
+        def objective(x):
+            fit = []
+            error = 0
+            for i in range(len(ax)):  # for all the points
+                fit.append((100*x[0])*(1/(x[1]*(np.sqrt(2*np.pi))))*(np.exp(-0.5*(((ax[i]-x[2])/x[1])**2))))
+                    
+            for j in range(pos - look, pos + look):  # error between +-look of the peak position
+                error += (fit[j] - y[j]) ** 2  # total error
+            return error
+    
+        def constraint1(x):
+            return 0
+        
+        x0 = np.array([amp, sigma, p])  # master vector to optimize, initial values
+        bnds = [[0.0000001, max(y)*2], [0.0000001, 1000], [(p-s), (p+s)]]
+        con1 = {'type': 'ineq', 'fun': constraint1}
+        cons = ([con1])
+        solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
+        x = solution.x
+    
+        fit = []
+    
+        for l in range(len(ax)):  # for all the points
+            fit.append((100*x[0])*(1/(x[1]*(np.sqrt(2*np.pi))))*(np.exp(-0.5*(((ax[l]-x[2])/x[1])**2))))
+        
     return fit
 
 
-# def studentfit(data, pos, ax=None, look=5, shift=5, v=0.01):
-#     """
-#     Fits peak as an optimization problem.
+def studentfit(y=[0], x=[0], pos=0, look=5, shift=5, v=0.01, manual=False):
+    """
+    Fits peak as an optimization problem.
 
-#     :type data: list[float]
-#     :param data: Data to fit. Single vector.
+    :type y: list[float]
+    :param y: Data to fit. Single vector.
 
-#     :type ax: list[float]
-#     :param ax: x axis.
+    :type x: list[float]
+    :param x: x axis.
 
-#     :type pos: int
-#     :param pos: Peak index to fit to.
+    :type pos: int
+    :param pos: Peak index to fit to.
 
-#     :type look: int
-#     :param look: index positions to look to each side. The default is 20.
+    :type look: int
+    :param look: index positions to look to each side. The default is 20.
 
-#     :type shift: int
-#     :param shift: Possible index shift of the peak. The default is 5.
+    :type shift: int
+    :param shift: Possible index shift of the peak. The default is 5.
    
-#     :type v: float
-#     :param v: . The default is 4.4.
+    :type v: float
+    :param v: . The default is 0.01.
 
-#     :returns: Fitted curve.
-#     :rtype: list[float]
-#     """
-#     # initial guesses
-#     ax = list(ax)
-#     y = list(data)      
-#     look = int(look)
-#     s = int(shift)
-#     pos = int(valtopos(pos, ax))
-#     amp = 1000
-#     v = float(v)
+    :type manual: boolean
+    :param manual: If `True`, 1 curve will be generated using the declared 
+        parameter `sigma` and perform a manual fit. Default is `False`.
+
+    :returns: Fitted curve.
+    :rtype: list[float]
+    """
+    # initial guesses
+    ax = list(x)
+    y = list(y)      
+    look = int(look)
+    s = int(shift)
+    amp = 1000
+    v = float(v)
+    pos = int(valtoind(pos, ax))
     
-#     if ax == None: # if no axis is passed
-#         ax = [i for i in range(len(y))]
-    
-#     for k in range(pos - s, pos + s):
-#             if y[k] > y[pos]:
-#                 pos = k
-#     p = ax[pos]
-
-#     def objective(x):
-#         fit = []
-#         error = 0
-#         for i in range(len(ax)):  # for all the points
-#             a = gamma((x[1]+1)/2)
-#             b = np.sqrt(np.pi*x[1])*gamma(x[1]/2)
-#             c = 1+((ax[i]-x[2])**2)/x[1]
-#             d = -(x[1]+1)/2
-#             fit.append(x[0]*((a/b)*(c**d)))
-            
-#         for j in range(pos - look, pos + look):  # error between +-look of the peak position
-#             error += (fit[j] - y[j]) ** 2  # total 
-#         return error
-
-#     def constraint1(x):
-#         return x[0]*x[1]*x[2]
-    
-#     x0 = np.array([amp, v, p])  # master vector to optimize, initial values
-
-#     bnds = [[0, max(y)*100], [0.01, 10], [p-s, p+s]]
-#     con1 = {'type': 'ineq', 'fun': constraint1}
-#     cons = ([con1])
-#     solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
-#     x = solution.x
-
-#     print(solution)
-
-#     fit = []
-
-#     for i in range(len(ax)):  # for all the points
-#         a = gamma((x[1]+1)/2)
-#         b = np.sqrt(np.pi*x[1])*gamma(x[1]/2)
-#         c = 1+((ax[i]-x[2])**2)/x[1]
-#         d = -(x[1]+1)/2
+    if manual:
+        if ax == [0]: # if no axis is passed
+            ax = [i/10 for i in range(-100, 100)]
+        fit = []
+        for i in ax:  # for all the points
+            a = gamma((v+1)/2)
+            b = np.sqrt(np.pi*v)*gamma(v/2)
+            c = 1+((i-pos)**2)/v
+            d = -(v+1)/2
+            fit.append((a/b)*(c**d))
         
-#         fit.append(x[0]*((a/b)*(c**d)))
-#     return fit
+    else:
+        ax = [i for i in range(len(y))]
+        
+        for k in range(pos - s, pos + s):
+                if y[k] > y[pos]:
+                    pos = k
+    
+        def objective(x):
+            fit = []
+            error = 0
+            for i in range(len(ax)):  # for all the points
+                a = gamma((x[1]+1)/2)
+                b = np.sqrt(np.pi*x[1])*gamma(x[1]/2)
+                c = 1+((ax[i]-x[2])**2)/x[1]
+                d = -(x[1]+1)/2
+                fit.append(x[0]*((a/b)*(c**d)))
+                
+            for j in range(pos - look, pos + look):  # error between +-look of the peak position
+                error += (fit[j] - y[j]) ** 2  # total 
+            return np.sqrt(error/(look*2))
+    
+        def constraint1(x):
+            return x[0]*x[1]*x[2]
+        
+        x0 = np.array([amp, v, pos])  # master vector to optimize, initial values
+    
+        bnds = [[0, max(y)*100], [0.001, 10], [pos-s, pos+s]]
+        con1 = {'type': 'ineq', 'fun': constraint1}
+        cons = ([con1])
+        solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
+        x = solution.x
+    
+        fit = []
+    
+        for i in range(len(ax)):  # for all the points
+            a = gamma((x[1]+1)/2)
+            b = np.sqrt(np.pi*x[1])*gamma(x[1]/2)
+            c = 1+((ax[i]-x[2])**2)/x[1]
+            d = -(x[1]+1)/2
+            
+            fit.append(x[0]*((a/b)*(c**d)))
+            
+    return fit
 
 
-def decbound(xx, yy, xlims, ylims, divs=0.5):
+def decbound(x_points, y_points, groups, limits=None, divs=0.5):
     """
     Calculates the Decision Boundaries.
 
-    :type xx: list[float]
-    :param xx: X coordinates of centroids.
+    :type x_points: list[float]
+    :param x_points: X coordinates of each point.
 
-    :type yy: list[float]
-    :param yy: Y coordinates of centroids.
+    :type y_points: list[float]
+    :param y_points: Y coordinates of each point.
 
-    :type xlims: list[float]
-    :param xlims: Limits.
+    :type groups: list[int]
+    :param groups: List of targets for each point.
 
-    :type ylims: list[float]
-    :param ylims: Limits.
+    :type limits: list[float]
+    :param limits: Plot and calculation limits. The default is 'None'.
 
     :type divs: float
     :param divs: Resolution. The default is 0.01.
@@ -1391,14 +1514,19 @@ def decbound(xx, yy, xlims, ylims, divs=0.5):
     :returns: The decision boundaries.
     :rtype: list[float]
     """
-    cmx = list(xx)  # centroids
-    cmy = list(yy)
-    divs = float(divs)  # step
-    map_x = list(np.array(xlims) / divs)  # mapping limits
-    map_y = list(np.array(ylims) / divs)
+    css, cmp, cmx, cmy = cmscore(x_points, y_points, groups)
 
-    x_divs = int((map_x[1] - map_x[0]))  # mapping combining 'divs' & 'lims'
-    y_divs = int((map_y[1] - map_y[0]))
+    divs = float(divs)  # step
+    
+    if limits == None :
+        map_x = [int((min(x_points)-1)/divs), int((max(x_points)+1)/divs)] 
+        map_y = [int((min(y_points)-1)/divs), int((max(y_points)+1)/divs)]
+    else:
+        map_x = list(np.array(limits[:2]) / divs)  # mapping limits
+        map_y = list(np.array(limits[2:]) / divs)   
+
+    x_divs = int(map_x[1] - map_x[0])  # mapping combining 'divs' & 'lims'
+    y_divs = int(map_y[1] - map_y[0])
 
     x_cords = [divs * i for i in range(int(min(map_x)), int(max(map_x)))]  # coordinates
     y_cords = [divs * i for i in range(int(min(map_y)), int(max(map_y)))]
@@ -1460,7 +1588,7 @@ def regression(target, variable, cov=0):
         v = [1 for i in range(len(master) + 1)]
         for j in range(len(master)):
             v[j] = master[j][i]
-        A.append(v)  # A value
+        A.append(v)
 
     b = np.matrix(target).T  # transpose matrix
     A = np.matrix(A)
@@ -1477,35 +1605,43 @@ def regression(target, variable, cov=0):
     return prediction, fit
 
 
-def decdensity(lims, x_points, y_points, groups, divs=0.5):
+def decdensity(x, y, groups, limits=None, divs=0.5, th=2):
     """
     Calculates the density decision map from a cluster mapping.
 
-    :type lims: list[float]
-    :param lims: Plot and calculation limits.
+    :type x: list[float]
+    :param x: X coordinates of each point.
 
-    :type x_points: list[float]
-    :param x_points: X coordinates of each point.
-
-    :type y_points: list[float]
-    :param y_points: Y coordinates of each point.
+    :type y: list[float]
+    :param y: Y coordinates of each point.
 
     :type groups: list[int]
     :param groups: List of targets for each point.
 
+    :type limits: list[float]
+    :param limits: Plot and calculation limits. The default is 'None'.
+
     :type divs: float
     :param divs: Resolution ti calculate density. The default is 0.5.
 
+    :type th: int
+    :param th: Threshold from where a area is defined as a certain group.
+    
     :returns: The density decision map.
     :rtype: list[float]
     """
+    
     divs = float(divs)
 
-    map_x = list(np.array(lims[:2]) / divs)  # mapping limits
-    map_y = list(np.array(lims[2:]) / divs)
-
-    x_p = list(x_points)
-    y_p = list(y_points)
+    if limits == None :
+        map_x = [int((min(x)-1)/divs), int((max(x)+1)/divs)] 
+        map_y = [int((min(y)-1)/divs), int((max(y)+1)/divs)]
+    else:
+        map_x = list(np.array(limits[:2]) / divs)  # mapping limits
+        map_y = list(np.array(limits[2:]) / divs)
+    
+    x_p = list(x)
+    y_p = list(y)
 
     groups = list(groups)
     n_groups = int(max(groups) + 1)  # number of groups
@@ -1515,7 +1651,7 @@ def decdensity(lims, x_points, y_points, groups, divs=0.5):
 
     x_cords = [divs * i for i in range(int(min(map_x)), int(max(map_x)))]  # coordinates
     y_cords = [divs * i for i in range(int(min(map_y)), int(max(map_y)))]
-
+    
     master = []  # to store the maps for each group
 
     for l in range(n_groups):
@@ -1530,14 +1666,19 @@ def decdensity(lims, x_points, y_points, groups, divs=0.5):
                         count += 1
                         
               
-                if count > 1:  ###############    
+                if count > th:
                     pmap[j][i] = count
                 else:
-                    pmap[j][i] = 0  #########
-
-
+                    pmap[j][i] = 0
+        
         maximum = max(np.array(pmap).flatten())
-        pmap = np.array(pmap) / maximum
+        
+        if maximum == 0:
+            print('No density was found for group ' + str(l) + '. Check if the range is out of bounds or targets with this value are missing.\n')
+            pmap = np.array(pmap)
+        else:
+            pmap = np.array(pmap) / maximum
+        
         master.append(pmap)
     return master
 
@@ -1726,7 +1867,7 @@ def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, plot=True):
     """
     ref_data = list(ref_data)
     ref_axis = list(ref_axis)
-    # ref_peak = valtopos(ref_peak, ref_axis)
+    # ref_peak = valtoind(ref_peak, ref_axis)
     mode = int(mode)
     plot = bool(plot)
 
@@ -1737,16 +1878,16 @@ def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, plot=True):
     if dims > 1:
         for i in range(len(ref_data)):  # depending on the mode chosen...
             if mode == 1:
-                fit.append(lorentzfit(ref_data[i], ref_peak, ax=ref_axis[i]))
+                fit.append(lorentzfit(y=ref_data[i], x=ref_axis[i], pos=ref_peak))
             if mode == 2:
-                fit.append(gaussfit(ref_data[i], ref_peak, ax=ref_axis[i]))
+                fit.append(gaussfit(y=ref_data[i], x=ref_axis[i], pos=ref_peak))
             if mode == 0:
                 fit.append(ref_data[i])
     else:
         if mode == 1:
-            fit.append(lorentzfit(ref_data, ref_peak, ref_axis))
+            fit.append(lorentzfit(y=ref_data, x=ref_axis, pos=ref_peak))
         if mode == 2:
-            fit.append(gaussfit(ref_data, ref_peak, ref_axis))
+            fit.append(gaussfit(y=ref_data, x=ref_axis, pos=ref_peak))
         if mode == 0:
             fit.append(ref_data)
 
@@ -1867,15 +2008,15 @@ def classify(data, gnumber=3, glimits=[], var='x'):
                 elif group_limits[i] <= targets[j] < group_limits[i + 1]:
                     class_targets[j] = i + 1
 
-        group_names.append(str(var)+' < ' + str(group_limits[0]))
+        group_names.append(str(var)+' $<$ ' + str(group_limits[0]))
         for i in range(0, len(group_limits) - 1):
-            group_names.append(str(group_limits[i]) + ' <= '+str(var)+' < ' + str(group_limits[i + 1]))
-        group_names.append(str(max(group_limits)) + ' <= '+str(var))
+            group_names.append(str(group_limits[i]) + ' $<=$ '+str(var)+' $<$ ' + str(group_limits[i + 1]))
+        group_names.append(str(max(group_limits)) + ' $<=$ '+str(var))
 
     return class_targets, group_names
 
 
-def subtractref(data, ref, axis=0, alpha=0.9, sample=0, plot_lim=[0, 0], plot=False):
+def subtractref(data, ref, axis=0, alpha=0.9, sample=0, lims=[0, 0], plot=False):
     """
     Subtracts a reference spectra from the measurements.
 
@@ -1894,8 +2035,8 @@ def subtractref(data, ref, axis=0, alpha=0.9, sample=0, plot_lim=[0, 0], plot=Fa
     :type sample: int
     :param sample: Sample spectra to work with. The default is 0.
 
-    :type plot_lim: list[int]
-    :param plot_lim: Limits of the plot.
+    :type lims: list[int]
+    :param lims: Limits of the plot.
 
     :type plot: bool
     :param plot: To plot or not a visual aid. The default is True.
@@ -1927,10 +2068,10 @@ def subtractref(data, ref, axis=0, alpha=0.9, sample=0, plot_lim=[0, 0], plot=Fa
             axis = list(axis)
         
         plt.plot(axis, toplot, linewidth=1, label='Original', linestyle='--')
-        plt.plot(axis, ref, linewidth=1, label='Air', linestyle='--')
+        plt.plot(axis, np.array(ref)*alpha, linewidth=1, label='Air*Alpha', linestyle='--')
         plt.plot(axis, final, linewidth=1, label='Final')
-        if plot_lim[0] < plot_lim[1]:
-            plt.gca().set_xlim(plot_lim[0], plot_lim[1])
+        if lims[0] < lims[1]:
+            plt.gca().set_xlim(lims[0], lims[1])
         plt.legend(loc=0)
         plt.ylabel('a.u.')
         plt.xlabel('Shift (cm-1)')
@@ -2025,7 +2166,8 @@ def pearson(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25,
 
     return pears
 
-def spearman(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25, ti="Spearman", plot=True):
+def spearman(data, labels=[], cm="seismic", fons=20, figs=(20, 17), 
+             tfs=25, ti="Spearman", plot=True):
     """
     Calculates Pearson matrix and plots it.
 
@@ -2281,7 +2423,7 @@ def moveavg(data, move=2):
 
 
 def plot2dml(train, test=[], names=['D1', 'D2', 'T'], train_pred=[], 
-             test_pred=[], labels=[],title='', xax='x', yax='y', fs=15, 
+             test_pred=[], labels=[], title='', xax='x', yax='y', fs=15, 
              lfs=10, loc='best', size=20, xlim=[], ylim=[], plot=True):
     """
     Plots 2-dimensional results from LDA, PCA, NCA, or similar machine learning
@@ -2391,16 +2533,20 @@ def plot2dml(train, test=[], names=['D1', 'D2', 'T'], train_pred=[],
     return plot
 
     
-def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral', 
-              figsize=(3, 4.5), lw=1, plot=True):
+def stackplot(y, offset, order=None, xlabel='', ylabel='', title='', cmap='Spectral', 
+              figsize=(6, 9), fs=20, lw=1, xlim=None, plot=True):
     """
     Plots a stack plot of selected spectras.
 
-    :type data: list[float]
-    :param data: Data to in the plot.
+    :type y: list[float]
+    :param y: Data to plot. Must be more than 1 vector.
 
-    :type add: float
-    :param add: displacement, or difference, between each curve.
+    :type offset: float
+    :param offset: displacement, or difference, between each curve.
+
+    :type order: list[int]
+    :param order: Order of the curves in which they are plotted. If `None`,
+        is the order as they appear in the list.
 
     :type xlabel: str
     :param xlabel: Label of axis.
@@ -2408,14 +2554,23 @@ def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral',
     :type ylabel: str
     :param ylabel: Label of axis.
 
+    :type title: str
+    :param title: Title of the plot.
+
     :type cmap: str
     :param cmap: Colormap, according to matplotlib options.
 
     :type figsize: tuple
     :param figsize: Size of the plot. Default is (3, 4.5)
 
+    :type fs: float
+    :param fs: Font size. Default is 20.
+
     :type lw: float
     :param lw: Linewidth of the curves.
+    
+    :type xlim: list[float]
+    :param xlim: Plot limits for x-axis. If `None` it plots all.
 
     :type plot: bool
     :param plot: If True it plot. Only for test purposes.
@@ -2424,40 +2579,46 @@ def stackplot(data, add, xlabel='', ylabel='', cmap='Spectral',
     :rtype: bool
     """      
        
-    base = [add for _ in range(len(data[0]))]
+    base = [offset for _ in range(len(y[0]))]
     
     cmap = plt.cm.get_cmap(cmap)
     color = []
-    for i in range(len(data)):
-        color.append(cmap(i/(len(data)-1)))
+    for i in range(len(y)):
+        color.append(cmap(i/(len(y)-1)))
     
     if plot:
         plt.figure(figsize=figsize)
-        for i in range(len(data)):
-            plt.plot(np.array(data[i]) + np.array(base)*i, color=color[i], lw=lw)
+        for i in range(len(y)):
+            plt.plot(np.array(y[i]) + np.array(base)*i, color=color[i], lw=lw)
         plt.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
-        plt.xlabel(xlabel)
-        plt.ylabel(ylabel)
+        plt.xlabel(xlabel, fontsize=fs)
+        plt.ylabel(ylabel, fontsize=fs)
+        plt.title(title, fontsize=fs)
+        if xlim:
+            plt.xlim(xlim[0], xlim[1])
         plt.show()  
         
     return plot
 
 
-def cosmicmp(ndata, alpha=1, avg=2):
+def cosmicmp(y, alpha=1, avg=2):
     """
     It identifies CRs by comparing similar spectras and paring in matching
     pairs. Uses randomnes of CRs (S. J. Barton, B. M. Hennelly, https://doi.org/10.1177/0003702819839098)
     
-    :type ndata: list[float]
-    :param ndata: List of spectras to remove cosmic rays.
+    :type y: list[float]
+    :param y: List of spectras to remove cosmic rays.
 
     :type alpha: float
     :param alpha: Factor to modify the criteria to identify a cosmic ray.
 
+    :type avg: int
+    :param avg: Moving average window.
+
     :returns: Data with removed cosmic rays.
     :rtype: list[float]
     """
-    data = copy.deepcopy(ndata)
+    data = copy.deepcopy(y)
 
     sim_specs = []  # most similar spectra (position) for each spectra i
 
@@ -2496,13 +2657,13 @@ def cosmicmp(ndata, alpha=1, avg=2):
     return data
 
 
-def cosmicdd(ndata, th=100, asy=0.6745, m=5):
+def cosmicdd(y, th=100, asy=0.6745, m=5):
     """
     It identifies CRs by detrended differences, the differences between a
     value and the next (D. A. Whitaker and K. Hayes, https://doi.org/10.1016/j.chemolab.2018.06.009).
     
-    :type ndata: list[float]
-    :param ndata: List of spectras to remove cosmic rays.
+    :type y: list[float]
+    :param y: List of spectras to remove cosmic rays.
 
     :type th: float
     :param th: Factor to modify the criteria to identify a cosmic ray.
@@ -2516,7 +2677,7 @@ def cosmicdd(ndata, th=100, asy=0.6745, m=5):
     :returns: Data with removed cosmic rays.
     :rtype: list[float]
     """
-    data = copy.deepcopy(ndata)
+    data = copy.deepcopy(y)
     
     diff = list(np.array(data))  # diff data
      
@@ -2546,13 +2707,13 @@ def cosmicdd(ndata, th=100, asy=0.6745, m=5):
     return data
 
 
-def cosmicmed(data, sigma=1.5):
+def cosmicmed(y, sigma=1.5):
     """
     Precise cosmic ray elimination for measurements of the same point or very
     similar spectras.
     
-    :type data: list[float]
-    :param data: List of spectras to remove cosmic rays.
+    :type y: list[float]
+    :param y: List of spectras to remove cosmic rays.
 
     :type sigma: float
     :param sigma: Factor to modify the criteria to identify a cosmic ray.
@@ -2561,7 +2722,7 @@ def cosmicmed(data, sigma=1.5):
     :returns: Data with removed cosmic rays.
     :rtype: list[float]
     """
-    solved = copy.deepcopy(data)     
+    solved = copy.deepcopy(y)     
     acq = len(solved)
     length = len(solved[0])
     
@@ -2569,7 +2730,7 @@ def cosmicmed(data, sigma=1.5):
     
     for i in range(acq):
         for j in range(length):
-            if data[i][j] > sigma*med[j]:
+            if y[i][j] > sigma*med[j]:
                 solved[i][j] = med[j]
     
     return solved
@@ -2600,6 +2761,7 @@ def makeaxisstep(start=0, step=1.00, length=1000, adjust=False, rounded=-1):
     :returns: Axis with the set parameters.
     :rtype: list[float]
     """
+    length = int(length)
     if adjust:
         d = str(step)[::-1].find('.')
         axis = [round(start+step*i,d) for i in range(length)]
@@ -2639,70 +2801,67 @@ def makeaxisdivs(start, finish, divs, rounded=-1):
     return axis
 
 
-def minmax(data):
+def minmax(y):
     """
     Calculates the vectors that contain the minimum and maximum values of each
     bin from a list of vectors.
     
-    :type data: list 
-    :param data: List of vectors to calculate the minimum and maximum vectors.
+    :type y: list 
+    :param y: List of vectors to calculate the minimum and maximum vectors.
                 
     :returns: minimum and maximum vectors.
     :rtype: list[float]
     """
     minimum = []
     maximum = []
-    for i in range(len(data[0])):
+    for i in range(len(y[0])):
         temp_min = 99999999999999999999
         temp_max = -9999999999999999999
-        for j in range(len(data)):
-            if data[j][i] < temp_min:
-                temp_min = data[j][i]
-            if data[j][i] > temp_max:
-                temp_max = data[j][i] 
+        for j in range(len(y)):
+            if y[j][i] < temp_min:
+                temp_min = y[j][i]
+            if y[j][i] > temp_max:
+                temp_max = y[j][i] 
         minimum.append(temp_min)
         maximum.append(temp_max)
     return minimum, maximum
 
 
-def fwhm(data, peaks, axis, step=0.001, s=10):
+def fwhm(y, x, peaks, s=10):
     """
-    Calculates the Full Width Half Maximum of an indeicated peak or groups of
+    Calculates the Full Width Half Maximum of specific peak or list of
     peaks for a single or multiple spectras.
     
-    :type data: list
-    :param data: spectrocopic data to calculate the fwhm from. Single vector or
+    :type y: list
+    :param y: spectrocopic data to calculate the fwhm from. Single vector or
         list of vectors.    
+
+    :type x: list
+    :param x: Axis of the data. If none, then the axis will be 0..N where N
+        is the length of the spectra or spectras.
     
     :type peaks: float or list[float]
-    :param peaks: Aproximate axis value of the position of the peak. If sinlge
+    :param peaks: Aproximate axis value of the position of the peak. If single
         peak then a float is needed. If many peaks are requierd then a list of
         them.
         
-    :type axis: list
-    :param axis: Axis of the data. If none, then the axis will be 0..N where N
-        is the length of the spectra or spectras.
-
-    :type res: float
-    :param res: Resolution in wich to calculate the width. Must be a power of 
-        10. If 'res=1' the the axis resolution (step) is used.
-
     :type s: int
-    :param s: Shift to sides to check real peak. The default is 5.   
+    :param s: Shift to sides to check real peak. The default is 10.   
         
+    :type interpolate: boolean
+    :param interpolate: If True, will interpolte according to `step` and `s`.   
+    
     :returns: A list, or single float value, of the fwhm.
     :rtype: float or list[float]
     """
-    s = int(s/step)
-    dims_data = len(np.array(data).shape)
+    dims_data = len(np.array(y).shape)
+    axis_0 = x
     if dims_data > 1:
-        y, axis_0 = interpolation(data[0], axis, new_step=step)
-        length = len(data)
+        length = len(y)
     else:
-        y, axis_0 = interpolation(data, axis, new_step=step)
         length = 1
         
-    ind = valtopos(peaks, axis_0)
+    ind = valtoind(peaks, axis_0)
     
     dims_peaks = len(np.array(peaks).shape)
     if dims_peaks < 1:
@@ -2711,8 +2870,7 @@ def fwhm(data, peaks, axis, step=0.001, s=10):
     r_fwhm = []
     for h in range(length):
         if dims_data > 1:
-            y_0 = data[h]
-            y_0, axis_0 = interpolation(y_0, axis, new_step=step)
+            y_0 = y[h]
         else:
             y_0 = y
         
@@ -2721,7 +2879,7 @@ def fwhm(data, peaks, axis, step=0.001, s=10):
             for i in range(ind[j] - s, ind[j] + s):
                 if y_0[i] > y_0[ind[j]]:
                     ind[j] = i
-                    
+            
             h_m = y_0[ind[j]]/2 # half maximum 
             
             temp = 999999999
@@ -2757,55 +2915,73 @@ def fwhm(data, peaks, axis, step=0.001, s=10):
     return r_fwhm   
 
 
-def asymmetry(data, peak, axis, res= 0.001, s=5, limit=10):
+def asymmetry(y, x, peak, s=5, limit=10):
     """
-    Calculates the Full Width Half Maximum of an indeicated peak or groups of
-    peaks for a single or multiple spectras.
+    Comparesboth sides of a peak, or list of peaks, and check how similar they
+    are. It does this by calculating the MRSE and indicating which side is 
+    larger or smaller. If it is a negative (-), then left side is smaller.
     
-    :type data: list
-    :param data: spectrocopic data to calculate the fwhm from. Single vector or
+    :type y: list
+    :param y: spectrocopic data to calculate the fwhm from. Single vector or
         list of vectors.    
-    
+         
+    :type x: list
+    :param x: Axis of the data. If none, then the axis will be 0..N where N is
+        the length of the spectra or spectras.
+
     :type peak: float, list[float]
     :param peak: Aproximate axis value of the position of the peak. If sinlge
         peak then a float is needed. If many peaks are requierd then a list of
         them.
-        
-    :type axis: list
-    :param axis: Axis of the data. If none, then the axis will be 0..N where N
-        is the length of the spectra or spectras.
-
-    :type res: float
-    :param res: Resolution in wich to calculate the width. Must be a power of 
-        10. If 'res=1' the the axis resolution (step) is used.
 
     :type s: int
     :param s: Shift to sides to check real peak. The default is 5.   
         
+    :type limit: int
+    :param limit: Comparison limits to each side of the peak. Default is 10. 
+    
     :returns: R2 value comparing both sides of the peak and a sign to tell if
         either left side is smaller (negative) or tight side is smaller
         (positive, no sign included).
     :rtype: list[float]
     """
-    x = axis
-    y = data
+    dims = len(np.array(y).shape)
+    index = valtoind(peak, x)
     
-    index = valtopos(peak, x)
+    if dims > 1:
+        final = []
+        for h in y:
+            for i in range(index - s, index + s):
+                            if h[i] > h[index]:
+                                index = i
+            diff_nom = 0
+            diff_abs = 0
+            for i in range(limit):
+                diff_nom += h[index - i] - h[index + i]
+                diff_abs += (h[index - i] - h[index + i])**2
+            
+            if diff_nom < 0: # left side is smaller -> right larger
+                diff_abs = np.sqrt(diff_abs/(2*limit))*(-1)
         
-    for i in range(index - s, index + s):
-                    if y[i] > y[index]:
-                        index = i
+            final.append(diff_abs)
+        
+    elif dims <= 1:
+        for i in range(index - s, index + s):
+                        if y[i] > y[index]:
+                            index = i
+        diff_nom = 0
+        diff_abs = 0
+        for i in range(limit):
+            diff_nom += y[index - i] - y[index + i]
+            diff_abs += (y[index - i] - y[index + i])**2
+        
+        if diff_nom < 0: # left side is smaller -> right larger
+            diff_abs = np.sqrt(diff_abs/(2*limit))*(-1)
+        
+        final = diff_abs
     
-    diff_nom = 0
-    diff_abs = 0
-    for i in range(limit):
-        diff_nom += y[index - i] - y[index + i]
-        diff_abs += (y[index - i] - y[index + i])**2
-    
-    if diff_nom < 0: # left side is smaller -> right larger
-        diff_abs = np.sqrt(diff_abs)*(-1)
-    
-    return diff_abs
+    return final
+
 
 def rwm(y, ws, plot=False):
     """
@@ -2851,3 +3027,63 @@ def rwm(y, ws, plot=False):
         plt.show()
         
     return new_spectra
+
+
+def typical(y):
+    """
+    Looks for the typical spectra of a dataset. In other words, it calculates 
+    the average spectra and looks for the one that is closer to it in relation
+    to standard deviation.
+    
+    :type y: list[list[float]]
+    :param y: A list of spectras.   
+        
+    :returns: The typical spectra of the set.
+    :rtype: list[float]
+    """
+    y = copy.deepcopy(y)
+    
+    m = avg(y)
+    
+    std = float('inf')
+    typical = []
+    for i in y:
+        temp = sum(sdev([m, i]))
+        if temp < std:
+            std = temp
+            typical = i
+    
+    return typical
+
+
+def issinglevalue(y):
+    """
+    Checks if a vector, or a list of vectors, is composed of the same value
+    (single value vector). Not to be confused with a single element vector 
+    were the length of the vector is 1.
+    
+    :type y: list
+    :param y: Vector, or list of vectors, that needs to be checked.
+    
+    :returns: True if contains the same value. False if there are different. If
+        `y` is a list of vectors then it returns a list of booleans with the 
+        respective answer.
+    :rtype: bool
+    """
+    dims = len(np.array(y).shape)
+    if dims == 1:
+        y = [y]
+    isequal = [True for _ in range(len(y))]
+    
+    for i in range(len(y)):
+        sample = y[i][0] # take the first to check
+        for j in y[i]:
+            if j != sample:
+                isequal[i] = False
+            if j == sample and isequal[i] != False:
+                isequal[i] = True
+    
+    if dims == 1:
+        isequal = isequal[0]
+    
+    return isequal
