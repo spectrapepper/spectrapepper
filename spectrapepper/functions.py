@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from scipy import sparse
 from scipy import interpolate
-from scipy.special import gamma, factorial
+from scipy.special import gamma
 from scipy.stats import stats
 from scipy.signal import butter, filtfilt
 from scipy.optimize import minimize
@@ -354,17 +354,15 @@ def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
             else:
                 baseline.append(splev(x, spl))
 
-
-
     else:
         y_p = []  # y values for the selected points
         for i in range(len(pos)):
             temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
             y_p.append(temp)
-    
+        
         spl = splrep(points, y_p)
         baseline = splev(x, spl)
-        
+
         if plot:        
             plt.plot(x, data)
             plt.plot(x, baseline)
@@ -500,7 +498,6 @@ def valtoind(vals, x):
             pos[i] = temp_pos  # save the position           
                 
     if shape == 0:
-        pos = -1  # i position of area limits
         dif_temp = 9999999  # safe initial difference
         temp_pos = 0  # temporal best position
         for k in range(len(x)):
@@ -624,7 +621,7 @@ def normsum(data):
     return y
 
 
-def normtoratio(data, r1, r2, axis=None):
+def normtoratio(data, r1, r2, x=None):
     """
     Normalizes a peak to the ratio vaue respect to another. That is, the peak
     found in the range of r1 is normalized to the ratio r1/(r1+r2).
@@ -638,8 +635,8 @@ def normtoratio(data, r1, r2, axis=None):
     :type r2: list[float, float]
     :param r2: Range of the second area according to the axis.
         
-    :type axis: list[float]
-    :param axis: Axis of the data. If `None` then it goes from 0 to N, where
+    :type x: list[float]
+    :param x: Axis of the data. If `None` then it goes from 0 to N, where
         N is the length of the spectras.
 
     :returns: Normalized data
@@ -647,6 +644,12 @@ def normtoratio(data, r1, r2, axis=None):
     """
     y = copy.deepcopy(data)
     dims = len(np.array(data).shape)
+    if x is None:
+        r1, r2 = r1, r2
+    else:
+        r1 = valtoind(r1, x)
+        r2 = valtoind(r2, x)
+    
     if dims > 1:
         for i in range(len(y)):
             a1 = max(y[i][r1[0]:r1[1]])
@@ -900,7 +903,7 @@ def mdscore(x_p, y_p, tar):
     """
     x_p = list(x_p)
     y_p = list(y_p)
-    g_n = max(tar) + 1
+    g_n = int(max(tar) + 1)
     tar = list(tar)
 
     a = [0 for _ in range(g_n)]
@@ -1518,7 +1521,7 @@ def decbound(x_points, y_points, groups, limits=None, divs=0.5):
 
     divs = float(divs)  # step
     
-    if limits == None :
+    if limits is None :
         map_x = [int((min(x_points)-1)/divs), int((max(x_points)+1)/divs)] 
         map_y = [int((min(y_points)-1)/divs), int((max(y_points)+1)/divs)]
     else:
@@ -1633,7 +1636,7 @@ def decdensity(x, y, groups, limits=None, divs=0.5, th=2):
     
     divs = float(divs)
 
-    if limits == None :
+    if limits is None :
         map_x = [int((min(x)-1)/divs), int((max(x)+1)/divs)] 
         map_y = [int((min(y)-1)/divs), int((max(y)+1)/divs)]
     else:
@@ -1920,8 +1923,7 @@ def shiftref(ref_data, ref_axis, ref_peak=520, mode=1, plot=True):
             plt.axvline(x=ref_peak, ymin=0, ymax=max(ref_data), linewidth=2, color="red", label=ref_peak)
             plt.axvline(x=ref_peak - peakshift, ymin=0, ymax=max(ref_data), linewidth=2, color="yellow",
                         label="Meas. Max.")
-        # plt.gca().set_xlim(ref_peak - 15, ref_peak + 15)
-        # plt.gca().set_ylim(0, 2)
+        plt.xlim(ref_peak - 15, ref_peak + 15)
         plt.legend(loc=0)
         plt.ylabel('a.u.')
         plt.xlabel('Shift (cm-1)')
@@ -2534,7 +2536,7 @@ def plot2dml(train, test=[], names=['D1', 'D2', 'T'], train_pred=[],
 
     
 def stackplot(y, offset, order=None, xlabel='', ylabel='', title='', cmap='Spectral', 
-              figsize=(6, 9), fs=20, lw=1, xlim=None, plot=True):
+              figsize=(6, 9), fs=20, lw=1, xlimits=None, plot=True):
     """
     Plots a stack plot of selected spectras.
 
@@ -2594,8 +2596,8 @@ def stackplot(y, offset, order=None, xlabel='', ylabel='', title='', cmap='Spect
         plt.xlabel(xlabel, fontsize=fs)
         plt.ylabel(ylabel, fontsize=fs)
         plt.title(title, fontsize=fs)
-        if xlim:
-            plt.xlim(xlim[0], xlim[1])
+        if xlimits:
+            plt.xlim(xlimits[0], xlimits[1])
         plt.show()  
         
     return plot
@@ -2917,9 +2919,10 @@ def fwhm(y, x, peaks, s=10):
 
 def asymmetry(y, x, peak, s=5, limit=10):
     """
-    Comparesboth sides of a peak, or list of peaks, and check how similar they
-    are. It does this by calculating the MRSE and indicating which side is 
-    larger or smaller. If it is a negative (-), then left side is smaller.
+    Compares both sides of a peak, or list of peaks, and checks how similar 
+    they are. It does this by calculating the MRSE and indicating which side is 
+    larger or smaller bya area. If it is a negative (-), then left side is
+    smaller.
     
     :type y: list
     :param y: spectrocopic data to calculate the fwhm from. Single vector or
@@ -2947,39 +2950,32 @@ def asymmetry(y, x, peak, s=5, limit=10):
     """
     dims = len(np.array(y).shape)
     index = valtoind(peak, x)
-    
     if dims > 1:
         final = []
         for h in y:
             for i in range(index - s, index + s):
-                            if h[i] > h[index]:
-                                index = i
+                if h[i] > h[index]:
+                    index = i
             diff_nom = 0
             diff_abs = 0
             for i in range(limit):
                 diff_nom += h[index - i] - h[index + i]
                 diff_abs += (h[index - i] - h[index + i])**2
-            
             if diff_nom < 0: # left side is smaller -> right larger
                 diff_abs = np.sqrt(diff_abs/(2*limit))*(-1)
-        
             final.append(diff_abs)
-        
-    elif dims <= 1:
+    else:
         for i in range(index - s, index + s):
-                        if y[i] > y[index]:
-                            index = i
+            if y[i] > y[index]:
+                index = i
         diff_nom = 0
         diff_abs = 0
         for i in range(limit):
             diff_nom += y[index - i] - y[index + i]
             diff_abs += (y[index - i] - y[index + i])**2
-        
         if diff_nom < 0: # left side is smaller -> right larger
             diff_abs = np.sqrt(diff_abs/(2*limit))*(-1)
-        
         final = diff_abs
-    
     return final
 
 
@@ -3087,3 +3083,32 @@ def issinglevalue(y):
         isequal = isequal[0]
     
     return isequal
+
+
+def mahalanobis(v):
+    """
+    Calculates the Mahalanobis distance for a groups of vectors to the center 
+    of mass, or average coordinates.
+    
+    :param v: vectors to calculate the distance
+    :type v: list
+    
+    :returns: List of the respectve distances.
+    :rtype: list
+    """
+    mean = avg(v)
+    cov = [[0 for _ in range(len(v[0]))] for _ in range(len(v[0]))]
+    length = len(v)
+    
+    for i in range(len(cov)):
+        for j in range(len(cov)):
+            for k in range(len(v)):
+                cov[i][j] += (v[k][i]-mean[i])*(v[k][j]-mean[j])
+            cov[i][j] = cov[i][j]/length            
+    
+    inverse = np.linalg.inv(cov)
+    mahdist = []
+    for i in v:
+        mahdist.append(np.sqrt(np.dot(np.dot(np.transpose((i-mean)), inverse), (i-mean))))
+
+    return mahdist
