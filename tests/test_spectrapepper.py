@@ -3,11 +3,10 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-import spectrapepper as spep
+# import spectrapepper as spep
+import my_functions as spep
 import numpy as np
 import pandas as pd
-# import my_functions as spep
-# import sys
 
 class TestSpectrapepper(unittest.TestCase):
     """Tests for `spectrapepper` package."""
@@ -399,7 +398,20 @@ class TestSpectrapepper(unittest.TestCase):
         print('running_median_nd: ' + str(r))
         self.assertEqual(r,1510.57)
 
+        data2 = spep.typical(spectras[1:10])
+        r = int(sum(data2))
+        print('typical: ' + str(r))
+        self.assertEqual(r, 1557)
 
+        data2 = spep.issinglevalue(spectras[0:3])
+        print('issinglevalue: ' + str(data2))
+        self.assertEqual(data2, [False, False, False])
+
+        data2 = spep.mahalanobis([a[:2], b[:2], c[:2], d[:2]])
+        r = round(sum(data2), 2)
+        print('mahalanobis: ' + str(r))
+        self.assertEqual(r, 5.36)
+        
 
 if __name__ == '__main__':
     unittest.main()

@@ -4,7 +4,6 @@ This example shows how to use pearson and spearman matrices and grau plot.
 
 # import the library
 import spectrapepper as spep
-import numpy as np
 
 # load data
 data = spep.load_params()
