@@ -29,19 +29,31 @@ import os.path
 import os
 
 
-def load_spectras():
+def load_spectras(sample=None):
     """
     Load sample specrtal data, axis included in the first line.
     
-    :returns: Sample spectral data.
-    :rtype: list[float]
-    """
+    :type sample: int, tuple
+    :param sample: Index of the sample spectra wanted or a tuple with the range
+        of the indeces of a groups of spectras.
     
+    :returns: X axis and the sample spectral data selected.
+    :rtype: list[float], list[float]
+    """ 
     location = os.path.dirname(os.path.realpath(__file__))
     my_file = os.path.join(location, 'datasets', 'spectras.txt')
     data = load(my_file)
+    x = data[0]
+    y = [list(i) for i in data[1:]]
     
-    return data
+    dims = len(np.array(sample).shape)
+    
+    if dims == 1:
+        y = y[sample[0]: sample[1]]
+    if dims == 0 and sample is not None:
+        y = y[sample]
+    
+    return x, y
 
 
 def load_targets(flatten=True):
@@ -163,12 +175,12 @@ def loadline(file, line=0, dtype='float', split=False):
     return info
 
 
-def lowpass(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
+def lowpass(y, cutoff=0.25, fs=30, order=2, nyq=0.75):
     """
     Butter low pass filter for a single or spectra or a list of them.
         
-    :type data: list[float]
-    :param data: List of vectors in line format (each line is a vector).
+    :type y: list[float]
+    :param y: List of vectors in line format (each line is a vector).
     
     :type cutoff: float
     :param cutoff: Desired cutoff frequency of the filter. The default is 0.25.
@@ -185,24 +197,31 @@ def lowpass(data, cutoff=0.25, fs=30, order=2, nyq=0.75):
     :returns: Filtered data
     :rtype: list[float]
     """
-    y = copy.deepcopy(data)  # so it does not change the input list
+    y = copy.deepcopy(y)  # so it does not change the input list
+    dims = len(np.array(y).shape)
+    print(dims)
+    if dims == 1:
+        y = [y]
+    
     normal_cutoff = cutoff / (nyq * fs)
     b, a = butter(order, normal_cutoff, btype='low', analog=False)
-    if len(np.array(y).shape) > 1:
-        for i in range(len(y)):
-            y[i] = filtfilt(b, a, y[i])
-    else:
-        y = filtfilt(b, a, y)
+    
+    for i in range(len(y)):
+        y[i] = filtfilt(b, a, y[i])
+
+    if dims == 1:
+        y = y[0]
+    
     return y
 
 
-def normtomax(data, zeromin=False):
+def normtomax(y, zeromin=False):
     """
     Normalizes spectras to the maximum value of each, in other words, the
     maximum value of each spectras is set to 1.
 
-    :type data: list[float]
-    :param data: Single or multiple vectors to normalize.
+    :type y: list[float]
+    :param y: Single or multiple vectors to normalize.
         
     :type zeromin: boolean
     :param zeromin: If `True`, the minimum value is traslated to 0. Default
@@ -211,31 +230,32 @@ def normtomax(data, zeromin=False):
     :returns: Normalized data.
     :rtype: list[float]
     """
-    y = copy.deepcopy(data)  # so it does not chamge the input list
+    y = copy.deepcopy(y)  # so it does not chamge the input list
     dims = len(np.array(y).shape)  # detect dimensions
-    if dims > 1:
-        for i in range(len(y)):           
-            if zeromin:
-                min_data = min(y[i])
-                y[i] = y[i] - min_data
-            max_data = max(y[i])
-            y[i] = y[i]/max_data
-    else:
+    
+    if dims == 1:
+        y = [y]
+    
+    for i in range(len(y)):           
         if zeromin:
-            min_data = min(y)
-            y = y -  min_data
-        max_data = max(y)
-        y = y/max_data
+            min_data = min(y[i])
+            y[i] = y[i] - min_data
+        max_data = max(y[i])
+        y[i] = y[i]/max_data
+
+    if dims == 1:
+        y = y[0]
+    
     return y
 
 
-def normtovalue(data, val):
+def normtovalue(y, val):
     """
     Normalizes the spectras to a set value, in other words, the defined value
     will be reescaled to 1 in all the spectras.
 
-    :type data: list[float]
-    :param data: Single or multiple vectors to normalize.
+    :type y: list[float]
+    :param y: Single or multiple vectors to normalize.
 
     :type val: float
     :param val: Value to normalize to.
@@ -243,20 +263,20 @@ def normtovalue(data, val):
     :returns: Normalized data.
     :rtype: list[float]
     """
-    y = copy.deepcopy(data)  # so it does not change the input list
+    y = copy.deepcopy(y)
     y = np.array(y)/val
     y = list(y)
     return y
 
 
-def alsbaseline(data, lam=100, p=0.001, niter=10):
+def alsbaseline(y, lam=100, p=0.001, niter=10):
     """
     Calculation of the baseline using Asymmetric Least Squares Smoothing. This
     script only makes the calculation but it does not remove it. Original idea of
     this algorithm by P. Eilers and H. Boelens (2005):
 
-    :type data: list[float]
-    :param data: Spectra to calculate the baseline from.
+    :type y: list[float]
+    :param y: Spectra to calculate the baseline from.
 
     :type lam: int
     :param lam: Lambda, smoothness. The default is 100.
@@ -270,32 +290,27 @@ def alsbaseline(data, lam=100, p=0.001, niter=10):
     :returns: Returns the calculated baseline.
     :rtype: list[float]
     """
-    data = copy.deepcopy(data)
-    dims = len(np.array(data).shape)  # detect dimensions    
+    y = copy.deepcopy(y)
+    dims = len(np.array(y).shape)
     
-    if dims > 1:
-        l = len(data[0])
-        d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
-        w = np.ones(l)
-        for i in range(len(data)):
-            for _ in range(niter):
-                W = sparse.spdiags(w, 0, l, l)
-                Z = W + lam * d.dot(d.transpose())       
-                z = spsolve(Z, w * data[i])
-                w = p * (data[i] > z) + (1 - p) * (data[i] < z)
-            data[i] = data[i] - z  
-            
-    else:
-        l = len(data)
-        d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
-        w = np.ones(l)
+    if dims == 1:
+        y = [y]
+    
+    l = len(y[0])
+    d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
+    w = np.ones(l)
+    for i in range(len(y)):
         for _ in range(niter):
             W = sparse.spdiags(w, 0, l, l)
-            Z = W + lam * d.dot(d.transpose())
-            z = spsolve(Z, w * data)
-            w = p * (data > z) + (1 - p) * (data < z)
-        data = data - z
-    return data
+            Z = W + lam * d.dot(d.transpose())       
+            z = spsolve(Z, w * y[i])
+            w = p * (y[i] > z) + (1 - p) * (y[i] < z)
+        y[i] = y[i] - z  
+                
+    if dims == 1:
+        y = y[0]
+    
+    return y
 
 
 def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
@@ -308,17 +323,20 @@ def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
     :type x: list[float]
     :param x: x axis of the data, to interpolate the baseline function.
 
-    :type points: list[int]
-    :param points: axis values of points to calculate the bspine.
+    :type points: list[float], list[[float, float]]
+    :param points: Axis values of points to calculate the bspline. Axis ranges
+        are also acepted. In this case, the `avg` value will be `0`.
 
     :type avg: int
-    :param avg: points to each side to make average.
+    :param avg: Points to each side to make average. Default is 5. If `points`
+        are axis ranges, then it is set to 0 and will not have any effect.
 
     :type remove: True
-    :param remove: if True, calculates and returns (data - baseline).
+    :param remove: If `True`, calculates and returns `data - baseline`. If 
+        `False`, then it returns the `baseline`.
 
     :type plot: bool
-    :param plot: if True, calculates and returns (data - baseline).    
+    :param plot: If True, calculates and returns (data - baseline).    
 
     :returns: The baseline.
     :rtype: list[float]
@@ -326,62 +344,57 @@ def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
     data = copy.deepcopy(y)
     x = list(x)
     points = list(points)
-    avg = int(avg)
     pos = valtoind(points, x)
-    dims = len(np.array(data).shape)  # detect dimensions
+    avg = int(avg)
+    dims = len(np.array(data).shape)
 
-    if dims >= 2:
-        baseline = []
-        
-        for j in range(len(data)):
-            y_p = []  # y values for the selected points
-            for i in range(len(pos)):
-                temp = np.mean(data[j][pos[i] - avg: pos[i] + avg + 1])
-                y_p.append(temp)
-        
-            spl = splrep(points, y_p)
-
-            if plot and j == 0:        
-                plt.plot(x, data[0], label='Original')
-                plt.plot(x, baseline[0], label='Baseline')
-                plt.plot(points, y_p, 'o', color='red')
-                plt.ylim(min(data[0])*0.98, max(data[0])*1.02)
-                plt.legend()
-                plt.show()
-            
-            if remove:
-                baseline.append(data[j] - splev(x, spl))
-            else:
-                baseline.append(splev(x, spl))
-
+    if len(np.array(points).shape) == 2:
+        avg = 0
     else:
-        y_p = []  # y values for the selected points
+        pos = [[i, i] for i in pos]
+        points = [[i, i] for i in points]
+
+    if dims < 2:
+        data = [data]
+    
+    baseline = []
+    result = []
+    
+    for j in range(len(data)):
+        y_p = []
         for i in range(len(pos)):
-            temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
+            temp = np.mean(data[j][pos[i][0] - avg: pos[i][1] + avg + 1])
             y_p.append(temp)
         
+        points = [np.mean(i) for i in points]
         spl = splrep(points, y_p)
-        baseline = splev(x, spl)
+        baseline.append(splev(x, spl))
 
-        if plot:        
-            plt.plot(x, data)
-            plt.plot(x, baseline)
+        if remove:
+            result.append(list(data[j] - baseline[j]))
+        else:
+            result.append(list(baseline[j]))
+
+        if plot and j == 0:        
+            plt.plot(x, data[0], label='Original')
+            plt.plot(x, baseline[0], label='Baseline')
             plt.plot(points, y_p, 'o', color='red')
-            plt.ylim(min(data), max(data))
+            plt.ylim(min(data[0]), max(data[0]))
+            plt.legend()
             plt.show()
     
-        if remove:
-            baseline = data - baseline
+    if dims < 2:
+        result = result[0]
 
-    return baseline
+    return result
 
 
-def polybaseline(data, axis, points, deg=2, avg=5, remove=True, plot=False):
+def polybaseline(y, axis, points, deg=2, avg=5, remove=True, plot=False):
     """
     Calcuates the baseline using polynomial fit.
 
-    :type data: list[float]
-    :param data: Single or several spectras to remove the baseline from.
+    :type y: list[float]
+    :param y: Single or several spectras to remove the baseline from.
 
     :type axis: list[float]
     :param axis: x axis of the data, to interpolate the baseline function.
@@ -396,61 +409,46 @@ def polybaseline(data, axis, points, deg=2, avg=5, remove=True, plot=False):
     :param avg: points to each side to make average.
 
     :type remove: True
-    :param remove: if True, calculates and returns (data - baseline).
+    :param remove: if True, calculates and returns (y - baseline).
 
     :type plot: bool
-    :param plot: if True, calculates and returns (data - baseline).    
+    :param plot: if True, calculates and returns (y - baseline).    
 
     :returns: The baseline.
     :rtype: list[float]
     """
-    data = copy.deepcopy(data)  
+    y = copy.deepcopy(y)
+    dims = len(np.array(y).shape)
     axis = list(axis)
-    x = list(points)
+    points = list(points)
+    pos = valtoind(points, axis)
     avg = int(avg)
-    pos = valtoind(x, axis)
-    dims = len(np.array(data).shape)  # detect dimensions
     
-    if dims > 1:
-        baseline = []
-        for j in range(len(data)):
-            y = []  # y values for the selected x
-            temp = []
-            for i in range(len(pos)):
-                temp = np.mean(data[j][pos[i] - avg: pos[i] + avg + 1])
-                y.append(temp)
-                        
-            z = np.polyfit(x, y, deg)  # polinomial fit
-            f = np.poly1d(z)  # 1d polinomial
-            temp = f(axis)  # y values
-            if plot and j == 0:        
-                plt.plot(axis, data[j])
-                plt.plot(axis, temp)
-                plt.plot(x, y, 'o', color='red')
-                plt.show()
-        
-            if remove:
-                temp = data[j] - temp
-            baseline.append(temp)
+    if dims == 1:
+        y = [y]
     
-    else:
-        y = []  # y values for the selected x
+    baseline = []
+    for j in range(len(y)):
+        averages = []
         for i in range(len(pos)):
-            temp = np.mean(data[pos[i] - avg: pos[i] + avg + 1])
-            y.append(temp)
-    
-        z = np.polyfit(x, y, deg)  # polinomial fit
+            averages.append(np.mean(y[j][pos[i] - avg: pos[i] + avg + 1]))
+                    
+        z = np.polyfit(points, averages, deg)  # polinomial fit
         f = np.poly1d(z)  # 1d polinomial
-        baseline = f(axis)  # y values
-    
-        if plot:        
-            plt.plot(axis, data)
-            plt.plot(axis, baseline)
-            plt.plot(x, y, 'o', color='red')
+        fit = f(axis)
+        if plot and j == 0:        
+            plt.plot(axis, y[j])
+            plt.plot(axis, fit)
+            plt.plot(points, averages, 'o', color='red')
             plt.show()
     
         if remove:
-            baseline = data - baseline
+            baseline.append(y[j] - fit)
+        else:    
+            baseline.append(fit)
+
+    if dims == 1:
+        baseline = baseline[0]
 
     return baseline
 
@@ -469,7 +467,7 @@ def valtoind(vals, x):
     :returns: Index, or position, in the axis of the values in vals
     :rtype: list[int], int
     """
-    
+    vals = copy.deepcopy(vals)
     shape = len(np.array(vals).shape)
     
     if shape > 1:
@@ -532,19 +530,19 @@ def areacalculator(y, x, limits, norm=False):
     dims = len(np.array(y).shape)
     limits = valtoind(limits, x)
 
-    if dims >= 2:
-        areas = [[0 for _ in range(len(limits))] for _ in range(len(y))]  # final values of areas
-        for i in range(len(y)):  # calculate the areas for all the points
-            for j in range(len(limits)):  # for all the areas
-                areas[i][j] = np.sum(y[i][limits[j][0]:limits[j][1]])  # calculate the sum
-                if norm:
-                    areas[i][j] = areas[i][j] / np.sum(y[i])
-    else:
-        areas = [0 for _ in range(len(limits))]  # final values of areas
+    if dims == 1:
+        y = [y]
+
+    areas = [[0 for _ in range(len(limits))] for _ in range(len(y))]  # final values of areas
+    for i in range(len(y)):  # calculate the areas for all the points
         for j in range(len(limits)):  # for all the areas
-            areas[j] = np.sum(y[limits[j][0]:limits[j][1]])  # calculate the sum
+            areas[i][j] = np.sum(y[i][limits[j][0]:limits[j][1]])  # calculate the sum
             if norm:
-                areas[j] = areas[j] / np.sum(y)
+                areas[i][j] = areas[i][j] / np.sum(y[i])
+        
+    if dims == 1:
+        areas = areas[0]
+    
     return areas
 
 
@@ -596,38 +594,40 @@ def bincombs(n, s_min=1, s_max=0):
     return iters
 
 
-def normsum(data):
+def normsum(y):
     """
     Normalizes the sum under the curve to 1, for single or multiple spectras.
 
-    :type data: list[float]
-    :param data: Single spectra or a list of them.
+    :type y: list[float]
+    :param y: Single spectra or a list of them.
 
     :returns: Normalized data
     :rtype: list[float]
     """
-    y = copy.deepcopy(data)
-    dims = len(np.array(data).shape)
-    if dims > 1:
-        for i in range(len(y)):
-            s = sum(y[i])
-            for j in range(len(y[i])):
-                y[i][j] = y[i][j] / s
-    else:
-        y = list(data)
-        s = sum(y)
-        for i in range(len(y)):
-            y[i] = y[i] / s
+    y = copy.deepcopy(y)
+    dims = len(np.array(y).shape)
+    
+    if dims == 1:
+        y = [y]
+    
+    for i in range(len(y)):
+        s = sum(y[i])
+        for j in range(len(y[i])):
+            y[i][j] = y[i][j] / s
+    
+    if dims == 1:
+        y = y[0]
+    
     return y
 
 
-def normtoratio(data, r1, r2, x=None):
+def normtoratio(y, r1, r2, x=None):
     """
-    Normalizes a peak to the ratio vaue respect to another. That is, the peak
+    Normalizes a peak to the ratio value respect to another. That is, the peak
     found in the range of r1 is normalized to the ratio r1/(r1+r2).
 
-    :type data: list[float]
-    :param data: Single spectra or a list of them.
+    :type y: list[float]
+    :param y: Single spectra or a list of them.
 
     :type r1: list[float, float]
     :param r1: Range of the first area according to the axis.
@@ -642,58 +642,76 @@ def normtoratio(data, r1, r2, x=None):
     :returns: Normalized data
     :rtype: list[float]
     """
-    y = copy.deepcopy(data)
-    dims = len(np.array(data).shape)
+    y = copy.deepcopy(y)
+    dims = len(np.array(y).shape)
+    
+    if dims == 1:
+        y = [y]
+    
     if x is None:
         r1, r2 = r1, r2
     else:
         r1 = valtoind(r1, x)
         r2 = valtoind(r2, x)
     
-    if dims > 1:
-        for i in range(len(y)):
-            a1 = max(y[i][r1[0]:r1[1]])
-            a2 = max(y[i][r2[0]:r2[1]])
-            ratio = a1/(a1+a2)
-            m = ratio/max(y[i])
-            y[i] = y[i]*m
-    else:
-        a1 = max(y[r1[0]:r1[1]])
-        a2 = max(y[r2[0]:r2[1]])
+    for i in range(len(y)):
+        a1 = max(y[i][r1[0]:r1[1]])
+        a2 = max(y[i][r2[0]:r2[1]])
         ratio = a1/(a1+a2)
-        m = ratio/max(y)
-        y = y*m
-    return y
+        m = ratio/max(y[i])
+        y[i] = np.array(y[i])*m
+    
+    if dims == 1:
+        y = y[0]
+    
+    return list(y)
 
 
-def normtoglobalmax(data):
+def normtoglobalmax(y, globalmin=False):
     """
     Normalizes a list of spectras to the global max.
 
-    :type data: list[float]
-    :param data: List of spectras.
+    :type y: list[float]
+    :param y: List of spectras.
+
+    :type globalmin: Bool
+    :param globalmin: If `True`, the global minimum is reescaled to 0. Default
+        is `False`.
 
     :returns: Normalized data
     :rtype: list[float]
     """
-    y = copy.deepcopy(data)
-    dims = len(np.array(data).shape)
+    y = copy.deepcopy(y)
+    dims = len(np.array(y).shape)
     if dims > 1:
-        maximum = -99999999  # safe start
+        maximum = -999999999  # safe start
+        
+        if globalmin==True:
+            minimum = 999999999
+        else:
+            minimum = 0
+            
         for i in range(len(y)):
             for j in range(len(y[0])):
                 if y[i][j] > maximum:
                     maximum = y[i][j]
-        y = normtovalue(y, maximum)
-    else:  # if s single vector, then is the same as nortomax (loca)
-        y = normtomax(y)
+                if y[i][j] < minimum and globalmin==True:
+                    minimum = y[i][j]
+        
+        if globalmin==True:
+            for i in range(len(y)):
+                for j in range(len(y[0])):
+                    y[i][j] -= minimum
+        
+        y = normtovalue(y, (maximum-minimum))
+    else:  # if s single vector, then is the same as nortomax (local)
+        y = normtomax(y, zeromin=globalmin)
     return y
 
 
 def interpolation(y, x, step=1, start=0, finish=0):
     """
-    Interpolates data to a new axis. If there are multiple datasets with 
-    different axises in can interpolate to a common axis.
+    Interpolates data to a new axis.
 
     :type y: list[float]
     :param y: List of data to interpolate
@@ -956,7 +974,7 @@ def normtopeak(y, x, peak, shift=10):
     :param y: Data to be normalized.
 
     :type x: list[float]
-    :param x: X-axis of the data
+    :param x: x axis of the data
 
     :type peak: int
     :param peak: Peak position in x-axis values.
@@ -970,18 +988,19 @@ def normtopeak(y, x, peak, shift=10):
     y = copy.deepcopy(y)
     dims = len(np.array(y).shape)
     shift = int(shift)
-
     pos = valtoind(int(peak), x)
 
-    if dims > 1:
-        for j in range(len(y)):
-            section = y[j][pos - shift:pos + shift]
-            highest = max(section)    
-            y[j] = y[j] / highest
-    else:
-        section = y[pos - shift:pos + shift]
-        highest = max(section)
-        y = y / highest
+    if dims == 1:
+        y = [y]
+
+    for j in range(len(y)):
+        section = y[j][pos - shift:pos + shift]
+        highest = max(section)    
+        y[j] = y[j] / highest
+    
+    if dims == 1:
+        y = y[0]
+    
     return y
 
 
@@ -1162,63 +1181,63 @@ def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='',
     return m
 
 
-def avg(data):
+def avg(y):
     """
     Calculates the average vector from a list of vectors.
 
-    :type data: list[float]
-    :param data: List of vectors.
+    :type y: list[float]
+    :param y: List of vectors.
 
     :returns: The average of the vectors in the list.
     :rtype: list[float]
     """
-    data = copy.deepcopy(data)
-    avg_data = np.array([0 for _ in range(len(data[0]))])
-    for i in data:
+    y = copy.deepcopy(y)
+    avg_data = np.array([0 for _ in range(len(y[0]))])
+    for i in y:
         avg_data = avg_data + i
-    avg_data = avg_data / len(data)
+    avg_data = avg_data / len(y)
     return avg_data
 
 
-def sdev(data):
+def sdev(y):
     """
     Calculates the standard deviation for each bin from a list of vectors.
 
-    :type data: list[float]
-    :param data: List of vectors.
+    :type y: list[float]
+    :param y: List of vectors.
 
     :returns: Standard deviation curve
     :rtype: list[float]
     """
     curve_std = []  # stdev for each step
-    data = list(data)
-    for i in range(len(data[0])):
+    y = list(y)
+    for i in range(len(y[0])):
         temp = []
-        for j in range(len(data)):
-            temp.append(data[j][i])
+        for j in range(len(y)):
+            temp.append(y[j][i])
         curve_std.append(sta.stdev(temp))  # stdev for each step
     curve_std = np.array(curve_std)
     return curve_std
 
 
-def median(data):
+def median(y):
     """
     Calculates the median vector of a list of vectors.
     
-    :type data: list[float]
-    :param data: List of vectors.
+    :type y: list[float]
+    :param y: List of vectors.
 
     :returns: median curve
     :rtype: list[float]    
     """
     median = []
-    length = len(data[0])
-    meas = len(data)
+    length = len(y[0])
+    meas = len(y)
     
     for j in range(length):
         temp = []
         for i in range(meas):
-            temp.append(data[i][j])
+            temp.append(y[i][j])
         median.append(np.median(temp))    
     return median
 
@@ -1266,7 +1285,7 @@ def lorentzfit(y=[0], x=[0], pos=0, look=10, shift=5, gamma=5, manual=False):
         if ax == [0]: # if no axis is passed
             ax = [i for i in range(-100, 100)]
             
-        pos = int(valtoind(pos, ax))
+        # pos = int(valtoind(pos, ax))
         
         fit = []
         for i in ax:
@@ -1354,7 +1373,7 @@ def gaussfit(y=[0], x=[0], pos=0, look=10, shift=5, sigma=4.4, manual=False):
         if ax == [0]: # if no axis is passed
             ax = [i for i in range(-100, 100)]
         
-        pos = int(valtoind(pos, ax))
+        #pos = int(valtoind(pos, ax))
         
         fit = []
         for i in range(len(ax)):
@@ -1437,7 +1456,6 @@ def studentfit(y=[0], x=[0], pos=0, look=5, shift=5, v=0.01, manual=False):
     s = int(shift)
     amp = 1000
     v = float(v)
-    pos = int(valtoind(pos, ax))
     
     if manual:
         if ax == [0]: # if no axis is passed
@@ -1451,6 +1469,7 @@ def studentfit(y=[0], x=[0], pos=0, look=5, shift=5, v=0.01, manual=False):
             fit.append((a/b)*(c**d))
         
     else:
+        pos = int(valtoind(pos, ax))
         ax = [i for i in range(len(y))]
         
         for k in range(pos - s, pos + s):
@@ -1726,12 +1745,12 @@ def isaxis(data):
     return is_axis
 
 
-def trim(data, start=0, finish=0):
+def trim(y, start=0, finish=0):
     """
     Deletes columns in a list from start to finish.
 
-    :type data: list
-    :param data: Data to be trimmed. Single vector at the moment.
+    :type y: list
+    :param y: Data to be trimmed.
 
     :type start: int, optional
     :param start: Poistion of the starting point. The default is 0.
@@ -1742,31 +1761,27 @@ def trim(data, start=0, finish=0):
     :returns: Trimmed data.
     :rtype: list[]
     """
-    data = copy.deepcopy(data)
-
-    dims = len(np.array(data).shape)
-    if dims > 1:
-        final = []
-        if finish == 0 or finish > len(data[0]):
-            finish = len(data[0])
-        t = finish - start    
-        for j in data:
-            temp = j
-            for i in range(t):
-                temp = np.delete(temp, start, 0)   
-            final.append(list(temp))
-        data = final
-        
-    else:
-        if finish == 0 or finish > len(data):
-            finish = len(data)
+    y = copy.deepcopy(y)
+    dims = len(np.array(y).shape)
     
-        t = finish - start
+    if dims == 1:
+        y = [y]
     
+    final = []
+    if finish == 0 or finish > len(y[0]):
+        finish = len(y[0])
+    t = finish - start    
+    for j in y:
+        temp = j
         for i in range(t):
-            data = np.delete(data, start, 0)
-            
-    return data
+            temp = np.delete(temp, start, 0)   
+        final.append(list(temp))
+    y = final
+    
+    if dims == 1:
+        y = y[0]
+        
+    return y
 
 
 def shuffle(arrays, delratio=0):
@@ -2383,12 +2398,12 @@ def grau(data, labels=[], cm="seismic", fons=20, figs=(25, 15),
     return g2_shift
 
 
-def moveavg(data, move=2):
+def moveavg(y, move=2):
     """
     Calculate the moving average of a single or multiple vectors.
 
-    :type data: list[float]
-    :param data: Data to calculate the moving average. Single or multiple vectors.
+    :type y: list[float]
+    :param y: Data to calculate the moving average. Single or multiple vectors.
 
     :type move: int
     :param move: Average range to each side (total average = move + 1).
@@ -2397,30 +2412,26 @@ def moveavg(data, move=2):
     :rtype: list[float]
     """
     move = int(move)
-    b_data = copy.deepcopy(data)
-    dims = len(np.array(b_data).shape)
-    avg = []  # for smoothed data
+    y = copy.deepcopy(y)
+    dims = len(np.array(y).shape)
+    avg = []
+    
+    if dims == 1:
+        y = [y]
+    data_len = len(y[0])
 
-    if dims > 1:
-        data_len = len(b_data[0])
-
-        for j in range(len(b_data)):  # each measured point
-            temp = []
-            for i in range(move, data_len - move):
-                temp.append(np.mean(b_data[j][i - move: i + move + 1]))
-            for i in range(move):
-                temp.append(0)
-                temp.insert(0, 0)
-            avg.append(temp)
-    else:
-        data_len = len(b_data)
-
+    for j in range(len(y)):
+        temp = []
         for i in range(move, data_len - move):
-            avg.append(np.mean(b_data[i - move: i + move + 1]))
+            temp.append(np.mean(y[j][i - move: i + move + 1]))
         for i in range(move):
-            avg.append(0)
-            avg.insert(0, 0)
+            temp.append(0)
+            temp.insert(0, 0)
+        avg.append(temp)
 
+    if dims == 1:
+        avg = avg[0]
+    
     return avg
 
 
@@ -2856,22 +2867,21 @@ def fwhm(y, x, peaks, s=10):
     :returns: A list, or single float value, of the fwhm.
     :rtype: float or list[float]
     """
-    dims_data = len(np.array(y).shape)
+    dims = len(np.array(y).shape)
     axis_0 = x
-    if dims_data > 1:
+    if dims > 1:
         length = len(y)
     else:
         length = 1
         
     ind = valtoind(peaks, axis_0)
-    
     dims_peaks = len(np.array(peaks).shape)
     if dims_peaks < 1:
         ind = [ind]
     
     r_fwhm = []
     for h in range(length):
-        if dims_data > 1:
+        if dims > 1:
             y_0 = y[h]
         else:
             y_0 = y
@@ -2883,7 +2893,6 @@ def fwhm(y, x, peaks, s=10):
                     ind[j] = i
             
             h_m = y_0[ind[j]]/2 # half maximum 
-            
             temp = 999999999
             left = 0
             for i in range(ind[j]):
@@ -2909,7 +2918,7 @@ def fwhm(y, x, peaks, s=10):
             else:
                 fwhm.append(axis_0[right] - axis_0[left])
         
-        if dims_data > 1:
+        if dims > 1:
             r_fwhm.append(fwhm)
         else:
             r_fwhm = fwhm
@@ -2950,32 +2959,27 @@ def asymmetry(y, x, peak, s=5, limit=10):
     """
     dims = len(np.array(y).shape)
     index = valtoind(peak, x)
-    if dims > 1:
-        final = []
-        for h in y:
-            for i in range(index - s, index + s):
-                if h[i] > h[index]:
-                    index = i
-            diff_nom = 0
-            diff_abs = 0
-            for i in range(limit):
-                diff_nom += h[index - i] - h[index + i]
-                diff_abs += (h[index - i] - h[index + i])**2
-            if diff_nom < 0: # left side is smaller -> right larger
-                diff_abs = np.sqrt(diff_abs/(2*limit))*(-1)
-            final.append(diff_abs)
-    else:
+    
+    if dims == 1:
+        y = [y]
+    
+    final = []
+    for h in y:
         for i in range(index - s, index + s):
-            if y[i] > y[index]:
+            if h[i] > h[index]:
                 index = i
         diff_nom = 0
         diff_abs = 0
         for i in range(limit):
-            diff_nom += y[index - i] - y[index + i]
-            diff_abs += (y[index - i] - y[index + i])**2
+            diff_nom += h[index - i] - h[index + i]
+            diff_abs += (h[index - i] - h[index + i])**2
         if diff_nom < 0: # left side is smaller -> right larger
             diff_abs = np.sqrt(diff_abs/(2*limit))*(-1)
-        final = diff_abs
+        final.append(diff_abs)
+    
+    if dims == 1:
+        final = final[0]
+        
     return final
 
 
@@ -3029,7 +3033,7 @@ def typical(y):
     """
     Looks for the typical spectra of a dataset. In other words, it calculates 
     the average spectra and looks for the one that is closer to it in relation
-    to standard deviation.
+    to standard deviation. Do not confuse with a `Representative` spectra.
     
     :type y: list[list[float]]
     :param y: A list of spectras.   
@@ -3038,7 +3042,6 @@ def typical(y):
     :rtype: list[float]
     """
     y = copy.deepcopy(y)
-    
     m = avg(y)
     
     std = float('inf')
@@ -3112,3 +3115,29 @@ def mahalanobis(v):
         mahdist.append(np.sqrt(np.dot(np.dot(np.transpose((i-mean)), inverse), (i-mean))))
 
     return mahdist
+
+
+def representative(y):
+    """
+    Looks for the representative spectra of a dataset. In other words, it calculates 
+    the median spectra and looks for the one that is closer to it in relation
+    to standard deviation. Do not confuse with a `Typical` spectra.
+    
+    :type y: list[list[float]]
+    :param y: A list of spectras.   
+        
+    :returns: The representative spectra of the set.
+    :rtype: list[float]
+    """
+    y = copy.deepcopy(y)
+    m = median(y)
+    
+    std = float('inf')
+    reptve = []
+    for i in y:
+        temp = sum(sdev([m, i]))
+        if temp < std:
+            std = temp
+            reptve = i
+    
+    return reptve

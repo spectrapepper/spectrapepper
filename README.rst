@@ -76,6 +76,11 @@ Quickstart
         plt.ylabel('Intensity (a.u.)')
         plt.show()
 
+4. Stay up-to-date by updating the library using:
+
+        conda update spectrapepper
+        pip update spectgrapepper
+
 Credits
 -------
 

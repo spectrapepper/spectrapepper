@@ -3,16 +3,16 @@ This example shows how to use Scikit-learn for spectral data with spectrapepper.
 """
 
 # import libraries
-import spectrapepper as spep
+import my_functions as spep
 
-# load features
-features = spep.load_spectras()[1:]
+# load data
+x, y = spep.load_spectras()
 
 # load targets
 targets = spep.load_targets()
 
 # shuffle data
-features, targets = spep.shuffle([features, targets], delratio=0.1)
+features, targets = spep.shuffle([y, targets], delratio=0.1)
 
 # target classification
 classtargets, labels = spep.classify(targets, glimits=[1.05, 1.15], gnumber=0)

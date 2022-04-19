@@ -167,14 +167,14 @@
 use the search function to look up specific functionalities and keywords.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.alsbaseline">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">alsbaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#alsbaseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.alsbaseline" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">alsbaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#alsbaseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.alsbaseline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculation of the baseline using Asymmetric Least Squares Smoothing. This
 script only makes the calculation but it does not remove it. Original idea of
 this algorithm by P. Eilers and H. Boelens (2005):</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Spectra to calculate the baseline from.</p></li>
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Spectra to calculate the baseline from.</p></li>
 <li><p><strong>lam</strong> (<em>int</em>) – Lambda, smoothness. The default is 100.</p></li>
 <li><p><strong>p</strong> (<em>float</em>) – Asymmetry. The default is 0.001.</p></li>
 <li><p><strong>niter</strong> (<em>int</em>) – Niter. The default is 10.</p></li>
@@ -246,11 +246,11 @@ either left side is smaller (negative) or tight side is smaller
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.avg">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.avg" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.avg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the average vector from a list of vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors.</p>
+<dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The average of the vectors in the list.</p>
@@ -291,10 +291,13 @@ either left side is smaller (negative) or tight side is smaller
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single or several spectras to remove the baseline from.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis of the data, to interpolate the baseline function.</p></li>
-<li><p><strong>points</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – axis values of points to calculate the bspine.</p></li>
-<li><p><strong>avg</strong> (<em>int</em>) – points to each side to make average.</p></li>
-<li><p><strong>remove</strong> (<em>True</em>) – if True, calculates and returns (data - baseline).</p></li>
-<li><p><strong>plot</strong> (<em>bool</em>) – if True, calculates and returns (data - baseline).</p></li>
+<li><p><strong>points</strong> (<em>list</em><em>[</em><em>float</em><em>]</em><em>, </em><em>list</em><em>[</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Axis values of points to calculate the bspline. Axis ranges
+are also acepted. In this case, the <cite>avg</cite> value will be <cite>0</cite>.</p></li>
+<li><p><strong>avg</strong> (<em>int</em>) – Points to each side to make average. Default is 5. If <cite>points</cite>
+are axis ranges, then it is set to 0 and will not have any effect.</p></li>
+<li><p><strong>remove</strong> (<em>True</em>) – If <cite>True</cite>, calculates and returns <cite>data - baseline</cite>. If 
+<cite>False</cite>, then it returns the <cite>baseline</cite>.</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – If True, calculates and returns (data - baseline).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -644,8 +647,7 @@ here).</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.interpolation">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">interpolation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#interpolation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.interpolation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interpolates data to a new axis. If there are multiple datasets with 
-different axises in can interpolate to a common axis.</p>
+<dd><p>Interpolates data to a new axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -782,12 +784,12 @@ parameter <cite>gamma</cite> and perform a manual fit. Default is <cite>False</c
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.lowpass">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">lowpass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nyq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#lowpass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.lowpass" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">lowpass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nyq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#lowpass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.lowpass" title="Permalink to this definition">¶</a></dt>
 <dd><p>Butter low pass filter for a single or spectra or a list of them.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors in line format (each line is a vector).</p></li>
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors in line format (each line is a vector).</p></li>
 <li><p><strong>cutoff</strong> (<em>float</em>) – Desired cutoff frequency of the filter. The default is 0.25.</p></li>
 <li><p><strong>fs</strong> (<em>int</em>) – Sample rate in Hz. The default is 30.</p></li>
 <li><p><strong>order</strong> (<em>int</em>) – Sin wave can be approx represented as quadratic. The default is 2.</p></li>
@@ -896,11 +898,11 @@ X-axis coords of ths CMs. Y-axis coords of the Cms.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.median">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">median</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#median"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.median" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">median</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#median"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.median" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the median vector of a list of vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors.</p>
+<dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>median curve</p>
@@ -949,12 +951,12 @@ bin from a list of vectors.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.moveavg">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">moveavg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">move</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#moveavg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.moveavg" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">moveavg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">move</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#moveavg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.moveavg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the moving average of a single or multiple vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to calculate the moving average. Single or multiple vectors.</p></li>
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to calculate the moving average. Single or multiple vectors.</p></li>
 <li><p><strong>move</strong> (<em>int</em>) – Average range to each side (total average = move + 1).</p></li>
 </ul>
 </dd>
@@ -969,11 +971,11 @@ bin from a list of vectors.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.normsum">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normsum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normsum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normsum" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normsum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normsum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normsum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalizes the sum under the curve to 1, for single or multiple spectras.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single spectra or a list of them.</p>
+<dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single spectra or a list of them.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Normalized data</p>
@@ -986,11 +988,15 @@ bin from a list of vectors.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.normtoglobalmax">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtoglobalmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtoglobalmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtoglobalmax" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtoglobalmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtoglobalmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtoglobalmax" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalizes a list of spectras to the global max.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of spectras.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of spectras.</p></li>
+<li><p><strong>globalmin</strong> (<em>Bool</em>) – If <cite>True</cite>, the global minimum is reescaled to 0. Default
+is <cite>False</cite>.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Normalized data</p>
@@ -1003,13 +1009,13 @@ bin from a list of vectors.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.normtomax">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtomax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeromin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtomax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtomax" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtomax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeromin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtomax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtomax" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalizes spectras to the maximum value of each, in other words, the
 maximum value of each spectras is set to 1.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single or multiple vectors to normalize.</p></li>
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single or multiple vectors to normalize.</p></li>
 <li><p><strong>zeromin</strong> (<em>boolean</em>) – If <cite>True</cite>, the minimum value is traslated to 0. Default
 values is <cite>False</cite></p></li>
 </ul>
@@ -1031,7 +1037,7 @@ values is <cite>False</cite></p></li>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to be normalized.</p></li>
-<li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – X-axis of the data</p></li>
+<li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis of the data</p></li>
 <li><p><strong>peak</strong> (<em>int</em>) – Peak position in x-axis values.</p></li>
 <li><p><strong>shift</strong> (<em>int</em>) – Range to look for the real peak. The default is 10.</p></li>
 </ul>
@@ -1047,13 +1053,13 @@ values is <cite>False</cite></p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.normtoratio">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtoratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtoratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtoratio" title="Permalink to this definition">¶</a></dt>
-<dd><p>Normalizes a peak to the ratio vaue respect to another. That is, the peak
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtoratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtoratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtoratio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalizes a peak to the ratio value respect to another. That is, the peak
 found in the range of r1 is normalized to the ratio r1/(r1+r2).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single spectra or a list of them.</p></li>
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single spectra or a list of them.</p></li>
 <li><p><strong>r1</strong> (<em>list</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Range of the first area according to the axis.</p></li>
 <li><p><strong>r2</strong> (<em>list</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Range of the second area according to the axis.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Axis of the data. If <cite>None</cite> then it goes from 0 to N, where
@@ -1071,13 +1077,13 @@ N is the length of the spectras.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.normtovalue">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtovalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtovalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtovalue" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtovalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtovalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtovalue" title="Permalink to this definition">¶</a></dt>
 <dd><p>Normalizes the spectras to a set value, in other words, the defined value
 will be reescaled to 1 in all the spectras.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single or multiple vectors to normalize.</p></li>
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single or multiple vectors to normalize.</p></li>
 <li><p><strong>val</strong> (<em>float</em>) – Value to normalize to.</p></li>
 </ul>
 </dd>
@@ -1180,18 +1186,18 @@ D1, D2 and T.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.polybaseline">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">polybaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#polybaseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.polybaseline" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">polybaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#polybaseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.polybaseline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calcuates the baseline using polynomial fit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single or several spectras to remove the baseline from.</p></li>
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single or several spectras to remove the baseline from.</p></li>
 <li><p><strong>axis</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis of the data, to interpolate the baseline function.</p></li>
 <li><p><strong>points</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – positions in axis of points to calculate baseline.</p></li>
 <li><p><strong>deg</strong> (<em>int</em>) – Polynomial degree of the fit.</p></li>
 <li><p><strong>avg</strong> (<em>int</em>) – points to each side to make average.</p></li>
-<li><p><strong>remove</strong> (<em>True</em>) – if True, calculates and returns (data - baseline).</p></li>
-<li><p><strong>plot</strong> (<em>bool</em>) – if True, calculates and returns (data - baseline).</p></li>
+<li><p><strong>remove</strong> (<em>True</em>) – if True, calculates and returns (y - baseline).</p></li>
+<li><p><strong>plot</strong> (<em>bool</em>) – if True, calculates and returns (y - baseline).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1225,6 +1231,25 @@ D1, D2 and T.</p></li>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="functions.representative">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">representative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#representative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.representative" title="Permalink to this definition">¶</a></dt>
+<dd><p>Looks for the representative spectra of a dataset. In other words, it calculates 
+the median spectra and looks for the one that is closer to it in relation
+to standard deviation. Do not confuse with a <cite>Typical</cite> spectra.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – A list of spectras.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The representative spectra of the set.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="functions.rwm">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">rwm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#rwm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.rwm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the median of an array in a running window defined by the user.
@@ -1250,11 +1275,11 @@ for the statistics.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.sdev">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">sdev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#sdev"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.sdev" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">sdev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#sdev"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.sdev" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the standard deviation for each bin from a list of vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors.</p>
+<dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Standard deviation curve</p>
@@ -1418,12 +1443,12 @@ parameter <cite>sigma</cite> and perform a manual fit. Default is <cite>False</c
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.trim">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">trim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#trim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.trim" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">trim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#trim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.trim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Deletes columns in a list from start to finish.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>list</em>) – Data to be trimmed. Single vector at the moment.</p></li>
+<li><p><strong>y</strong> (<em>list</em>) – Data to be trimmed.</p></li>
 <li><p><strong>start</strong> (<em>int</em><em>, </em><em>optional</em>) – Poistion of the starting point. The default is 0.</p></li>
 <li><p><strong>finish</strong> (<em>int</em><em>, </em><em>optional</em>) – Position of the ending point (not included). The default is 0.</p></li>
 </ul>
@@ -1442,7 +1467,7 @@ parameter <cite>sigma</cite> and perform a manual fit. Default is <cite>False</c
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">typical</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#typical"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.typical" title="Permalink to this definition">¶</a></dt>
 <dd><p>Looks for the typical spectra of a dataset. In other words, it calculates 
 the average spectra and looks for the one that is closer to it in relation
-to standard deviation.</p>
+to standard deviation. Do not confuse with a <cite>Representative</cite> spectra.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – A list of spectras.</p>

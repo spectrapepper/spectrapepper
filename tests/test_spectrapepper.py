@@ -3,7 +3,7 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-import spectrapepper as spep
+import my_functions as spep
 import numpy as np
 import pandas as pd
 
@@ -21,10 +21,9 @@ class TestSpectrapepper(unittest.TestCase):
         self.assertEqual(spep.load_params()[0][0], 300)
 
     def test_functions(self):
-        spectras = spep.load_spectras()
-        data = spectras[1]
-        axis = spectras[0]
-        data_l1 = spectras[2]
+        axis, spectras = spep.load_spectras()
+        data = spectras[0]
+        data_l1 = spectras[1]
         params = spep.load_params(True)
 
         a = [0, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4]
@@ -37,10 +36,11 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.issinglevalue(y=[a, b, d])
         self.assertEqual(data2, [False, False, True])
 
+
         data2 = spep.typical(spectras[:10])
         r = round(sum(data2))
         print('typical: ' + str(r))
-        self.assertEqual(r, 1879)
+        self.assertEqual(r, 1627)
 
         data2 = spep.lowpass(data, cutoff=0.7, fs=10)
         r = np.floor(sum(data2))
@@ -85,22 +85,22 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.bspbaseline(y=data, x=axis, points=[100, 350, 700, 800], plot=False)
         r = np.floor(sum(data2))
         print('bspbaseline: ' + str(r))
-        self.assertEqual(r, 149)
+        self.assertEqual(r, 150)
 
         data2 = spep.bspbaseline(y=[data, data_l1], x=axis, points=[100, 350, 700, 800], plot=False)
         r = np.floor(np.sum(data2))
         print('bspbaseline_multi: ' + str(r))
-        self.assertEqual(r, 283)
+        self.assertEqual(r, 284)
 
         data2 = spep.polybaseline(data, axis, points=[100, 350, 700, 800], plot=False)
         r = np.floor(sum(data2))
         print('polybaseline: ' + str(r))
-        self.assertEqual(r, 47)
+        self.assertEqual(r, 46)
 
         data2 = spep.polybaseline([data, data_l1], axis, points=[100, 350, 700, 800], plot=False)
         r = np.floor(np.sum(data2))
         print('polybaseline_multi: ' + str(r))
-        self.assertEqual(r, 88)
+        self.assertEqual(r, 87)
 
         data2 = spep.lorentzfit(y=data, x=axis, pos=205)
         r = np.floor(sum(data2))
@@ -374,12 +374,12 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.minmax(spectras)
         r = round(np.sum(data2), 2)
         print('minmax: ' + str(r))
-        self.assertEqual(r, 532470.08)
+        self.assertEqual(r, 8399.54)
 
         data2 = spep.fwhm(y=spectras, x=axis, peaks=250, s=10)
         r = round(sum(data2), 2)
         print('fwhm: ' + str(r))
-        self.assertEqual(r, 2484.96)
+        self.assertEqual(r, 2346.65)
 
         data2 = spep.fwhm(y=data, x=axis, peaks=250, s=10)
         r = round(np.sum(data2), 2)
@@ -395,12 +395,12 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.rwm(data3, (3,3))
         r = round(np.sum(data2), 2)
         print('running_median_nd: ' + str(r))
-        self.assertEqual(r,1510.57)
+        self.assertEqual(r, 1447.84)
 
         data2 = spep.typical(spectras[1:10])
         r = int(sum(data2))
         print('typical: ' + str(r))
-        self.assertEqual(r, 1557)
+        self.assertEqual(r, 1626)
 
         data2 = spep.issinglevalue(spectras[0:3])
         print('issinglevalue: ' + str(data2))
@@ -410,6 +410,12 @@ class TestSpectrapepper(unittest.TestCase):
         r = round(sum(data2), 2)
         print('mahalanobis: ' + str(r))
         self.assertEqual(r, 5.36)
+        
+        data2 = spep.representative(spectras[0:10])
+        r = round(sum(data2), 2)
+        print('representative: ' + str(r))
+        self.assertEqual(r, 1485.47)
+        
         
 
 if __name__ == '__main__':

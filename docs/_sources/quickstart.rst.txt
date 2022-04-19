@@ -9,15 +9,15 @@ Quickstart
 
         conda install -c conda-forge spectrapepper
 
-
 3. Test it by plotting some data!::
 
         import spectrapepper as spep
         import matplotlib.pyplot as plt
 
-        data = spep.load_spectras()
-        for i in data[1:]:
-            plt.plot(data[0], i)
+        x, y = spep.load_spectras()
+
+        for i in y:
+            plt.plot(x, i)
         plt.xlabel('Raman shift ($cm^{-1}$)')
         plt.ylabel('Intensity (a.u.)')
         plt.show()

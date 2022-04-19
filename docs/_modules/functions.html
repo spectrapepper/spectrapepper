@@ -189,19 +189,31 @@
 <span class="kn">import</span> <span class="nn">os</span>
 
 
-<span class="k">def</span> <span class="nf">load_spectras</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">load_spectras</span><span class="p">(</span><span class="n">sample</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load sample specrtal data, axis included in the first line.</span>
 <span class="sd">    </span>
-<span class="sd">    :returns: Sample spectral data.</span>
-<span class="sd">    :rtype: list[float]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    
+<span class="sd">    :type sample: int, tuple</span>
+<span class="sd">    :param sample: Index of the sample spectra wanted or a tuple with the range</span>
+<span class="sd">        of the indeces of a groups of spectras.</span>
+<span class="sd">    </span>
+<span class="sd">    :returns: X axis and the sample spectral data selected.</span>
+<span class="sd">    :rtype: list[float], list[float]</span>
+<span class="sd">    &quot;&quot;&quot;</span> 
     <span class="n">location</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
     <span class="n">my_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">location</span><span class="p">,</span> <span class="s1">&#39;datasets&#39;</span><span class="p">,</span> <span class="s1">&#39;spectras.txt&#39;</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">my_file</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]]</span>
     
-    <span class="k">return</span> <span class="n">data</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">sample</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">sample</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">sample</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">sample</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
 
 
 <span class="k">def</span> <span class="nf">load_targets</span><span class="p">(</span><span class="n">flatten</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -323,12 +335,12 @@
     <span class="k">return</span> <span class="n">info</span></div>
 
 
-<div class="viewcode-block" id="lowpass"><a class="viewcode-back" href="../functions.html#functions.lowpass">[docs]</a><span class="k">def</span> <span class="nf">lowpass</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nyq</span><span class="o">=</span><span class="mf">0.75</span><span class="p">):</span>
+<div class="viewcode-block" id="lowpass"><a class="viewcode-back" href="../functions.html#functions.lowpass">[docs]</a><span class="k">def</span> <span class="nf">lowpass</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nyq</span><span class="o">=</span><span class="mf">0.75</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Butter low pass filter for a single or spectra or a list of them.</span>
 <span class="sd">        </span>
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: List of vectors in line format (each line is a vector).</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: List of vectors in line format (each line is a vector).</span>
 <span class="sd">    </span>
 <span class="sd">    :type cutoff: float</span>
 <span class="sd">    :param cutoff: Desired cutoff frequency of the filter. The default is 0.25.</span>
@@ -345,24 +357,31 @@
 <span class="sd">    :returns: Filtered data</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># so it does not change the input list</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># so it does not change the input list</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+    
     <span class="n">normal_cutoff</span> <span class="o">=</span> <span class="n">cutoff</span> <span class="o">/</span> <span class="p">(</span><span class="n">nyq</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span>
     <span class="n">b</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">butter</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">normal_cutoff</span><span class="p">,</span> <span class="n">btype</span><span class="o">=</span><span class="s1">&#39;low&#39;</span><span class="p">,</span> <span class="n">analog</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
-            <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">filtfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">filtfilt</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
     <span class="k">return</span> <span class="n">y</span></div>
 
 
-<div class="viewcode-block" id="normtomax"><a class="viewcode-back" href="../functions.html#functions.normtomax">[docs]</a><span class="k">def</span> <span class="nf">normtomax</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">zeromin</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="normtomax"><a class="viewcode-back" href="../functions.html#functions.normtomax">[docs]</a><span class="k">def</span> <span class="nf">normtomax</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">zeromin</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalizes spectras to the maximum value of each, in other words, the</span>
 <span class="sd">    maximum value of each spectras is set to 1.</span>
 
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: Single or multiple vectors to normalize.</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: Single or multiple vectors to normalize.</span>
 <span class="sd">        </span>
 <span class="sd">    :type zeromin: boolean</span>
 <span class="sd">    :param zeromin: If `True`, the minimum value is traslated to 0. Default</span>
@@ -371,31 +390,32 @@
 <span class="sd">    :returns: Normalized data.</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># so it does not chamge the input list</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># so it does not chamge the input list</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># detect dimensions</span>
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>           
-            <span class="k">if</span> <span class="n">zeromin</span><span class="p">:</span>
-                <span class="n">min_data</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_data</span>
-            <span class="n">max_data</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">max_data</span>
-    <span class="k">else</span><span class="p">:</span>
+    
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>           
         <span class="k">if</span> <span class="n">zeromin</span><span class="p">:</span>
-            <span class="n">min_data</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span>  <span class="n">min_data</span>
-        <span class="n">max_data</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">/</span><span class="n">max_data</span>
+            <span class="n">min_data</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">min_data</span>
+        <span class="n">max_data</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="n">max_data</span>
+
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
     <span class="k">return</span> <span class="n">y</span></div>
 
 
-<div class="viewcode-block" id="normtovalue"><a class="viewcode-back" href="../functions.html#functions.normtovalue">[docs]</a><span class="k">def</span> <span class="nf">normtovalue</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+<div class="viewcode-block" id="normtovalue"><a class="viewcode-back" href="../functions.html#functions.normtovalue">[docs]</a><span class="k">def</span> <span class="nf">normtovalue</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalizes the spectras to a set value, in other words, the defined value</span>
 <span class="sd">    will be reescaled to 1 in all the spectras.</span>
 
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: Single or multiple vectors to normalize.</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: Single or multiple vectors to normalize.</span>
 
 <span class="sd">    :type val: float</span>
 <span class="sd">    :param val: Value to normalize to.</span>
@@ -403,20 +423,20 @@
 <span class="sd">    :returns: Normalized data.</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  <span class="c1"># so it does not change the input list</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="n">val</span>
     <span class="n">y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">y</span></div>
 
 
-<div class="viewcode-block" id="alsbaseline"><a class="viewcode-back" href="../functions.html#functions.alsbaseline">[docs]</a><span class="k">def</span> <span class="nf">alsbaseline</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="viewcode-block" id="alsbaseline"><a class="viewcode-back" href="../functions.html#functions.alsbaseline">[docs]</a><span class="k">def</span> <span class="nf">alsbaseline</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculation of the baseline using Asymmetric Least Squares Smoothing. This</span>
 <span class="sd">    script only makes the calculation but it does not remove it. Original idea of</span>
 <span class="sd">    this algorithm by P. Eilers and H. Boelens (2005):</span>
 
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: Spectra to calculate the baseline from.</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: Spectra to calculate the baseline from.</span>
 
 <span class="sd">    :type lam: int</span>
 <span class="sd">    :param lam: Lambda, smoothness. The default is 100.</span>
@@ -430,32 +450,27 @@
 <span class="sd">    :returns: Returns the calculated baseline.</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># detect dimensions    </span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
-            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">niter</span><span class="p">):</span>
-                <span class="n">W</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">spdiags</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
-                <span class="n">Z</span> <span class="o">=</span> <span class="n">W</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">d</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>       
-                <span class="n">z</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">w</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-                <span class="n">w</span> <span class="o">=</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">z</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">z</span><span class="p">)</span>
-            <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">z</span>  
-            
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+    
+    <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">niter</span><span class="p">):</span>
             <span class="n">W</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">spdiags</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
-            <span class="n">Z</span> <span class="o">=</span> <span class="n">W</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">d</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
-            <span class="n">z</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">w</span> <span class="o">*</span> <span class="n">data</span><span class="p">)</span>
-            <span class="n">w</span> <span class="o">=</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">z</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span> <span class="o">&lt;</span> <span class="n">z</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="n">z</span>
-    <span class="k">return</span> <span class="n">data</span></div>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">W</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">d</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>       
+            <span class="n">z</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">w</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">z</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">z</span>  
+                
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">y</span></div>
 
 
 <div class="viewcode-block" id="bspbaseline"><a class="viewcode-back" href="../functions.html#functions.bspbaseline">[docs]</a><span class="k">def</span> <span class="nf">bspbaseline</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">avg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -468,17 +483,20 @@
 <span class="sd">    :type x: list[float]</span>
 <span class="sd">    :param x: x axis of the data, to interpolate the baseline function.</span>
 
-<span class="sd">    :type points: list[int]</span>
-<span class="sd">    :param points: axis values of points to calculate the bspine.</span>
+<span class="sd">    :type points: list[float], list[[float, float]]</span>
+<span class="sd">    :param points: Axis values of points to calculate the bspline. Axis ranges</span>
+<span class="sd">        are also acepted. In this case, the `avg` value will be `0`.</span>
 
 <span class="sd">    :type avg: int</span>
-<span class="sd">    :param avg: points to each side to make average.</span>
+<span class="sd">    :param avg: Points to each side to make average. Default is 5. If `points`</span>
+<span class="sd">        are axis ranges, then it is set to 0 and will not have any effect.</span>
 
 <span class="sd">    :type remove: True</span>
-<span class="sd">    :param remove: if True, calculates and returns (data - baseline).</span>
+<span class="sd">    :param remove: If `True`, calculates and returns `data - baseline`. If </span>
+<span class="sd">        `False`, then it returns the `baseline`.</span>
 
 <span class="sd">    :type plot: bool</span>
-<span class="sd">    :param plot: if True, calculates and returns (data - baseline).    </span>
+<span class="sd">    :param plot: If True, calculates and returns (data - baseline).    </span>
 
 <span class="sd">    :returns: The baseline.</span>
 <span class="sd">    :rtype: list[float]</span>
@@ -486,62 +504,57 @@
     <span class="n">data</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="n">x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="n">points</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
-    <span class="n">avg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span>
     <span class="n">pos</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># detect dimensions</span>
+    <span class="n">avg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">baseline</span> <span class="o">=</span> <span class="p">[]</span>
-        
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
-            <span class="n">y_p</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># y values for the selected points</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">)):</span>
-                <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">avg</span><span class="p">:</span> <span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">avg</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
-                <span class="n">y_p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
-        
-            <span class="n">spl</span> <span class="o">=</span> <span class="n">splrep</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">y_p</span><span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">plot</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>        
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">baseline</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Baseline&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">y_p</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">0.98</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1.02</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-            
-            <span class="k">if</span> <span class="n">remove</span><span class="p">:</span>
-                <span class="n">baseline</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">splev</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spl</span><span class="p">))</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">baseline</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">splev</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spl</span><span class="p">))</span>
-
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">y_p</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># y values for the selected points</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">[[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">]</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="p">[[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+    
+    <span class="n">baseline</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
+        <span class="n">y_p</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">)):</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">avg</span><span class="p">:</span> <span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">avg</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">avg</span><span class="p">:</span> <span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">avg</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
             <span class="n">y_p</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
         
+        <span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
         <span class="n">spl</span> <span class="o">=</span> <span class="n">splrep</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">y_p</span><span class="p">)</span>
-        <span class="n">baseline</span> <span class="o">=</span> <span class="n">splev</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spl</span><span class="p">)</span>
+        <span class="n">baseline</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">splev</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spl</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>        
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">baseline</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">remove</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">baseline</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">baseline</span><span class="p">[</span><span class="n">j</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="n">plot</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>        
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Original&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">baseline</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Baseline&#39;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">y_p</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
     
-        <span class="k">if</span> <span class="n">remove</span><span class="p">:</span>
-            <span class="n">baseline</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="n">baseline</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">return</span> <span class="n">baseline</span></div>
+    <span class="k">return</span> <span class="n">result</span></div>
 
 
-<div class="viewcode-block" id="polybaseline"><a class="viewcode-back" href="../functions.html#functions.polybaseline">[docs]</a><span class="k">def</span> <span class="nf">polybaseline</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">deg</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">avg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="polybaseline"><a class="viewcode-back" href="../functions.html#functions.polybaseline">[docs]</a><span class="k">def</span> <span class="nf">polybaseline</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">deg</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">avg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calcuates the baseline using polynomial fit.</span>
 
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: Single or several spectras to remove the baseline from.</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: Single or several spectras to remove the baseline from.</span>
 
 <span class="sd">    :type axis: list[float]</span>
 <span class="sd">    :param axis: x axis of the data, to interpolate the baseline function.</span>
@@ -556,61 +569,46 @@
 <span class="sd">    :param avg: points to each side to make average.</span>
 
 <span class="sd">    :type remove: True</span>
-<span class="sd">    :param remove: if True, calculates and returns (data - baseline).</span>
+<span class="sd">    :param remove: if True, calculates and returns (y - baseline).</span>
 
 <span class="sd">    :type plot: bool</span>
-<span class="sd">    :param plot: if True, calculates and returns (data - baseline).    </span>
+<span class="sd">    :param plot: if True, calculates and returns (y - baseline).    </span>
 
 <span class="sd">    :returns: The baseline.</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>  
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">axis</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
     <span class="n">avg</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">avg</span><span class="p">)</span>
-    <span class="n">pos</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
-    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>  <span class="c1"># detect dimensions</span>
     
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">baseline</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
-            <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># y values for the selected x</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">)):</span>
-                <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">avg</span><span class="p">:</span> <span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">avg</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
-                <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
-                        
-            <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>  <span class="c1"># polinomial fit</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>  <span class="c1"># 1d polinomial</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>  <span class="c1"># y values</span>
-            <span class="k">if</span> <span class="n">plot</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>        
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">temp</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
-                <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-        
-            <span class="k">if</span> <span class="n">remove</span><span class="p">:</span>
-                <span class="n">temp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">temp</span>
-            <span class="n">baseline</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
     
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># y values for the selected x</span>
+    <span class="n">baseline</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="n">averages</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">)):</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">avg</span><span class="p">:</span> <span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">avg</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
-            <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
-    
-        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>  <span class="c1"># polinomial fit</span>
+            <span class="n">averages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">avg</span><span class="p">:</span> <span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">avg</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
+                    
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">averages</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>  <span class="c1"># polinomial fit</span>
         <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>  <span class="c1"># 1d polinomial</span>
-        <span class="n">baseline</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>  <span class="c1"># y values</span>
-    
-        <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>        
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">baseline</span><span class="p">)</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+        <span class="n">fit</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">plot</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>        
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">fit</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">averages</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
     
         <span class="k">if</span> <span class="n">remove</span><span class="p">:</span>
-            <span class="n">baseline</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="n">baseline</span>
+            <span class="n">baseline</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">fit</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>    
+            <span class="n">baseline</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fit</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">baseline</span> <span class="o">=</span> <span class="n">baseline</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">baseline</span></div>
 
@@ -629,7 +627,7 @@
 <span class="sd">    :returns: Index, or position, in the axis of the values in vals</span>
 <span class="sd">    :rtype: list[int], int</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    
+    <span class="n">vals</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span>
     <span class="n">shape</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vals</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     
     <span class="k">if</span> <span class="n">shape</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -692,19 +690,19 @@
     <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">limits</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">limits</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">areas</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">limits</span><span class="p">))]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))]</span>  <span class="c1"># final values of areas</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>  <span class="c1"># calculate the areas for all the points</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">limits</span><span class="p">)):</span>  <span class="c1"># for all the areas</span>
-                <span class="n">areas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">limits</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span><span class="n">limits</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>  <span class="c1"># calculate the sum</span>
-                <span class="k">if</span> <span class="n">norm</span><span class="p">:</span>
-                    <span class="n">areas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">areas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">areas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">limits</span><span class="p">))]</span>  <span class="c1"># final values of areas</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+
+    <span class="n">areas</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">limits</span><span class="p">))]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))]</span>  <span class="c1"># final values of areas</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>  <span class="c1"># calculate the areas for all the points</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">limits</span><span class="p">)):</span>  <span class="c1"># for all the areas</span>
-            <span class="n">areas</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">limits</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span><span class="n">limits</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>  <span class="c1"># calculate the sum</span>
+            <span class="n">areas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">limits</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span><span class="n">limits</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>  <span class="c1"># calculate the sum</span>
             <span class="k">if</span> <span class="n">norm</span><span class="p">:</span>
-                <span class="n">areas</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">areas</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                <span class="n">areas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">areas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">areas</span> <span class="o">=</span> <span class="n">areas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
     <span class="k">return</span> <span class="n">areas</span></div>
 
 
@@ -756,38 +754,40 @@
     <span class="k">return</span> <span class="n">iters</span></div>
 
 
-<div class="viewcode-block" id="normsum"><a class="viewcode-back" href="../functions.html#functions.normsum">[docs]</a><span class="k">def</span> <span class="nf">normsum</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="normsum"><a class="viewcode-back" href="../functions.html#functions.normsum">[docs]</a><span class="k">def</span> <span class="nf">normsum</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalizes the sum under the curve to 1, for single or multiple spectras.</span>
 
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: Single spectra or a list of them.</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: Single spectra or a list of them.</span>
 
 <span class="sd">    :returns: Normalized data</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
-            <span class="n">s</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
-                <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">s</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
-            <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">s</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
+            <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">s</span>
+    
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
     <span class="k">return</span> <span class="n">y</span></div>
 
 
-<div class="viewcode-block" id="normtoratio"><a class="viewcode-back" href="../functions.html#functions.normtoratio">[docs]</a><span class="k">def</span> <span class="nf">normtoratio</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="normtoratio"><a class="viewcode-back" href="../functions.html#functions.normtoratio">[docs]</a><span class="k">def</span> <span class="nf">normtoratio</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Normalizes a peak to the ratio vaue respect to another. That is, the peak</span>
+<span class="sd">    Normalizes a peak to the ratio value respect to another. That is, the peak</span>
 <span class="sd">    found in the range of r1 is normalized to the ratio r1/(r1+r2).</span>
 
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: Single spectra or a list of them.</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: Single spectra or a list of them.</span>
 
 <span class="sd">    :type r1: list[float, float]</span>
 <span class="sd">    :param r1: Range of the first area according to the axis.</span>
@@ -802,58 +802,76 @@
 <span class="sd">    :returns: Normalized data</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+    
     <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span> <span class="o">=</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">r1</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">r1</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
         <span class="n">r2</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">r2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
     
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
-            <span class="n">a1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">r1</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">r1</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
-            <span class="n">a2</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">r2</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">r2</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
-            <span class="n">ratio</span> <span class="o">=</span> <span class="n">a1</span><span class="o">/</span><span class="p">(</span><span class="n">a1</span><span class="o">+</span><span class="n">a2</span><span class="p">)</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="n">ratio</span><span class="o">/</span><span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-            <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="n">m</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">a1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">r1</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">r1</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
-        <span class="n">a2</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">r2</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">r2</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="n">a1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">r1</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">r1</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">a2</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">r2</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">r2</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
         <span class="n">ratio</span> <span class="o">=</span> <span class="n">a1</span><span class="o">/</span><span class="p">(</span><span class="n">a1</span><span class="o">+</span><span class="n">a2</span><span class="p">)</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">ratio</span><span class="o">/</span><span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">*</span><span class="n">m</span>
-    <span class="k">return</span> <span class="n">y</span></div>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">ratio</span><span class="o">/</span><span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="n">m</span>
+    
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="normtoglobalmax"><a class="viewcode-back" href="../functions.html#functions.normtoglobalmax">[docs]</a><span class="k">def</span> <span class="nf">normtoglobalmax</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="normtoglobalmax"><a class="viewcode-back" href="../functions.html#functions.normtoglobalmax">[docs]</a><span class="k">def</span> <span class="nf">normtoglobalmax</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">globalmin</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Normalizes a list of spectras to the global max.</span>
 
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: List of spectras.</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: List of spectras.</span>
+
+<span class="sd">    :type globalmin: Bool</span>
+<span class="sd">    :param globalmin: If `True`, the global minimum is reescaled to 0. Default</span>
+<span class="sd">        is `False`.</span>
 
 <span class="sd">    :returns: Normalized data</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">maximum</span> <span class="o">=</span> <span class="o">-</span><span class="mi">99999999</span>  <span class="c1"># safe start</span>
+        <span class="n">maximum</span> <span class="o">=</span> <span class="o">-</span><span class="mi">999999999</span>  <span class="c1"># safe start</span>
+        
+        <span class="k">if</span> <span class="n">globalmin</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+            <span class="n">minimum</span> <span class="o">=</span> <span class="mi">999999999</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">minimum</span> <span class="o">=</span> <span class="mi">0</span>
+            
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
                 <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">maximum</span><span class="p">:</span>
                     <span class="n">maximum</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">normtovalue</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">maximum</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>  <span class="c1"># if s single vector, then is the same as nortomax (loca)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">normtomax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">minimum</span> <span class="ow">and</span> <span class="n">globalmin</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+                    <span class="n">minimum</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">globalmin</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+                    <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">-=</span> <span class="n">minimum</span>
+        
+        <span class="n">y</span> <span class="o">=</span> <span class="n">normtovalue</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="n">maximum</span><span class="o">-</span><span class="n">minimum</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># if s single vector, then is the same as nortomax (local)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">normtomax</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">zeromin</span><span class="o">=</span><span class="n">globalmin</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">y</span></div>
 
 
 <div class="viewcode-block" id="interpolation"><a class="viewcode-back" href="../functions.html#functions.interpolation">[docs]</a><span class="k">def</span> <span class="nf">interpolation</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Interpolates data to a new axis. If there are multiple datasets with </span>
-<span class="sd">    different axises in can interpolate to a common axis.</span>
+<span class="sd">    Interpolates data to a new axis.</span>
 
 <span class="sd">    :type y: list[float]</span>
 <span class="sd">    :param y: List of data to interpolate</span>
@@ -1116,7 +1134,7 @@
 <span class="sd">    :param y: Data to be normalized.</span>
 
 <span class="sd">    :type x: list[float]</span>
-<span class="sd">    :param x: X-axis of the data</span>
+<span class="sd">    :param x: x axis of the data</span>
 
 <span class="sd">    :type peak: int</span>
 <span class="sd">    :param peak: Peak position in x-axis values.</span>
@@ -1130,18 +1148,19 @@
     <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">shift</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span>
-
     <span class="n">pos</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">peak</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
-            <span class="n">section</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">pos</span> <span class="o">-</span> <span class="n">shift</span><span class="p">:</span><span class="n">pos</span> <span class="o">+</span> <span class="n">shift</span><span class="p">]</span>
-            <span class="n">highest</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>    
-            <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">highest</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">section</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">pos</span> <span class="o">-</span> <span class="n">shift</span><span class="p">:</span><span class="n">pos</span> <span class="o">+</span> <span class="n">shift</span><span class="p">]</span>
-        <span class="n">highest</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">/</span> <span class="n">highest</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="n">section</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">pos</span> <span class="o">-</span> <span class="n">shift</span><span class="p">:</span><span class="n">pos</span> <span class="o">+</span> <span class="n">shift</span><span class="p">]</span>
+        <span class="n">highest</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>    
+        <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">highest</span>
+    
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
     <span class="k">return</span> <span class="n">y</span></div>
 
 
@@ -1322,63 +1341,63 @@
     <span class="k">return</span> <span class="n">m</span></div>
 
 
-<div class="viewcode-block" id="avg"><a class="viewcode-back" href="../functions.html#functions.avg">[docs]</a><span class="k">def</span> <span class="nf">avg</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="avg"><a class="viewcode-back" href="../functions.html#functions.avg">[docs]</a><span class="k">def</span> <span class="nf">avg</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the average vector from a list of vectors.</span>
 
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: List of vectors.</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: List of vectors.</span>
 
 <span class="sd">    :returns: The average of the vectors in the list.</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">avg_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]))])</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">avg_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]))])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span>
         <span class="n">avg_data</span> <span class="o">=</span> <span class="n">avg_data</span> <span class="o">+</span> <span class="n">i</span>
-    <span class="n">avg_data</span> <span class="o">=</span> <span class="n">avg_data</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">avg_data</span> <span class="o">=</span> <span class="n">avg_data</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">avg_data</span></div>
 
 
-<div class="viewcode-block" id="sdev"><a class="viewcode-back" href="../functions.html#functions.sdev">[docs]</a><span class="k">def</span> <span class="nf">sdev</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="sdev"><a class="viewcode-back" href="../functions.html#functions.sdev">[docs]</a><span class="k">def</span> <span class="nf">sdev</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the standard deviation for each bin from a list of vectors.</span>
 
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: List of vectors.</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: List of vectors.</span>
 
 <span class="sd">    :returns: Standard deviation curve</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">curve_std</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># stdev for each step</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])):</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)):</span>
-            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">])</span>
         <span class="n">curve_std</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sta</span><span class="o">.</span><span class="n">stdev</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span>  <span class="c1"># stdev for each step</span>
     <span class="n">curve_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">curve_std</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">curve_std</span></div>
 
 
-<div class="viewcode-block" id="median"><a class="viewcode-back" href="../functions.html#functions.median">[docs]</a><span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<div class="viewcode-block" id="median"><a class="viewcode-back" href="../functions.html#functions.median">[docs]</a><span class="k">def</span> <span class="nf">median</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the median vector of a list of vectors.</span>
 <span class="sd">    </span>
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: List of vectors.</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: List of vectors.</span>
 
 <span class="sd">    :returns: median curve</span>
 <span class="sd">    :rtype: list[float]    </span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">median</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">meas</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">meas</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">meas</span><span class="p">):</span>
-            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">])</span>
         <span class="n">median</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span>    
     <span class="k">return</span> <span class="n">median</span></div>
 
@@ -1426,7 +1445,7 @@
         <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="c1"># if no axis is passed</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)]</span>
             
-        <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">valtoind</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="p">))</span>
+        <span class="c1"># pos = int(valtoind(pos, ax))</span>
         
         <span class="n">fit</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ax</span><span class="p">:</span>
@@ -1514,7 +1533,7 @@
         <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="c1"># if no axis is passed</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)]</span>
         
-        <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">valtoind</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="p">))</span>
+        <span class="c1">#pos = int(valtoind(pos, ax))</span>
         
         <span class="n">fit</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ax</span><span class="p">)):</span>
@@ -1597,7 +1616,6 @@
     <span class="n">s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span>
     <span class="n">amp</span> <span class="o">=</span> <span class="mi">1000</span>
     <span class="n">v</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-    <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">valtoind</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="p">))</span>
     
     <span class="k">if</span> <span class="n">manual</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="c1"># if no axis is passed</span>
@@ -1611,6 +1629,7 @@
             <span class="n">fit</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">a</span><span class="o">/</span><span class="n">b</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">c</span><span class="o">**</span><span class="n">d</span><span class="p">))</span>
         
     <span class="k">else</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">valtoind</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="p">))</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))]</span>
         
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">s</span><span class="p">,</span> <span class="n">pos</span> <span class="o">+</span> <span class="n">s</span><span class="p">):</span>
@@ -1886,12 +1905,12 @@
     <span class="k">return</span> <span class="n">is_axis</span></div>
 
 
-<div class="viewcode-block" id="trim"><a class="viewcode-back" href="../functions.html#functions.trim">[docs]</a><span class="k">def</span> <span class="nf">trim</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="trim"><a class="viewcode-back" href="../functions.html#functions.trim">[docs]</a><span class="k">def</span> <span class="nf">trim</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Deletes columns in a list from start to finish.</span>
 
-<span class="sd">    :type data: list</span>
-<span class="sd">    :param data: Data to be trimmed. Single vector at the moment.</span>
+<span class="sd">    :type y: list</span>
+<span class="sd">    :param y: Data to be trimmed.</span>
 
 <span class="sd">    :type start: int, optional</span>
 <span class="sd">    :param start: Poistion of the starting point. The default is 0.</span>
@@ -1902,31 +1921,27 @@
 <span class="sd">    :returns: Trimmed data.</span>
 <span class="sd">    :rtype: list[]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-
-    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">final</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">if</span> <span class="n">finish</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">finish</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="n">finish</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">finish</span> <span class="o">-</span> <span class="n">start</span>    
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="n">j</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-                <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>   
-            <span class="n">final</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">final</span>
-        
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">finish</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">finish</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-            <span class="n">finish</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     
-        <span class="n">t</span> <span class="o">=</span> <span class="n">finish</span> <span class="o">-</span> <span class="n">start</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
     
+    <span class="n">final</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">finish</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">finish</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">finish</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">finish</span> <span class="o">-</span> <span class="n">start</span>    
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">j</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            
-    <span class="k">return</span> <span class="n">data</span></div>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>   
+        <span class="n">final</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">temp</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">final</span>
+    
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+    <span class="k">return</span> <span class="n">y</span></div>
 
 
 <div class="viewcode-block" id="shuffle"><a class="viewcode-back" href="../functions.html#functions.shuffle">[docs]</a><span class="k">def</span> <span class="nf">shuffle</span><span class="p">(</span><span class="n">arrays</span><span class="p">,</span> <span class="n">delratio</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -2543,12 +2558,12 @@
     <span class="k">return</span> <span class="n">g2_shift</span></div>
 
 
-<div class="viewcode-block" id="moveavg"><a class="viewcode-back" href="../functions.html#functions.moveavg">[docs]</a><span class="k">def</span> <span class="nf">moveavg</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">move</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="moveavg"><a class="viewcode-back" href="../functions.html#functions.moveavg">[docs]</a><span class="k">def</span> <span class="nf">moveavg</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">move</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the moving average of a single or multiple vectors.</span>
 
-<span class="sd">    :type data: list[float]</span>
-<span class="sd">    :param data: Data to calculate the moving average. Single or multiple vectors.</span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: Data to calculate the moving average. Single or multiple vectors.</span>
 
 <span class="sd">    :type move: int</span>
 <span class="sd">    :param move: Average range to each side (total average = move + 1).</span>
@@ -2557,30 +2572,26 @@
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">move</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">move</span><span class="p">)</span>
-    <span class="n">b_data</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b_data</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="n">avg</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># for smoothed data</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">avg</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+    <span class="n">data_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">data_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b_data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">b_data</span><span class="p">)):</span>  <span class="c1"># each measured point</span>
-            <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">data_len</span> <span class="o">-</span> <span class="n">move</span><span class="p">):</span>
-                <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">b_data</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span> <span class="o">-</span> <span class="n">move</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">move</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
-                <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-                <span class="n">temp</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-            <span class="n">avg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">data_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">b_data</span><span class="p">)</span>
-
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">move</span><span class="p">,</span> <span class="n">data_len</span> <span class="o">-</span> <span class="n">move</span><span class="p">):</span>
-            <span class="n">avg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">b_data</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">move</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">move</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span> <span class="o">-</span> <span class="n">move</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">move</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]))</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">move</span><span class="p">):</span>
-            <span class="n">avg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="n">avg</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">temp</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">avg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">avg</span> <span class="o">=</span> <span class="n">avg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
     <span class="k">return</span> <span class="n">avg</span></div>
 
 
@@ -3016,22 +3027,21 @@
 <span class="sd">    :returns: A list, or single float value, of the fwhm.</span>
 <span class="sd">    :rtype: float or list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dims_data</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">axis_0</span> <span class="o">=</span> <span class="n">x</span>
-    <span class="k">if</span> <span class="n">dims_data</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">length</span> <span class="o">=</span> <span class="mi">1</span>
         
     <span class="n">ind</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">axis_0</span><span class="p">)</span>
-    
     <span class="n">dims_peaks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">dims_peaks</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">ind</span> <span class="o">=</span> <span class="p">[</span><span class="n">ind</span><span class="p">]</span>
     
     <span class="n">r_fwhm</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">dims_data</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">y_0</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">h</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">y_0</span> <span class="o">=</span> <span class="n">y</span>
@@ -3043,7 +3053,6 @@
                     <span class="n">ind</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
             
             <span class="n">h_m</span> <span class="o">=</span> <span class="n">y_0</span><span class="p">[</span><span class="n">ind</span><span class="p">[</span><span class="n">j</span><span class="p">]]</span><span class="o">/</span><span class="mi">2</span> <span class="c1"># half maximum </span>
-            
             <span class="n">temp</span> <span class="o">=</span> <span class="mi">999999999</span>
             <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ind</span><span class="p">[</span><span class="n">j</span><span class="p">]):</span>
@@ -3069,7 +3078,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">fwhm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">axis_0</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">-</span> <span class="n">axis_0</span><span class="p">[</span><span class="n">left</span><span class="p">])</span>
         
-        <span class="k">if</span> <span class="n">dims_data</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">r_fwhm</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fwhm</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">r_fwhm</span> <span class="o">=</span> <span class="n">fwhm</span>
@@ -3110,32 +3119,27 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">index</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">peak</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">final</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="n">s</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="n">s</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">h</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
-                    <span class="n">index</span> <span class="o">=</span> <span class="n">i</span>
-            <span class="n">diff_nom</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="n">diff_abs</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">limit</span><span class="p">):</span>
-                <span class="n">diff_nom</span> <span class="o">+=</span> <span class="n">h</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">h</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span>
-                <span class="n">diff_abs</span> <span class="o">+=</span> <span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">h</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
-            <span class="k">if</span> <span class="n">diff_nom</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># left side is smaller -&gt; right larger</span>
-                <span class="n">diff_abs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">diff_abs</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">limit</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-            <span class="n">final</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff_abs</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
+    
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+    
+    <span class="n">final</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="n">s</span><span class="p">,</span> <span class="n">index</span> <span class="o">+</span> <span class="n">s</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">h</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">h</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
                 <span class="n">index</span> <span class="o">=</span> <span class="n">i</span>
         <span class="n">diff_nom</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">diff_abs</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">limit</span><span class="p">):</span>
-            <span class="n">diff_nom</span> <span class="o">+=</span> <span class="n">y</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span>
-            <span class="n">diff_abs</span> <span class="o">+=</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">y</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
+            <span class="n">diff_nom</span> <span class="o">+=</span> <span class="n">h</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">h</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span>
+            <span class="n">diff_abs</span> <span class="o">+=</span> <span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">h</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="n">i</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span>
         <span class="k">if</span> <span class="n">diff_nom</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># left side is smaller -&gt; right larger</span>
             <span class="n">diff_abs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">diff_abs</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">limit</span><span class="p">))</span><span class="o">*</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">final</span> <span class="o">=</span> <span class="n">diff_abs</span>
+        <span class="n">final</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff_abs</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">final</span> <span class="o">=</span> <span class="n">final</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
     <span class="k">return</span> <span class="n">final</span></div>
 
 
@@ -3189,7 +3193,7 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Looks for the typical spectra of a dataset. In other words, it calculates </span>
 <span class="sd">    the average spectra and looks for the one that is closer to it in relation</span>
-<span class="sd">    to standard deviation.</span>
+<span class="sd">    to standard deviation. Do not confuse with a `Representative` spectra.</span>
 <span class="sd">    </span>
 <span class="sd">    :type y: list[list[float]]</span>
 <span class="sd">    :param y: A list of spectras.   </span>
@@ -3198,7 +3202,6 @@
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-    
     <span class="n">m</span> <span class="o">=</span> <span class="n">avg</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     
     <span class="n">std</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
@@ -3272,6 +3275,32 @@
         <span class="n">mahdist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="n">i</span><span class="o">-</span><span class="n">mean</span><span class="p">)),</span> <span class="n">inverse</span><span class="p">),</span> <span class="p">(</span><span class="n">i</span><span class="o">-</span><span class="n">mean</span><span class="p">))))</span>
 
     <span class="k">return</span> <span class="n">mahdist</span></div>
+
+
+<div class="viewcode-block" id="representative"><a class="viewcode-back" href="../functions.html#functions.representative">[docs]</a><span class="k">def</span> <span class="nf">representative</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Looks for the representative spectra of a dataset. In other words, it calculates </span>
+<span class="sd">    the median spectra and looks for the one that is closer to it in relation</span>
+<span class="sd">    to standard deviation. Do not confuse with a `Typical` spectra.</span>
+<span class="sd">    </span>
+<span class="sd">    :type y: list[list[float]]</span>
+<span class="sd">    :param y: A list of spectras.   </span>
+<span class="sd">        </span>
+<span class="sd">    :returns: The representative spectra of the set.</span>
+<span class="sd">    :rtype: list[float]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">median</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    
+    <span class="n">std</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+    <span class="n">reptve</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">sdev</span><span class="p">([</span><span class="n">m</span><span class="p">,</span> <span class="n">i</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">temp</span> <span class="o">&lt;</span> <span class="n">std</span><span class="p">:</span>
+            <span class="n">std</span> <span class="o">=</span> <span class="n">temp</span>
+            <span class="n">reptve</span> <span class="o">=</span> <span class="n">i</span>
+    
+    <span class="k">return</span> <span class="n">reptve</span></div>
 </pre></div>
 
            </div>

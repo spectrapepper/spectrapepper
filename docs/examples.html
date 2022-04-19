@@ -180,48 +180,44 @@
 <span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
 
 <span class="c1"># load data</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()</span>
-
-<span class="c1"># get the axis</span>
-<span class="n">axis</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()</span>
 
 <span class="c1"># normalize each spectra to its maximum value</span>
-<span class="n">norm1</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">norm1</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
-<span class="c1"># normalize to a particular value (10)</span>
-<span class="n">norm2</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtovalue</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="c1"># normalize to 10, that is, 10 will become 1.</span>
+<span class="n">norm2</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtovalue</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="c1"># normalize to the global maximum of all the data</span>
-<span class="n">norm3</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtoglobalmax</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">norm3</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtoglobalmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
 
 <span class="c1"># visualization</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Raw Spectras&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts (a.u.)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">norm1</span><span class="p">:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Spectras with maximum normalized to 1&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts (a.u.)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">norm2</span><span class="p">:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Spectras with 10 normalized to 1&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts (a.u.)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">norm3</span><span class="p">:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Spectras with global maximum normalized to 1&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts (a.u.)&#39;</span><span class="p">)</span>
@@ -239,14 +235,10 @@
 <span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
 
 <span class="c1"># load data</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()</span>
-
-<span class="c1"># get the axis</span>
-<span class="n">axis</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()</span>
 
 <span class="c1"># remove baseline</span>
-<span class="n">newdata</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">alsbaseline</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">newdata</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">alsbaseline</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
 <span class="c1"># remove noise with moving average</span>
 <span class="n">newdata</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">moveavg</span><span class="p">(</span><span class="n">newdata</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
@@ -257,15 +249,15 @@
 <span class="c1"># visualization</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original spectras&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts (a.u.)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">newdata</span><span class="p">:</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Processed spectras&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts (a.u.)&#39;</span><span class="p">)</span>
@@ -306,16 +298,16 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1"># import libraries</span>
-<span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+<span class="kn">import</span> <span class="nn">my_functions</span> <span class="k">as</span> <span class="nn">spep</span>
 
-<span class="c1"># load features</span>
-<span class="n">features</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="c1"># load data</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()</span>
 
 <span class="c1"># load targets</span>
 <span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_targets</span><span class="p">()</span>
 
 <span class="c1"># shuffle data</span>
-<span class="n">features</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">shuffle</span><span class="p">([</span><span class="n">features</span><span class="p">,</span> <span class="n">targets</span><span class="p">],</span> <span class="n">delratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">features</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">shuffle</span><span class="p">([</span><span class="n">y</span><span class="p">,</span> <span class="n">targets</span><span class="p">],</span> <span class="n">delratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
 
 <span class="c1"># target classification</span>
 <span class="n">classtargets</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">glimits</span><span class="o">=</span><span class="p">[</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">1.15</span><span class="p">],</span> <span class="n">gnumber</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -351,15 +343,11 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="c1"># load data to fit</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()[</span><span class="mi">10</span><span class="p">]</span> <span class="c1"># load 1 single spectra from the data</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">(</span><span class="n">sample</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># load 1 single spectra from the data</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="c1"># Normalize the maximum value to 1</span>
 
-<span class="c1"># load axis</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># load the x axis from the dataset</span>
-
 <span class="c1"># select peak to fit to</span>
-<span class="n">peak</span> <span class="o">=</span> <span class="mi">206</span> <span class="c1"># aproximate position of the peak (in cm-1) to be evaulated</span>
-
+<span class="n">peak</span> <span class="o">=</span> <span class="mi">206</span> <span class="c1"># approximate position of the peak (in cm-1) to be evaluated</span>
 
 <span class="c1"># automatically fit the distributions to the peak in the data</span>
 <span class="n">gauss</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">gaussfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -380,8 +368,8 @@
 
 <span class="c1"># manually fit the distributions to the peak.</span>
 <span class="n">gauss</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">gaussfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">4.4</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">lorentz</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">lorentzfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="o">+</span><span class="mi">31</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">student</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">studentfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="o">+</span><span class="mi">31</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">lorentz</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">lorentzfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">student</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">studentfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Spectra&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">gauss</span><span class="p">),</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Gauss fit&#39;</span><span class="p">)</span>
@@ -405,7 +393,7 @@
     <span class="n">student</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spep</span><span class="o">.</span><span class="n">studentfit</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="o">*</span><span class="n">i</span><span class="p">),</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 
 <span class="c1"># the stackplot fuinction is a nice tool to show the evolution of data</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">gauss</span><span class="p">,</span> <span class="n">lorentz</span><span class="p">,</span> <span class="n">student</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;Gauss&#39;</span><span class="p">,</span><span class="s1">&#39;Lorentz&#39;</span><span class="p">,</span><span class="s1">&#39;Student&#39;</span><span class="p">]):</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">gauss</span><span class="p">,</span> <span class="n">lorentz</span><span class="p">,</span> <span class="n">student</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;Gauss&#39;</span><span class="p">,</span> <span class="s1">&#39;Lorentz&#39;</span><span class="p">,</span> <span class="s1">&#39;Student&#39;</span><span class="p">]):</span>
     <span class="n">spep</span><span class="o">.</span><span class="n">stackplot</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;$x$&#39;</span><span class="p">,</span>
                     <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\varphi (x)$&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">j</span><span class="p">)</span>
  
