@@ -1,5 +1,5 @@
 =============
-SpectraPepper
+Spectrapepper
 =============
 
 .. image:: https://img.shields.io/pypi/v/spectrapepper.svg
@@ -16,7 +16,7 @@ SpectraPepper
         :target: https://codecov.io/gh/spectrapepper/spectrapepper
 .. image:: https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?color=blue&label=conda%20downloads
         :target: https://pepy.tech/project/spectrapepper
-.. image:: https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=none&left_color=grey&left_text=pypi%20downloads&right_color=blue
+.. image:: https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=international_system&left_color=grey&left_text=pypi%20downloads&right_color=blue
         :target: https://pepy.tech/project/spectrapepper
 .. image:: https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown
         :target: https://stackoverflow.com/questions/tagged/spectrapepper
@@ -69,9 +69,9 @@ Quickstart
         import spectrapepper as spep
         import matplotlib.pyplot as plt
 
-        data = spep.load_spectras()
-        for i in data[1:]:
-            plt.plot(data[0], i)
+        x, y = spep.load_spectras()
+        for i in y:
+            plt.plot(x, i)
         plt.xlabel('Raman shift ($cm^{-1}$)')
         plt.ylabel('Intensity (a.u.)')
         plt.show()
@@ -79,7 +79,7 @@ Quickstart
 4. Stay up-to-date by updating the library using:
 
         conda update spectrapepper
-        pip update spectgrapepper
+        pip install --update spectrapepper
 
 Credits
 -------

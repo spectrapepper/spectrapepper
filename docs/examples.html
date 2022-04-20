@@ -90,7 +90,7 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">SpectraPepper</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Spectrapepper</a></li>
 <li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#example-1-normalization-methods">Example 1: Normalization methods</a></li>
@@ -98,6 +98,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#example-3-pearson-spearman-and-grau-analyses">Example 3: Pearson, Spearman, and Grau analyses</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-4-machine-learning-preparation">Example 4: Machine learning preparation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#example-5-curve-fittings">Example 5: Curve fittings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-6-spectroscopic-data-set-macro-analysis">Example 6: Spectroscopic data set macro analysis</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
@@ -397,6 +398,57 @@
     <span class="n">spep</span><span class="o">.</span><span class="n">stackplot</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;$x$&#39;</span><span class="p">,</span>
                     <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\varphi (x)$&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">j</span><span class="p">)</span>
  
+</pre></div>
+</div>
+</div>
+<div class="section" id="example-6-spectroscopic-data-set-macro-analysis">
+<h2>Example 6: Spectroscopic data set macro analysis<a class="headerlink" href="#example-6-spectroscopic-data-set-macro-analysis" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This example shows basic analysis of a set of spectras.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+
+<span class="c1"># load data set</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()</span>
+
+<span class="c1"># Calculate the averge spectra of the set.</span>
+<span class="n">avg</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">avg</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Calculate the median spectra of the set. That is, a synthetic spectra</span>
+<span class="c1"># composed by the median value in each wavenumber.</span>
+<span class="n">med</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Calculate the standard deviation for each wavenumber.</span>
+<span class="n">sdv</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">sdev</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Obtain the typical sample of the set. That is, the spectra that is closer</span>
+<span class="c1"># to the average.</span>
+<span class="n">typ</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">typical</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Look for the representative spectra. In other words, the spectra that is</span>
+<span class="c1"># closest to the median.</span>
+<span class="n">rep</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">representative</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Calculate the minimum and maximum spectra. That is, the minimum and maximum</span>
+<span class="c1"># values for each wavenumber. They are calculated together.</span>
+<span class="n">mis</span><span class="p">,</span> <span class="n">mas</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">minmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># visualiz the results</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">avg</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Average&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">med</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Median&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">sdv</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;St. dev.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Typical&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Representative&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mis</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Minimum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">mas</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Maximum&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

@@ -2,7 +2,7 @@
 This example shows basic analysis of a set of spectras.
 """
 
-import my_functions as spep
+import spectrapepper as spep
 
 # load data set
 x, y = spep.load_spectras()
