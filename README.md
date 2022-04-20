@@ -8,7 +8,7 @@
 [![image](https://img.shields.io/lgtm/grade/python/g/spectrapepper/spectrapepper.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/spectrapepper/spectrapepper/context:python)
 [![image](https://github.com/spectrapepper/spectrapepper/workflows/docs/badge.svg)](https://spectrapepper.github.io/spectrapepper)
 [![codecov](https://codecov.io/gh/spectrapepper/spectrapepper/branch/main/graph/badge.svg?token=DC0QIwuYel)](https://codecov.io/gh/spectrapepper/spectrapepper)
-[![Downloads](https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=none&left_color=grey&right_color=blue&left_text=pypi%20downloads)](https://pepy.tech/project/spectrapepper)
+[![Downloads](https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=abbreviation&left_color=grey&right_color=blue&left_text=pypi%20downloads)](https://pepy.tech/project/spectrapepper)
 [![image](https://img.shields.io/conda/dn/conda-forge/spectrapepper?color=blue&label=conda%20downloads)](https://anaconda.org/conda-forge/spectrapepper)
 [![image](https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown?logo=stackoverflow&logoWidth=18&logoColor=white)](https://stackoverflow.com/questions/tagged/spectrapepper)
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.03781/status.svg)](https://doi.org/10.21105/joss.03781)
@@ -56,9 +56,9 @@ The following is a short list of some main procedures that **spectrapepper** pac
         import spectrapepper as spep
         import matplotlib.pyplot as plt
 
-        data = spep.load_spectras()
-        for i in data[1:]:
-            plt.plot(data[0], i)
+        x, y = spep.load_spectras()
+        for i in y:
+            plt.plot(x, i)
         plt.xlabel('Raman shift ($cm^{-1}$)')
         plt.ylabel('Intensity (a.u.)')
         plt.show()
@@ -66,7 +66,7 @@ The following is a short list of some main procedures that **spectrapepper** pac
 4. Stay up-to-date by updating the library using:
 
         conda update spectrapepper
-        pip update spectgrapepper
+        pip install --update spectrapepper
 
 # Credits
 

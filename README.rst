@@ -43,7 +43,7 @@ fast and automated traditional methods.
 Features
 --------
 
-The following is a short list of some of the main procedures that **SpectraPepper** package enables.
+The following is a short list of some of the main procedures that **spectrapepper** package enables.
 
 - Baseline removal functions.
 - Normalization methods.
