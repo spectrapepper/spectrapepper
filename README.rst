@@ -76,7 +76,13 @@ Quickstart
         plt.ylabel('Intensity (a.u.)')
         plt.show()
 
-4. Stay up-to-date by updating the library using:
+4. If you find this library useful, please consider a reference or citation as::
+
+        Grau-Luque et al., (2021). spectrapepper: A Python toolbox for advanced analysis
+        of spectroscopic data for materials and devices. Journal of Open Source Software,
+        6(67), 3781, https://doi.org/10.21105/joss.03781
+
+5. Stay up-to-date by updating the library using::
 
         conda update spectrapepper
         pip install --update spectrapepper

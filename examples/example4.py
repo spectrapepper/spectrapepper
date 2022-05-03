@@ -3,7 +3,7 @@ This example shows how to use Scikit-learn for spectral data with spectrapepper.
 """
 
 # import libraries
-import my_functions as spep
+import spectrapepper as spep
 
 # load data
 x, y = spep.load_spectras()
