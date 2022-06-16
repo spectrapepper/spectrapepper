@@ -1,0 +1,6 @@
+Functions
+---------
+
+.. automodule:: functions
+   :members:
+   :exclude-members: load_spectras, load_targets, load_params, test_loads
