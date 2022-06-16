@@ -1,5 +1,5 @@
 =============
-Spectrapepper
+spectrapepper
 =============
 
 .. image:: https://img.shields.io/pypi/v/spectrapepper.svg
@@ -84,8 +84,13 @@ Quickstart
 
 5. Stay up-to-date by updating the library using::
 
-        conda update spectrapepper
         pip install --update spectrapepper
+        conda update spectrapepper
+
+6. If you encounter problems when updating, try uninstalling and then re-installing::
+
+        pip uninstall spectrapepper
+        conda remove spectrapepper
 
 Credits
 -------

@@ -1,5 +1,5 @@
 =============
-SpectraPepper
+spectrapepper
 =============
 
 .. image:: https://img.shields.io/pypi/v/spectrapepper.svg
@@ -16,7 +16,7 @@ SpectraPepper
         :target: https://codecov.io/gh/spectrapepper/spectrapepper
 .. image:: https://img.shields.io/conda/dn/conda-forge/spectrapepper.svg?color=blue&label=conda%20downloads
         :target: https://pepy.tech/project/spectrapepper
-.. image:: https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=none&left_color=grey&left_text=pypi%20downloads&right_color=blue
+.. image:: https://static.pepy.tech/personalized-badge/spectrapepper?period=total&units=international_system&left_color=grey&left_text=pypi%20downloads&right_color=blue
         :target: https://pepy.tech/project/spectrapepper
 .. image:: https://img.shields.io/badge/stackoverflow-Ask%20a%20question-brown
         :target: https://stackoverflow.com/questions/tagged/spectrapepper
@@ -31,7 +31,6 @@ SpectraPepper
 * Conda-forge: https://anaconda.org/conda-forge/spectrapepper
 * Free software: MIT license
 
-
 Introduction
 ============
 
@@ -44,7 +43,7 @@ fast and automated traditional methods.
 Features
 --------
 
-The following is a short list of some of the main procedures that **SpectraPepper** package enables.
+The following is a short list of some of the main procedures that **spectrapepper** package enables.
 
 - Baseline removal functions.
 - Normalization methods.
@@ -53,6 +52,45 @@ The following is a short list of some of the main procedures that **SpectraPeppe
 - Combinatorial analysis tools, such as Spearman, Pearson, and n-dimensional correlation coefficients.
 - Tools for Machine Learning applications, such as data merging, randomization, and decision boundaries.
 - Sample data and examples.
+
+Quickstart
+----------
+
+1. Install this library using ``pip``::
+
+        pip install spectrapepper
+
+2. Install this library using ``conda-forge``::
+
+        conda install -c conda-forge spectrapepper
+
+3. Test it by plotting some data!::
+
+        import spectrapepper as spep
+        import matplotlib.pyplot as plt
+
+        x, y = spep.load_spectras()
+        for i in y:
+            plt.plot(x, i)
+        plt.xlabel('Raman shift ($cm^{-1}$)')
+        plt.ylabel('Intensity (a.u.)')
+        plt.show()
+
+4. If you find this library useful, please consider a reference or citation as::
+
+        Grau-Luque et al., (2021). spectrapepper: A Python toolbox for advanced analysis
+        of spectroscopic data for materials and devices. Journal of Open Source Software,
+        6(67), 3781, https://doi.org/10.21105/joss.03781
+
+5. Stay up-to-date by updating the library using::
+
+        pip install --update spectrapepper
+        conda update spectrapepper
+
+6. If you encounter problems when updating, try uninstalling and then re-installing::
+
+        pip uninstall spectrapepper
+        conda remove spectrapepper
 
 Credits
 -------

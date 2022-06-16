@@ -3,7 +3,8 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-import spectrapepper as spep
+#import spectrapepper as spep
+import functions as spep
 import numpy as np
 import pandas as pd
 
@@ -36,7 +37,6 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.issinglevalue(y=[a, b, d])
         self.assertEqual(data2, [False, False, True])
 
-
         data2 = spep.typical(spectras[:10])
         r = round(sum(data2))
         print('typical: ' + str(r))
@@ -46,11 +46,6 @@ class TestSpectrapepper(unittest.TestCase):
         r = np.floor(sum(data2))
         print('lowpass: ' + str(r))
         self.assertEqual(r, 1464)
-
-        data2 = spep.moveavg(data, 10)
-        r = np.floor(sum(data2))
-        print('moveavg: ' + str(r))
-        self.assertEqual(r, 1442)
 
         data2 = spep.normtomax(data, zeromin=True)
         r = round(sum(data2), 2)
@@ -102,15 +97,15 @@ class TestSpectrapepper(unittest.TestCase):
         print('polybaseline_multi: ' + str(r))
         self.assertEqual(r, 87)
 
-        data2 = spep.lorentzfit(y=data, x=axis, pos=205)
+        data2 = spep.lorentzfit(y=data, x=axis, pos=205, look=10)
         r = np.floor(sum(data2))
         print('lorentzfit: ' + str(r))
         self.assertEqual(r, 232)
 
-        data2 = spep.gaussfit(data, x=axis, pos=205)
+        data2 = spep.gaussfit(data, x=axis, pos=205, look=10)
         r = np.floor(sum(data2))
         print('gaussfit: ' + str(r))
-        self.assertEqual(r, 169)
+        self.assertEqual(r, 170)
 
         data2 = spep.valtoind([50,100,121,400], axis)
         r = sum(data2)
@@ -315,12 +310,12 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.moveavg(data, 2)
         r = round(np.sum(data2), 2)
         print('moveavg: ' + str(r))
-        self.assertEqual(r, 1460.06)
+        self.assertEqual(r, 1463.69)
 
         data2 = spep.moveavg([data,data_l1], 2)
         r = round(np.sum(data2), 2)
         print('moveavg_multi: ' + str(r))
-        self.assertEqual(r, 2917.29)
+        self.assertEqual(r, 2924.63)
 
         df = pd.DataFrame(data = np.transpose([a,b,c]), columns = ['D1', 'D2', 'T'])
         data2 = spep.plot2dml(df, plot=False)
@@ -376,20 +371,20 @@ class TestSpectrapepper(unittest.TestCase):
         print('minmax: ' + str(r))
         self.assertEqual(r, 8399.54)
 
-        data2 = spep.fwhm(y=spectras, x=axis, peaks=250, s=10)
+        data2 = spep.fwhm(y=spectras, x=axis, peaks=206, s=10)
         r = round(sum(data2), 2)
         print('fwhm: ' + str(r))
-        self.assertEqual(r, 2346.65)
+        self.assertEqual(r, 2520.99)
 
-        data2 = spep.fwhm(y=data, x=axis, peaks=250, s=10)
+        data2 = spep.fwhm(y=data, x=axis, peaks=206, s=10)
         r = round(np.sum(data2), 2)
         print('fwhm_single: ' + str(r))
-        self.assertEqual(r, 1.84)
+        self.assertEqual(r, 9.22)
 
-        data2 = spep.asymmetry(y=data, x=axis, peak=250, s=5, limit=10)
+        data2 = spep.asymmetry(y=data, x=axis, peak=206, s=5, limit=10)
         r = round(np.sum(data2), 2)
         print('asymmetry: ' + str(r))
-        self.assertEqual(r, -0.13)
+        self.assertEqual(r, -0.38)
 
         data3 = np.vstack((spectras[2],spectras[1],spectras[0]))
         data2 = spep.rwm(data3, (3,3))
@@ -410,13 +405,13 @@ class TestSpectrapepper(unittest.TestCase):
         r = round(sum(data2), 2)
         print('mahalanobis: ' + str(r))
         self.assertEqual(r, 5.36)
-        
+
         data2 = spep.representative(spectras[0:10])
         r = round(sum(data2), 2)
         print('representative: ' + str(r))
         self.assertEqual(r, 1485.47)
-        
-        
+
+
 
 if __name__ == '__main__':
     unittest.main()

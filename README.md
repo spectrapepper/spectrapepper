@@ -69,15 +69,18 @@ The following is a short list of some main procedures that **spectrapepper** pac
         of spectroscopic data for materials and devices. Journal of Open Source Software,
         6(67), 3781, https://doi.org/10.21105/joss.03781
 
-
 5. Stay up-to-date by updating the library using:
 
        conda update spectrapepper
        pip install --update spectrapepper
 
+6. If you encounter problems when updating, try uninstalling and then re-installing::
+
+        pip uninstall spectrapepper
+        conda remove spectrapepper
+
 
 # Credits
-
 
 This package was created with [Cookiecutter](https://github.com/cookiecutter/cookiecutter) and the
 [giswqs/pypackage](https://github.com/giswqs/pypackage) project template.
