@@ -3,8 +3,7 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-#import spectrapepper as spep
-import functions as spep
+import spectrapepper as spep
 import numpy as np
 import pandas as pd
 
