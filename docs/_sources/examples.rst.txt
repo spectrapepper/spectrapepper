@@ -33,3 +33,8 @@ Example 6: Spectroscopic data set macro analysis
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. literalinclude:: ../examples/example6.py
+
+Example 7: Deconvolution of a spectra
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. literalinclude:: ../examples/example7.py

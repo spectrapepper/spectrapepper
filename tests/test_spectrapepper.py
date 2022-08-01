@@ -56,6 +56,11 @@ class TestSpectrapepper(unittest.TestCase):
         print('normtomax_multi_zeromin: ' + str(r))
         self.assertEqual(r, 175.20)
 
+        data2 = spep.normtoratio(data, r1=[100, 120], r2=[0, 500], x=axis)
+        r = round(np.sum(data2), 2)
+        print('normtoratio: ' + str(r))
+        self.assertEqual(r, 20.49)
+
         data2 = spep.normtovalue(data,100)
         r = np.floor(sum(data2))
         print('normtovalue: ' + str(r))
@@ -105,6 +110,16 @@ class TestSpectrapepper(unittest.TestCase):
         r = np.floor(sum(data2))
         print('gaussfit: ' + str(r))
         self.assertEqual(r, 170)
+
+        data2 = spep.studentfit(data, x=axis, pos=205, look=10)
+        r = np.floor(sum(data2))
+        print('studentfit: ' + str(r))
+        self.assertEqual(r, 151)
+
+        data2 = spep.voigtfit(data, x=axis, pos=205, look=10)
+        r = np.floor(sum(data2))
+        print('voigtfit: ' + str(r))
+        self.assertEqual(r, 48)
 
         data2 = spep.valtoind([50,100,121,400], axis)
         r = sum(data2)
@@ -410,6 +425,30 @@ class TestSpectrapepper(unittest.TestCase):
         print('representative: ' + str(r))
         self.assertEqual(r, 1485.47)
 
+        data2 = spep.autocorrelation(data, x=axis, lag=1)
+        r = round(data2, 2)
+        print('autocorrelation: ' + str(r))
+        self.assertEqual(r, 0.99)
+
+        data2 = spep.crosscorrelation(y1=data, y2=data_l1, lag=1)
+        r = round(data2, 2)
+        print('crosscorrelation: ' + str(r))
+        self.assertEqual(r, 4296.45)
+
+        data2 = spep.derivative(data, x=None, s=1, deg=1)
+        r = round(sum(data2), 2)
+        print('derivative: ' + str(r))
+        self.assertEqual(r, -1.5)
+
+        data2 = spep.peaksimilarity(y1=data, y2=data_l1, p1=[206], p2=[206], x=axis, plot=False)
+        r = round(data2[0][0], 2)
+        print('peaksimilarity: ' + str(r))
+        self.assertEqual(r, 0.99)
+
+        data2 = spep.reverse(y=data)
+        r = round(sum(data2), 2)
+        print('reverse: ' + str(r))
+        self.assertEqual(r, 1463.76)
 
 
 if __name__ == '__main__':
