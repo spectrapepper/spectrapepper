@@ -57,7 +57,7 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.normtoratio(spectras[0], r1=[100, 120], r2=[0, 500], x=axis)
         r = round(np.sum(data2), 2)
         print('normtoratio: ', r)
-        self.assertEqual(r, 5.47)
+        self.assertEqual(r, 5.47) # 20.49
 
         data2 = spep.normtovalue(spectras[0],100)
         r = np.floor(sum(data2))
@@ -114,10 +114,10 @@ class TestSpectrapepper(unittest.TestCase):
         print('studentfit: ', r)
         self.assertEqual(r, 151)
 
-        data2 = spep.voigtfit(spectras[0], x=axis, pos=205, look=10)
+        data2 = spep.voigtfit(spep.normtomax(spectras[0]), x=axis, pos=205, look=10)
         r = np.floor(sum(data2))
         print('voigtfit: ', r)
-        self.assertEqual(r, 48)
+        self.assertEqual(r, 16)
 
         data2 = spep.valtoind([50,100,121,400], axis)
         r = sum(data2)
@@ -207,7 +207,7 @@ class TestSpectrapepper(unittest.TestCase):
         r = np.floor(np.sum(data2))
         print('confusionmatrix: ', r)
         self.assertEqual(r, 5)
-
+        
         data2 = spep.avg([spectras[0],spectras[1]])
         r = np.floor(sum(data2))
         print('avg: ', r)
