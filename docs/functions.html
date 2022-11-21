@@ -76,7 +76,7 @@
 use the search function to look up specific functionalities and keywords.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.alsbaseline">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">alsbaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#alsbaseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.alsbaseline" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">alsbaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#alsbaseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.alsbaseline" title="Permalink to this definition"></a></dt>
 <dd><p>Calculation of the baseline using Asymmetric Least Squares Smoothing. This
 script only makes the calculation but it does not remove it. Original idea of
 this algorithm by P. Eilers and H. Boelens (2005):</p>
@@ -87,6 +87,8 @@ this algorithm by P. Eilers and H. Boelens (2005):</p>
 <li><p><strong>lam</strong> (<em>int</em>) – Lambda, smoothness. The default is 100.</p></li>
 <li><p><strong>p</strong> (<em>float</em>) – Asymmetry. The default is 0.001.</p></li>
 <li><p><strong>niter</strong> (<em>int</em>) – Niter. The default is 10.</p></li>
+<li><p><strong>remove</strong> (<em>True</em>) – If <cite>True</cite>, calculates and returns <cite>data - baseline</cite>. If 
+<cite>False</cite>, then it returns the <cite>baseline</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -126,12 +128,12 @@ values.</p>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">asymmetry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#asymmetry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.asymmetry" title="Permalink to this definition"></a></dt>
 <dd><p>Compares both sides of a peak, or list of peaks, and checks how similar 
 they are. It does this by calculating the MRSE and indicating which side is 
-larger or smaller bya area. If it is a negative (-), then left side is
+larger or smaller by area. If it is a negative (-), then left side is
 smaller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>y</strong> (<em>list</em>) – spectrocopic data to calculate the fwhm from. Single vector or
+<li><p><strong>y</strong> (<em>list</em>) – spectrocopic data to calculate the asymmetry from. Single vector or
 list of vectors.</p></li>
 <li><p><strong>x</strong> (<em>list</em>) – Axis of the data. If none, then the axis will be 0..N where N is
 the length of the spectra or spectras.</p></li>
@@ -317,7 +319,7 @@ X-axis coords of ths CMs. Y-axis coords of the Cms.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.confusionmatrix">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">confusionmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['',</span> <span class="pre">'',</span> <span class="pre">'']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Blues'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'True'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Prediction'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#confusionmatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.confusionmatrix" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">confusionmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Blues'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'True'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Prediction'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#confusionmatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.confusionmatrix" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates and/or plots the confusion matrix for machine learning algorithm
 results.</p>
 <dl class="field-list simple">
@@ -326,11 +328,14 @@ results.</p>
 <li><p><strong>tt</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Real targets.</p></li>
 <li><p><strong>tp</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Predicted targets.</p></li>
 <li><p><strong>plot</strong> (<em>boolean</em>) – If true, plots the matrix. The default is False</p></li>
-<li><p><strong>gn</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Names, or lables , of the classification groups. Default is empty.</p></li>
+<li><p><strong>gn</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Names, or lables , of the classification groups. Default is <cite>None</cite>.</p></li>
+<li><p><strong>ndw</strong> (<em>bool</em>) – No data warning. If <cite>True</cite>, it warns about no havingdata to 
+evaluate. Default is True.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – Name of the matrix. Default is empty.</p></li>
 <li><p><strong>cmm</strong> (<em>str</em>) – Nam eof the colormap (matplotlib) to use for the plot. Default
 is Blue.</p></li>
 <li><p><strong>fontsize</strong> (<em>int</em>) – Font size for the labels. The default is 20.</p></li>
+<li><p><strong>figsize</strong> (<em>Tuple</em>) – Size of the image. The default is (12, 15).</p></li>
 <li><p><strong>ylabel</strong> (<em>str</em>) – Label for y axis. Default is <cite>True</cite>.</p></li>
 <li><p><strong>xlabel</strong> (<em>str</em>) – Label for x axis. Default is <cite>Prediction</cite>.</p></li>
 </ul>
@@ -412,6 +417,27 @@ pairs. Uses randomnes of CRs (S. J. Barton, B. M. Hennelly, <a class="reference 
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="functions.count">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.count" title="Permalink to this definition"></a></dt>
+<dd><p>Counts the number of values that coincide with <cite>value</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – vector or list of vectors to search for values.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – Value or list of values to search in <cite>y</cite>. If many values are
+passed, then it rteturns a list with the counted equalities. Default is 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[float]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Reversed data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="functions.crosscorrelation">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">crosscorrelation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalization</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#crosscorrelation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.crosscorrelation" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the correlation of a signal with a delayed copy of a second
@@ -483,6 +509,36 @@ signals.</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="functions.deconvolution">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">deconvolution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gauss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#deconvolution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.deconvolution" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>BETA: Deconvolutes a spectra into a defined number of distributions. This will</dt><dd><p>fit dsitributions on the declared positions <cite>pos</cite> of peaks and change 
+their shape acoording to the difference betwwen the spectra and the 
+sum (convoilution) of the fittings.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – vector to deconvolute.</p></li>
+<li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – axis.</p></li>
+<li><p><strong>pos</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – positions of peaks in x values</p></li>
+<li><p><strong>method</strong> (<em>string</em>) – The selected shape of the fittings. Options include: <cite>gauss</cite>,
+<cite>lorentz</cite>, and <cite>voigt</cite>.</p></li>
+<li><p><strong>pp</strong> (<em>boolean</em>) – If <cite>True</cite>, it prints parameters of the fittings. Default
+is <cite>False</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[list[float]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>2-D list of the fittings.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -566,7 +622,7 @@ basically find the <cite>full width quarter maximum</cite>. <cite>alpha</cite> s
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.gaussfit">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">gaussfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#gaussfit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.gaussfit" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">gaussfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#gaussfit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.gaussfit" title="Permalink to this definition"></a></dt>
 <dd><p>Fits peak as an optimization problem or manual fit. A curve <cite>y</cite> is only 
 mandatory if the optimixzation is needed (manual=False, default). If no
 axis ‘ax’ is defined, then a default axis is generated for both options.</p>
@@ -584,6 +640,8 @@ when <cite>manual=False</cite>. The maximum value fo the fitting is proportional
 to this value, but is not necesarly its value. The default is 1.</p></li>
 <li><p><strong>manual</strong> (<em>boolean</em>) – If <cite>True</cite>, 1 curve will be generated using the declared 
 parameter <cite>sigma</cite> and perform a manual fit. Default is <cite>False</cite>.</p></li>
+<li><p><strong>params</strong> (<em>boolean</em>) – If <cite>True</cite>, it returns the parameters of the fit in the
+order of <cite>alpha</cite>, <cite>sigma</cite> and <cite>peak position</cite>. Default is <cite>False</cite>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -706,47 +764,30 @@ respective answer.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.load">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromline=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'float'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.load" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromline=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'float'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split=False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.load" title="Permalink to this definition"></a></dt>
 <dd><p>Load data from a standard text file obtained from LabSpec and other
 spectroscopy instruments. Normally, when single measurement these come in 
 columns with the first one being the x-axis. When it is a mapping, the
-first row is the x-axis and the following are the measurements.</p>
+first row is the x-axis and the following are the measurements. It can also
+perofrm random access toa particular ´line´.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>file</strong> (<em>str</em>) – Url of data file. Must not have headers and separated by ‘spaces’ (LabSpec).</p></li>
-<li><p><strong>fromline</strong> (<em>int</em>) – Line of file from which to start loading data. The default is 0.</p></li>
+<li><p><strong>file</strong> (<em>str</em>) – Url of data file. Must not have headers and separated by 
+‘spaces’ (LabSpec).</p></li>
+<li><p><strong>fromline</strong> (<em>int</em>) – Line of file from which to start loading data. The default
+is 0.</p></li>
+<li><p><strong>line</strong> (<em>int</em>) – Random access to file. Loads a specific line in a file. Default
+is ´None´.</p></li>
 <li><p><strong>transpose</strong> (<em>boolean</em>) – If True transposes the data. Default is False.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of the data.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list[float]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="functions.loadline">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">loadline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#loadline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.loadline" title="Permalink to this definition"></a></dt>
-<dd><p>Random access to file. Loads a specific line in a file. Useful when
-managing large data files in processes where time is important. It can
-load numbers as floats.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>file</strong> (<em>str</em>) – Url od the data file</p></li>
-<li><p><strong>line</strong> (<em>int</em>) – Line number. Counts from 0.</p></li>
 <li><p><strong>dtype</strong> (<em>str</em>) – Type of data. If its numeric then ‘float’, if text then ‘string’.
 Default is ‘float’.</p></li>
-<li><p><strong>split</strong> (<em>boolean</em>) – True to make a list of strings when ‘tp’ is ‘string’, 
+<li><p><strong>split</strong> (<em>boolean</em>) – True to make a list of strings when ‘dtype’ is ‘string’, 
 separated by space. The default is False.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Array with the desired line.</p>
+<dd class="field-even"><p>List of the data.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>list[float]</p>
@@ -980,8 +1021,10 @@ bin from a list of vectors.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single spectra or a list of them.</p></li>
-<li><p><strong>lims</strong> (<em>list</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Limits of the vector to nomrlize the sum. Default is <cite>None</cite>.</p></li>
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single spectra or a list of them to normalize.</p></li>
+<li><p><strong>lims</strong> (<em>list</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Limits of the vector to normalize the sum. Default is <cite>None</cite>.
+For example, if ´lims = [N, M]´, the the sum under the curve betwween
+N and M is normalized to 1.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1004,6 +1047,27 @@ bin from a list of vectors.</p>
 <li><p><strong>globalmin</strong> (<em>Bool</em>) – If <cite>True</cite>, the global minimum is reescaled to 0. Default
 is <cite>False</cite>.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Normalized data</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="functions.normtoglobalsum">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtoglobalsum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtoglobalsum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtoglobalsum" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Normalizes a list of spectras to the global max sum under the curve. In </dt><dd><p>other words, looks to the largest sum under the curve and sets it to 1,
+then the other areas are scaled in relation to that one.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of spectras.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Normalized data</p>
@@ -1106,7 +1170,7 @@ will be reescaled to 1 in all the spectras.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.peakfinder">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">peakfinder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">between</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#peakfinder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.peakfinder" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">peakfinder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#peakfinder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.peakfinder" title="Permalink to this definition"></a></dt>
 <dd><p>Finds the location of the peaks in a single vector.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1114,7 +1178,6 @@ will be reescaled to 1 in all the spectras.</p>
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to find a peak in. Single spectra.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – X axis of the data. If no axis is passed then the axis goes 
 from 0 to N, where N is the length of the spectras. Default is <cite>None</cite>.</p></li>
-<li><p><strong>between</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Range in x values</p></li>
 <li><p><strong>ranges</strong> (<em>list</em><em>[</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em><em>]</em>) – Aproximate ranges of known peaks, if any. If no ranges are 
 known or defined, it will return all the peaks that comply with the 
 <cite>look</cite> criteria. If ranges are defined, it wont use the <cite>look</cite> criteria,
@@ -1134,7 +1197,7 @@ maximum. The default is 10.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.peaksimilarity">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">peaksimilarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inferno'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Peak</span> <span class="pre">similarity'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#peaksimilarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.peaksimilarity" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">peaksimilarity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'inferno'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Peak</span> <span class="pre">similarity'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#peaksimilarity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.peaksimilarity" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the similarity matrix as described in ´doi:10.1142/S021972001350011X´.
 It quantifyes the difference of the derivative function of the peaks and 
 puts them into a matrix. This can be used for peak alignment.</p>
@@ -1565,8 +1628,33 @@ searches for the position of the value. It approximates to the closest.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="functions.vectortoimg">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">vectortoimg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">negatives</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'remove'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inverted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#vectortoimg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.vectortoimg" title="Permalink to this definition"></a></dt>
+<dd><dl class="simple">
+<dt>Transforms 1-D vecctors into an image. Useful for more insightful results</dt><dd><p>when performing deep learning.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – vector or list of vectors.</p></li>
+<li><p><strong>negatives</strong> (<em>str</em>) – Specify what to do with negative values. If <cite>remove</cite> then negative values are set to <cite>0</cite>. If
+<cite>globalmin</cite> then all the data is shifted up so the global minimum is <cite>0</cite>. Default it <cite>remove</cite>.</p></li>
+<li><p><strong>inverted</strong> (<em>boolean</em>) – If <cite>True</cite>, inverts the process to take an image to a vector. Default is <cite>False</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list[list[list[int]]]</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>3-D list containing 0 or 1.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="functions.voigtfit">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">voigtfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#voigtfit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.voigtfit" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">voigtfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#voigtfit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.voigtfit" title="Permalink to this definition"></a></dt>
 <dd><p>Fits peak as an optimization problem or manual fit for Voigt distirbution,
 also known as a convoluted Gaussian-Lorentz curve. A curve <cite>y</cite> is only
 needed for the optimization (manual=False, default). If no axis <cite>x</cite> is 

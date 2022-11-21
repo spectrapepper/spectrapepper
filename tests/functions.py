@@ -92,87 +92,80 @@ def load_params(transpose=True):
     return data
 
 
-def load(file, fromline=0, transpose=False, dtype=float):
+def load(file, fromline=0, line=None, transpose=False, dtype=float, split=False):
     """
     Load data from a standard text file obtained from LabSpec and other
     spectroscopy instruments. Normally, when single measurement these come in 
     columns with the first one being the x-axis. When it is a mapping, the
-    first row is the x-axis and the following are the measurements.
-
+    first row is the x-axis and the following are the measurements. It can also
+    perofrm random access toa particular ´line´.
+    
     :type file: str
-    :param file: Url of data file. Must not have headers and separated by 'spaces' (LabSpec).
+    :param file: Url of data file. Must not have headers and separated by 
+        'spaces' (LabSpec).
     
     :type fromline: int
-    :param fromline: Line of file from which to start loading data. The default is 0.
+    :param fromline: Line of file from which to start loading data. The default
+        is 0.
+    
+    :type line: int
+    :param line: Random access to file. Loads a specific line in a file. Default
+        is ´None´.
     
     :type transpose: boolean
     :param transpose: If True transposes the data. Default is False.
+    
+    :type dtype: str
+    :param dtype: Type of data. If its numeric then 'float', if text then 'string'.
+        Default is 'float'.
+    
+    :type split: boolean
+    :param split: True to make a list of strings when 'dtype' is 'string', 
+        separated by space. The default is False.
     
     :returns: List of the data.
     :rtype: list[float]
     """
     new_data = []
-    raw_data = open(file, "r")
-    i = 0
-    for row in raw_data:
-        if i >= fromline:
-            # row = row.replace(",", ".")
-            row = row.replace(";", " ")
-            row = row.replace("NaN", "-1")
-            row = row.replace("nan", "-1")
-            row = row.replace("--", "-1")
-            s_row = str.split(row)
-            s_row = np.array(s_row, dtype=dtype)
-            new_data.append(s_row)
-        i += 1
-    raw_data.close()
-
-    if transpose:
-        new_data = np.transpose(new_data)
+    with open(file, 'r') as raw_data:
+        # raw_data = open(file, "r")
+        i = 0
+        
+        if line is not None:
+            line = int(line) + 1
+            file = str(file)
+            info = linecache.getline(file, line)
+            
+            if dtype == 'float':
+                info = info.replace("NaN", "-1")
+                info = info.replace("nan", "-1")
+                info = info.replace("--", "-1")
+                info = str.split(info)
+                info = np.array(info, dtype=float)
+    
+            if dtype == 'string':
+                if split:
+                        info = str.split(info)
+                info = np.array(info, dtype=str)
+                
+        elif line is None:
+            for row in raw_data:
+                if i >= fromline:
+                    # row = row.replace(",", ".")
+                    row = row.replace(";", " ")
+                    row = row.replace("NaN", "-1")
+                    row = row.replace("nan", "-1")
+                    row = row.replace("--", "-1")
+                    s_row = str.split(row)
+                    s_row = np.array(s_row, dtype=dtype)
+                    new_data.append(s_row)
+                i += 1
+            # raw_data.close()
+        
+        if transpose:
+            new_data = np.transpose(new_data)
 
     return new_data
-
-
-def loadline(file, line=0, dtype='float', split=False):
-    """
-    Random access to file. Loads a specific line in a file. Useful when
-    managing large data files in processes where time is important. It can
-    load numbers as floats.
-
-    :type file: str
-    :param file: Url od the data file
-
-    :type line: int
-    :param line: Line number. Counts from 0.
-
-    :type dtype: str
-    :param dtype: Type of data. If its numeric then 'float', if text then 'string'.
-        Default is 'float'.
-
-    :type split: boolean
-    :param split: True to make a list of strings when 'tp' is 'string', 
-        separated by space. The default is False.
-
-    :returns: Array with the desired line.
-    :rtype: list[float]
-    """
-    line = int(line) + 1
-    file = str(file)
-    info = linecache.getline(file, line)
-    
-    if dtype == 'float':
-        info = info.replace("NaN", "-1")
-        info = info.replace("nan", "-1")
-        info = info.replace("--", "-1")
-        info = str.split(info)
-        info = np.array(info, dtype=float)
-
-    if dtype == 'string':
-        if split:
-                info = str.split(info)
-        info = np.array(info, dtype=str)
-
-    return info
 
 
 def lowpass(y, cutoff=0.25, fs=30, order=2, nyq=0.75):
@@ -199,7 +192,7 @@ def lowpass(y, cutoff=0.25, fs=30, order=2, nyq=0.75):
     """
     y = copy.deepcopy(y)  # so it does not change the input list
     dims = len(np.array(y).shape)
-    print(dims)
+
     if dims == 1:
         y = [y]
     
@@ -273,7 +266,7 @@ def normtovalue(y, val):
     return y
 
 
-def alsbaseline(y, lam=100, p=0.001, niter=10):
+def alsbaseline(y, lam=100, p=0.001, niter=10, remove=True):
     """
     Calculation of the baseline using Asymmetric Least Squares Smoothing. This
     script only makes the calculation but it does not remove it. Original idea of
@@ -291,6 +284,10 @@ def alsbaseline(y, lam=100, p=0.001, niter=10):
     :type niter: int
     :param niter: Niter. The default is 10.
 
+    :type remove: True
+    :param remove: If `True`, calculates and returns `data - baseline`. If 
+        `False`, then it returns the `baseline`.
+
     :returns: Returns the calculated baseline.
     :rtype: list[float]
     """
@@ -303,18 +300,24 @@ def alsbaseline(y, lam=100, p=0.001, niter=10):
     l = len(y[0])
     d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
     w = np.ones(l)
+    
+    resolve = []
     for i in range(len(y)):
         for _ in range(niter):
             W = sparse.spdiags(w, 0, l, l)
             Z = W + lam * d.dot(d.transpose())       
             z = spsolve(Z, w * y[i])
             w = p * (y[i] > z) + (1 - p) * (y[i] < z)
-        y[i] = y[i] - z  
+        # y[i] = y[i] - z
+        if remove:
+            resolve.append(y[i] - z)
+        else:
+            resolve.append(z)
                 
     if dims == 1:
-        y = y[0]
+        resolve = resolve[0]
     
-    return y
+    return resolve
 
 
 def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
@@ -358,7 +361,7 @@ def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
         pos = [[i, i] for i in pos]
         points = [[i, i] for i in points]
 
-    if dims < 2:
+    if dims == 1:
         data = [data]
     
     baseline = []
@@ -391,7 +394,7 @@ def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
             plt.legend()
             plt.show()
     
-    if dims < 2:
+    if dims == 1:
         result = result[0]
 
     return result
@@ -538,16 +541,20 @@ def areacalculator(y, x, limits, norm=False):
     dims = len(np.array(y).shape)
     limits = valtoind(limits, x)
 
+    if len(np.array(limits).shape) == 1:
+        limits = [limits]
+
     if dims == 1:
         y = [y]
 
     areas = [[0 for _ in range(len(limits))] for _ in range(len(y))]  # final values of areas
+    
     for i in range(len(y)):  # calculate the areas for all the points
         for j in range(len(limits)):  # for all the areas
             areas[i][j] = np.sum(y[i][limits[j][0]:limits[j][1]])  # calculate the sum
             if norm:
                 areas[i][j] = areas[i][j] / np.sum(y[i])
-        
+
     if dims == 1:
         areas = areas[0]
     
@@ -607,10 +614,12 @@ def normsum(y, x=None, lims=None):
     Normalizes the sum under the curve to 1, for single or multiple spectras.
 
     :type y: list[float]
-    :param y: Single spectra or a list of them.
+    :param y: Single spectra or a list of them to normalize.
 
     :type lims: list[float, float]
-    :param lims: Limits of the vector to nomrlize the sum. Default is `None`.
+    :param lims: Limits of the vector to normalize the sum. Default is `None`.
+        For example, if ´lims = [N, M]´, the the sum under the curve betwween
+        N and M is normalized to 1.
 
     :returns: Normalized data
     :rtype: list[float]
@@ -672,8 +681,8 @@ def normtoratio(y, r1, r2, x=None):
         r2 = valtoind(r2, x)
     
     for i in range(len(y)):
-        a1 = max(y[i][r1[0]:r1[1]])
-        a2 = max(y[i][r2[0]:r2[1]])
+        a1 = sum(y[i][r1[0]:r1[1]])
+        a2 = sum(y[i][r2[0]:r2[1]])
         ratio = a1/(a1+a2)
         m = ratio/max(y[i])
         y[i] = np.array(y[i])*m
@@ -694,6 +703,7 @@ def normtoglobalmax(y, globalmin=False):
     :type globalmin: Bool
     :param globalmin: If `True`, the global minimum is reescaled to 0. Default
         is `False`.
+
 
     :returns: Normalized data
     :rtype: list[float]
@@ -726,6 +736,34 @@ def normtoglobalmax(y, globalmin=False):
     return y
 
 
+def normtoglobalsum(y):
+    """
+    Normalizes a list of spectras to the global max sum under the curve. In 
+        other words, looks to the largest sum under the curve and sets it to 1,
+        then the other areas are scaled in relation to that one.
+
+    :type y: list[float]
+    :param y: List of spectras.
+
+    :returns: Normalized data
+    :rtype: list[float]
+    """
+    y = copy.deepcopy(y)
+    dims = len(np.array(y).shape)
+    if dims > 1:
+        sums = []
+        for i in y:
+            sums.append(sum(i))
+        maxsum = max(sums)
+        
+        for i in range(len(y)):
+            y[i] = y[i] / maxsum
+        
+    else:  # if s single vector, then is the same as normtomax (local)
+        y = normsum(y)
+    return y
+
+
 def interpolation(y, x, step=1, start=0, finish=0):
     """
     Interpolates data to a new axis.
@@ -742,8 +780,7 @@ def interpolation(y, x, step=1, start=0, finish=0):
     :returns: Interpolated data and the new axis
     :rtype: list[float], list[float]
     """
-    temp_y = list(y)
-    axis = list(x)
+    temp_y = copy.deepcopy(y)
     dims = len(np.array(y).shape)
 
     # NEW AXIS
@@ -754,10 +791,10 @@ def interpolation(y, x, step=1, start=0, finish=0):
         new_start = start
         new_end = finish
         
-    if min(axis) > new_start:
-        new_start = math.ceil(min(axis))
-    if max(axis) < new_end:
-        new_end = math.floor(max(axis))
+    if min(x) > new_start:
+        new_start = math.ceil(min(x))
+    if max(x) < new_end:
+        new_end = math.floor(max(x))
 
     x_new = np.arange(new_start, new_end + step, step)
 
@@ -765,10 +802,10 @@ def interpolation(y, x, step=1, start=0, finish=0):
     
     if dims > 1:   
         for i in range(len(temp_y)):
-            this = interpolate.interp1d(axis, temp_y[i])
+            this = interpolate.interp1d(x, temp_y[i])
             master_y.append(this(x_new))            
     else:
-        this = interpolate.interp1d(axis, temp_y)
+        this = interpolate.interp1d(x, temp_y)
         master_y = this(x_new)
         
     return master_y, x_new
@@ -1020,7 +1057,7 @@ def normtopeak(y, x, peak, shift=10):
     return y
 
 
-def peakfinder(y, x=None, between=False, ranges=None, look=10):
+def peakfinder(y, x=None, ranges=None, look=10):
     """
     Finds the location of the peaks in a single vector.
 
@@ -1030,9 +1067,6 @@ def peakfinder(y, x=None, between=False, ranges=None, look=10):
     :type x: list[float]
     :param x: X axis of the data. If no axis is passed then the axis goes 
         from 0 to N, where N is the length of the spectras. Default is `None`.
-
-    :type between: list[float]
-    :param between: Range in x values 
 
     :type ranges: list[[float, float]]
     :param ranges: Aproximate ranges of known peaks, if any. If no ranges are 
@@ -1050,58 +1084,24 @@ def peakfinder(y, x=None, between=False, ranges=None, look=10):
     y = copy.deepcopy(y)
     peaks = []
     
-    if len(np.array(x).shape) < 1:
+    if x is None:
         x = [i for i in range(len(y))]
-        
-    # if between:
-    #     between = valtoind(between, x)
 
-    if between:
-        start, finish = between
+    if ranges is None:
+        ranges = [0, len(y)]
     else:
-        start, finish = 0, len(y)
-    
-    if not ranges:
-        is_max = [0 for _ in y]
-        is_min = [0 for _ in y]
-        for i in range(start + look, finish - look):  # start at "look" to avoid o.o.r
-            lower = 0  # negative if lower, positive if higher
-            higher = 0
-            for j in range(look):
-                if y[i] <= y[i - look + j] and y[i] <= y[i + j]:  # search all range lower
-                    lower += 1  # +1 if lower
-                elif (y[i] >= y[i - look + j] and
-                      y[i] >= y[i + j]):  # search all range higher
-                    higher += 1  # +1 if higher
-            if higher == look:  # if all higher then its local max
-                is_max[i] = 1
-                is_min[i] = 0
-                peaks.append(int(i))
-            elif lower == look:  # if all lower then its local min
-                is_max[i] = 0
-                is_min[i] = 1
-            else:
-                is_max[i] = 0
-                is_min[i] = 0
-                
-    elif ranges:
         ranges = valtoind(ranges, x)
-        if len(np.array(ranges).shape) > 1:
-            for i in ranges:
-                section = y[i[0]:i[1]]
-                m = max(section)
-                for j in range(i[0], i[1]):
-                    if y[j] == m:
-                        peaks.append(int(j))
-        else:
-            m = max(y[ranges[0]:ranges[1]])
-            for j in range(ranges[0], ranges[1]):
-                if y[j] == m:
-                    peaks.append(int(j))            
+        
+    if len(np.array(ranges).shape) == 1:
+        ranges = [ranges]
+        
+    for i in ranges:
+        section = y[i[0]:i[1]]
+        m = max(section)
+        for j in range(i[0], i[1]):
+            if y[j] == m:
+                peaks.append(int(j))
 
-    if len(peaks) == 0:
-        print('No peak was detected using the defined criteria. Change the parameters and try again.') 
-        peaks = []
 
     if len(peaks) == 1:
         peaks = int(peaks[0])
@@ -1109,8 +1109,8 @@ def peakfinder(y, x=None, between=False, ranges=None, look=10):
     return peaks
 
 
-def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='',
-                    cmm='Blues', fontsize=20, ylabel='True', xlabel='Prediction'):
+def confusionmatrix(tt, tp, gn=None, plot=False, title='', ndw=True, cmm='Blues',
+                    fontsize=20, figsize=(12, 15), ylabel='True', xlabel='Prediction'):
     """
     Calculates and/or plots the confusion matrix for machine learning algorithm
     results.
@@ -1125,7 +1125,11 @@ def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='',
     :param plot: If true, plots the matrix. The default is False
 
     :type gn: list[str]
-    :param gn: Names, or lables , of the classification groups. Default is empty.
+    :param gn: Names, or lables , of the classification groups. Default is `None`.
+
+    :type ndw: bool
+    :param ndw: No data warning. If `True`, it warns about no havingdata to 
+        evaluate. Default is True.
 
     :type title: str
     :param title: Name of the matrix. Default is empty.
@@ -1136,6 +1140,9 @@ def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='',
 
     :type fontsize: int
     :param fontsize: Font size for the labels. The default is 20.
+    
+    :type figsize: Tuple
+    :param figsize: Size of the image. The default is (12, 15).
 
     :type ylabel: str
     :param ylabel: Label for y axis. Default is `True`.
@@ -1149,6 +1156,11 @@ def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='',
     tt = list(tt)
     tp = list(tp)
     plot = bool(plot)
+    
+    if gn is None:
+        t = int(max(max(tt), max(tp)))
+        gn = [i for i in range(t+1)]
+    
     group_names = list(gn)
     gn = len(group_names)
     title = str(title)
@@ -1156,12 +1168,13 @@ def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='',
     fontsize = int(fontsize)
 
     m = [[0 for _ in range(gn)] for _ in range(gn)]
-    p = [0 for _ in range(gn)]
+    p = [0 for _ in range(gn)] # number in each class
 
-    for i in range(len(p)):
+    for i in range(len(p)): # count them
         for j in tt:
             if i == j:
                 p[i] += 1
+
     for i in range(len(tt)):
         for row in range(len(p)):
             for col in range(len(p)):
@@ -1170,12 +1183,14 @@ def confusionmatrix(tt, tp, gn=['', '', ''], plot=False, title='',
 
     for i in range(len(m)):
         if p[i] == 0:
-            print('No data with label (class) ' + str(i) + ' where found when making the confusion matrix. Check if the count is out of bounds or none samples of the class where included in the sample.\n')
+            # if ndw == True:
+            if ndw is True:
+                print('No data with label (class) ' + str(i) + ' where found when making the confusion matrix. Check if the count is out of bounds or none samples of the class where included in the sample.\n')
         else:
             m[i] = np.array(m[i]) / p[i]
 
     if plot:
-        fig = plt.figure(tight_layout=True, figsize=(6, 7.5))
+        fig = plt.figure(tight_layout=True, figsize=figsize)
         plt.rc('font', size=fontsize)
         ax = fig.add_subplot()
         ax.imshow(m, cmap=cmm)
@@ -1358,7 +1373,7 @@ def lorentzfit(y=[0], x=[0], pos=0, look=5, shift=2, gamma=5, alpha=1, manual=Fa
     return fit
 
 
-def gaussfit(y=[0], x=[0], pos=0, look=5, shift=2, sigma=4.4, alpha=1, manual=False):
+def gaussfit(y=[0], x=None, pos=0, look=5, shift=2, sigma=4.4, alpha=1, manual=False, params=False):
     """
     Fits peak as an optimization problem or manual fit. A curve `y` is only 
     mandatory if the optimixzation is needed (manual=False, default). If no
@@ -1391,6 +1406,10 @@ def gaussfit(y=[0], x=[0], pos=0, look=5, shift=2, sigma=4.4, alpha=1, manual=Fa
     :param manual: If `True`, 1 curve will be generated using the declared 
         parameter `sigma` and perform a manual fit. Default is `False`.
 
+    :type params: boolean
+    :param params: If `True`, it returns the parameters of the fit in the
+        order of `alpha`, `sigma` and `peak position`. Default is `False`.
+
     :returns: Fitted curve.
     :rtype: list[float]
     """
@@ -1398,7 +1417,7 @@ def gaussfit(y=[0], x=[0], pos=0, look=5, shift=2, sigma=4.4, alpha=1, manual=Fa
     ax = list(x) # from now foreward, x is the variable for the optimization.
     
     if manual:
-        if ax == [0]: # if no axis is passed
+        if ax is None: # if no axis is passed
             ax = [i for i in range(-100, 100)]
 
         fit = []
@@ -1406,18 +1425,24 @@ def gaussfit(y=[0], x=[0], pos=0, look=5, shift=2, sigma=4.4, alpha=1, manual=Fa
             fit.append((alpha/(sigma*(np.sqrt(2*np.pi))))*(np.exp(-0.5*(((i-pos)/sigma)**2))))    
         
     else:
-        if ax == [0]: # if no axis is passed
+        if ax is None: # if no axis is passed
             ax = [i for i in range(len(y))]
             
         y = list(y)
+        
         pos = int(valtoind(pos, ax))
+        
+        for i in range(len(y)):
+            if y[i] < 0:
+                y[i] = 1
         
         s = int(shift/abs(ax[1]-ax[0]))
         look = int(look/abs(ax[1]-ax[0]))
         
         for k in range(pos - s, pos + s):
-                if y[k] > y[pos]:
-                    pos = k
+            if y[k] > y[pos]:
+                pos = k
+                
         p = ax[pos]
     
         def objective(x):
@@ -1445,7 +1470,10 @@ def gaussfit(y=[0], x=[0], pos=0, look=5, shift=2, sigma=4.4, alpha=1, manual=Fa
         for l in range(len(ax)):  # for all the points
             fit.append(((x[0]/(x[1]*(np.sqrt(2*np.pi))))*(np.exp(-0.5*(((ax[l]-x[2])/x[1])**2)))))
         
-    return fit
+    if params:
+        return x
+    else:
+        return fit
 
 
 def studentfit(y=[0], x=[0], pos=0, v=0.01, alpha=1, look=5, shift=2, manual=False):
@@ -1535,8 +1563,6 @@ def studentfit(y=[0], x=[0], pos=0, v=0.01, alpha=1, look=5, shift=2, manual=Fal
         cons = ([con1])
         solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
         x = solution.x
-    
-        print(x, solution.fun)
     
         fit = []
     
@@ -2529,9 +2555,11 @@ def plot2dml(train, test=[], names=['D1', 'D2', 'T'], train_pred=[],
         
     :returns: Plot
     """
-    marker = ['o', 'v', 's', 'd', '*', '^', 'x', '+', '.',
-              'o', 'v', 's', 'd', '*', '^', 'x', '+', '.']
-    color = ['orange', 'green', 'blue', 'grey', 'yellow', 'olive', 'lime',
+    # marker = ['o', 'v', 's', 'd', '*', '^', 'x', '+', '.',
+    #           'o', 'v', 's', 'd', '*', '^', 'x', '+', '.']
+    marker = ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o',
+              'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o']
+    color = ['red', 'green', 'blue', 'grey', 'orange', 'olive', 'lime',
              'springgreen', 'mediumspringgreen', 'cyan', 'teal', 'royalblue', 
              'turquoise', 'indigo', 'purple', 'deeppink', 'crimson']
     
@@ -2963,11 +2991,11 @@ def asymmetry(y, x, peak, s=5, limit=10):
     """
     Compares both sides of a peak, or list of peaks, and checks how similar 
     they are. It does this by calculating the MRSE and indicating which side is 
-    larger or smaller bya area. If it is a negative (-), then left side is
+    larger or smaller by area. If it is a negative (-), then left side is
     smaller.
     
     :type y: list
-    :param y: spectrocopic data to calculate the fwhm from. Single vector or
+    :param y: spectrocopic data to calculate the asymmetry from. Single vector or
         list of vectors.    
          
     :type x: list
@@ -3176,7 +3204,7 @@ def representative(y):
     return reptve
 
 
-def voigtfit(y=[0], x=[0], pos=0, look=5, shift=2, gamma=5, sigma=4, alpha=1, amp=None, manual=False):
+def voigtfit(y=None, x=None, pos=0, look=5, shift=2, gamma=5, sigma=4, alpha=1, amp=None, manual=False):
     """
     Fits peak as an optimization problem or manual fit for Voigt distirbution,
     also known as a convoluted Gaussian-Lorentz curve. A curve `y` is only
@@ -3216,14 +3244,14 @@ def voigtfit(y=[0], x=[0], pos=0, look=5, shift=2, gamma=5, sigma=4, alpha=1, am
     :returns: Fitted curve.
     :rtype: list[float]
     """
-    ax = list(x)
-    y = list(y)      
-    s = int(shift/abs(ax[1]-ax[0]))
-    look = int(look/abs(ax[1]-ax[0]))
-    
+    ax = x
+    # y = list(y)      
+        
     if manual:
-        if ax == [0]: # if no axis is passed
+        if ax is None: # if no axis is passed
             ax = [i for i in range(-100, 100)]
+        
+        s = int(shift/abs(ax[1]-ax[0]))
         
         fit = []
         for i in ax:
@@ -3232,8 +3260,11 @@ def voigtfit(y=[0], x=[0], pos=0, look=5, shift=2, gamma=5, sigma=4, alpha=1, am
             fit.append(gau*lor*alpha)
         
     else:        
-        if ax == [0]: # if no axis is passed
+        if ax is None: # if no axis is passed
             ax = [i for i in range(len(y))]
+        
+        s = int(shift/abs(ax[1]-ax[0]))
+        look = int(look/abs(ax[1]-ax[0]))
         
         pos = int(valtoind(pos, ax))
         
@@ -3437,7 +3468,7 @@ def derivative(y, x=None, s=1, deg=1):
     return fd
 
 
-def peaksimilarity(y1, y2, p1, p2, x=None, n=5, plot=True, cmm='inferno', fontsize=10, title='Peak similarity'):    
+def peaksimilarity(y1, y2, p1, p2, n=5, x=None, plot=False, cmm='inferno', fontsize=10, title='Peak similarity'):    
     """
     Calculates the similarity matrix as described in ´doi:10.1142/S021972001350011X´.
     It quantifyes the difference of the derivative function of the peaks and 
@@ -3547,5 +3578,207 @@ def reverse(y):
     
     return rev
         
+
+def count(y, value=0):
+    """
+    Counts the number of values that coincide with `value`.
+    
+    :type y: list[float]
+    :param y: vector or list of vectors to search for values.
+    
+    :type value: float
+    :param value: Value or list of values to search in `y`. If many values are
+        passed, then it rteturns a list with the counted equalities. Default is 0.
+
+    :rtype: list[float]
+    :returns: Reversed data.
+    """
+    y = copy.deepcopy(y)
+    dims_val = len(np.array(value).shape)
+    dims_y = len(np.array(y).shape)
+    
+    print(dims_y, dims_val)
+    
+    if dims_val < 1:
+        value = [value]
         
+    if dims_y == 1:
+        y = [y]
+    
+    count = [[0 for _ in range(len(value))] for _ in range(len(y))]
+    
+    for k in range(len(y)):
+        for j in range(len(value)):
+            for i in y[k]:
+                if i == value[j]:
+                    count[k][j] += 1
+    
+    if dims_val < 1:
+        count = [i[0] for i in count]
+    
+    if dims_y == 1:
+        count = count[0]
+    
+    return count
+
+def vectortoimg(y, negatives='remove', inverted=False):
+    """
+    Transforms 1-D vecctors into an image. Useful for more insightful results
+        when performing deep learning.
+
+    :type y: list[float]
+    :param y: vector or list of vectors.
+
+    :type negatives: str
+    :param negatives: Specify what to do with negative values. If `remove` then negative values are set to `0`. If
+        `globalmin` then all the data is shifted up so the global minimum is `0`. Default it `remove`.
+
+    :type inverted: boolean
+    :param inverted: If `True`, inverts the process to take an image to a vector. Default is `False`.
+
+    :rtype: list[list[list[int]]]
+    :returns: 3-D list containing 0 or 1.
+    """
+    y = copy.deepcopy(y)
+    y_dims = len(np.array(y).shape)
+
+    if y_dims == 1:
+        y = [y]
+
+    gm = False
+    if negatives == 'globalmin':
+        gm = True
+
+    y = normtoglobalmax(y, globalmin=gm)
+    y_len = len(y[0])
+    imgs = [[[0 for _ in range(y_len)] for _ in range(y_len)] for _ in y]
+    for i in range(len(y)):
+        for j in range(y_len):
+            if negatives == 'remove' and y[i][j] < 0:
+                y[i][j] = 0.00
+            val = int(round(y[i][j]*(y_len-1), 0))
+            imgs[i][int(val)][j] = 1.00
+
+    if y_dims == 1:
+        imgs = imgs[0]
+
+    return imgs
+
+
+def deconvolution(y, x, pos, method='gauss', shift=5, look=None, pp=False):
+    """
+    BETA: Deconvolutes a spectra into a defined number of distributions. This will
+        fit dsitributions on the declared positions `pos` of peaks and change 
+        their shape acoording to the difference betwwen the spectra and the 
+        sum (convoilution) of the fittings.
         
+    :type y: list[float]
+    :param y: vector to deconvolute.
+
+    :type x: list[float]
+    :param x: axis.
+    
+    :type pos: list[float]
+    :param pos: positions of peaks in x values 
+    
+    :type method: string
+    :param method: The selected shape of the fittings. Options include: `gauss`,
+        `lorentz`, and `voigt`.
+    
+    :type pp: boolean
+    :param pp: If `True`, it prints parameters of the fittings. Default
+         is `False`.
+         
+    :rtype: list[list[float]]
+    :returns: 2-D list of the fittings.
+    """
+    if look is None:
+        look = [0, len(y)]
+    else:
+        look = valtoind(look, x)
+    
+    if len(np.array(pos).shape) == 0:
+        pos = [pos]
+    
+    n = len(pos)
+    gamma, sigma, alpha = [1 for _ in pos], [1 for _ in pos], [1 for _ in pos]
+
+    ax = x # x becomes the optimization variables
+    
+    def objective(x):
+    
+        fit = []
+        for i in range(n):
+            if method == 'voigt':
+                fit.append(voigtfit(x=ax, pos=x[i], gamma=x[n+i], sigma=x[2*n+i], alpha=x[3*n+i], manual=True))
+            if method == 'lorentz':
+                fit.append(lorentzfit(x=ax, pos=x[i], gamma=x[i+n], alpha=x[2*n+i], manual=True))
+            if method == 'gauss':
+                fit.append(gaussfit(x=ax, pos=x[i], sigma=x[i+n], alpha=x[2*n+i], manual=True))
+    
+        error = 0
+        
+        for i in range(look[0], look[1]):
+            s = 0
+            for j in range(len(fit)):
+                s += fit[j][i]
+            
+            error += (y[i]-s)**2
+        
+        return error**0.5 
+    
+    def constraint1(x):
+        # is_zero=0
+        # fit = []
+        # for i in range(n):
+        #     # fit.append(spep.voigtfit(x=ax, pos=pos[i], gamma=x[i], sigma=x[n+i], alpha=x[2*n+i], manual=True))
+        #     # fit.append(spep.lorentzfit(x=ax, pos=pos[i], gamma=x[i], alpha=x[n+i], manual=True))
+        #     fit.append(spep.gaussfit(x=ax, pos=x[i], sigma=x[i+n], alpha=x[2*n+i], manual=True))
+        
+        # for i in range(look[0], look[1]):
+        #     s = 0
+        #     for j in range(len(fit)):
+        #         s += fit[j][i]
+        #     return y[i]-s
+        return 0
+    
+    
+    initial = []
+    bnds = []
+    for i in range(n):
+        bnds.append([pos[i]-shift, pos[i]+shift])
+        initial.append(pos[i])
+    if method == 'voigt':
+        for i in range(n):
+            bnds.append([0.001, 999])
+            initial.append(gamma[i])
+    for i in range(n):
+        bnds.append([0.001, 999])
+        initial.append(sigma[i])
+    for i in range(n):
+        bnds.append([0.001, max(y)*99999])
+        initial.append(alpha[i])
+    
+    x0 = np.array(initial, dtype='object')  # master vector to optimize, initial values
+    con1 = {'type': 'ineq', 'fun': constraint1}
+    cons = ([con1])
+    solution = minimize(objective, x0, method='SLSQP', bounds=bnds, constraints=cons)
+    x = solution.x
+    
+    if pp:
+        print(x)
+    
+    y0 = [0 for _ in ax]
+    f = []
+    for i in range(n):
+        if method == 'gauss':
+            temp = gaussfit(x=ax, pos=x[i], sigma=x[i+n], alpha=x[i+2*n], manual=True)
+        if method == 'lorentz':
+            temp = lorentzfit(x=ax, pos=x[i], gamma=x[i+n], alpha=x[i+2*n], manual=True)
+        if method == 'voigt':
+            temp = voigtfit(x=ax, pos=x[i], gamma=x[i+n], sigma=x[i+2*n], alpha=x[i+3*n], manual=True)
+        f.append(temp)
+        for j in range(len(ax)):
+            y0[j] += temp[j]
+    
+    return f[0]

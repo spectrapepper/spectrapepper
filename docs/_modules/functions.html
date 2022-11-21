@@ -162,87 +162,80 @@
     <span class="k">return</span> <span class="n">data</span>
 
 
-<div class="viewcode-block" id="load"><a class="viewcode-back" href="../functions.html#functions.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">fromline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">):</span>
+<div class="viewcode-block" id="load"><a class="viewcode-back" href="../functions.html#functions.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">fromline</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load data from a standard text file obtained from LabSpec and other</span>
 <span class="sd">    spectroscopy instruments. Normally, when single measurement these come in </span>
 <span class="sd">    columns with the first one being the x-axis. When it is a mapping, the</span>
-<span class="sd">    first row is the x-axis and the following are the measurements.</span>
-
+<span class="sd">    first row is the x-axis and the following are the measurements. It can also</span>
+<span class="sd">    perofrm random access toa particular ´line´.</span>
+<span class="sd">    </span>
 <span class="sd">    :type file: str</span>
-<span class="sd">    :param file: Url of data file. Must not have headers and separated by &#39;spaces&#39; (LabSpec).</span>
+<span class="sd">    :param file: Url of data file. Must not have headers and separated by </span>
+<span class="sd">        &#39;spaces&#39; (LabSpec).</span>
 <span class="sd">    </span>
 <span class="sd">    :type fromline: int</span>
-<span class="sd">    :param fromline: Line of file from which to start loading data. The default is 0.</span>
+<span class="sd">    :param fromline: Line of file from which to start loading data. The default</span>
+<span class="sd">        is 0.</span>
+<span class="sd">    </span>
+<span class="sd">    :type line: int</span>
+<span class="sd">    :param line: Random access to file. Loads a specific line in a file. Default</span>
+<span class="sd">        is ´None´.</span>
 <span class="sd">    </span>
 <span class="sd">    :type transpose: boolean</span>
 <span class="sd">    :param transpose: If True transposes the data. Default is False.</span>
+<span class="sd">    </span>
+<span class="sd">    :type dtype: str</span>
+<span class="sd">    :param dtype: Type of data. If its numeric then &#39;float&#39;, if text then &#39;string&#39;.</span>
+<span class="sd">        Default is &#39;float&#39;.</span>
+<span class="sd">    </span>
+<span class="sd">    :type split: boolean</span>
+<span class="sd">    :param split: True to make a list of strings when &#39;dtype&#39; is &#39;string&#39;, </span>
+<span class="sd">        separated by space. The default is False.</span>
 <span class="sd">    </span>
 <span class="sd">    :returns: List of the data.</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">new_data</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">raw_data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">raw_data</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">fromline</span><span class="p">:</span>
-            <span class="c1"># row = row.replace(&quot;,&quot;, &quot;.&quot;)</span>
-            <span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
-            <span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
-            <span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
-            <span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
-            <span class="n">s_row</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
-            <span class="n">s_row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">s_row</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
-            <span class="n">new_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s_row</span><span class="p">)</span>
-        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-    <span class="n">raw_data</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="k">if</span> <span class="n">transpose</span><span class="p">:</span>
-        <span class="n">new_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">raw_data</span><span class="p">:</span>
+        <span class="c1"># raw_data = open(file, &quot;r&quot;)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="k">if</span> <span class="n">line</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="n">linecache</span><span class="o">.</span><span class="n">getline</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+    
+            <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">split</span><span class="p">:</span>
+                        <span class="n">info</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
+                
+        <span class="k">elif</span> <span class="n">line</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">raw_data</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">fromline</span><span class="p">:</span>
+                    <span class="c1"># row = row.replace(&quot;,&quot;, &quot;.&quot;)</span>
+                    <span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span>
+                    <span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
+                    <span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
+                    <span class="n">row</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
+                    <span class="n">s_row</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+                    <span class="n">s_row</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">s_row</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+                    <span class="n">new_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s_row</span><span class="p">)</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="c1"># raw_data.close()</span>
+        
+        <span class="k">if</span> <span class="n">transpose</span><span class="p">:</span>
+            <span class="n">new_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">new_data</span></div>
-
-
-<div class="viewcode-block" id="loadline"><a class="viewcode-back" href="../functions.html#functions.loadline">[docs]</a><span class="k">def</span> <span class="nf">loadline</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Random access to file. Loads a specific line in a file. Useful when</span>
-<span class="sd">    managing large data files in processes where time is important. It can</span>
-<span class="sd">    load numbers as floats.</span>
-
-<span class="sd">    :type file: str</span>
-<span class="sd">    :param file: Url od the data file</span>
-
-<span class="sd">    :type line: int</span>
-<span class="sd">    :param line: Line number. Counts from 0.</span>
-
-<span class="sd">    :type dtype: str</span>
-<span class="sd">    :param dtype: Type of data. If its numeric then &#39;float&#39;, if text then &#39;string&#39;.</span>
-<span class="sd">        Default is &#39;float&#39;.</span>
-
-<span class="sd">    :type split: boolean</span>
-<span class="sd">    :param split: True to make a list of strings when &#39;tp&#39; is &#39;string&#39;, </span>
-<span class="sd">        separated by space. The default is False.</span>
-
-<span class="sd">    :returns: Array with the desired line.</span>
-<span class="sd">    :rtype: list[float]</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">line</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="n">file</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-    <span class="n">info</span> <span class="o">=</span> <span class="n">linecache</span><span class="o">.</span><span class="n">getline</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="s1">&#39;float&#39;</span><span class="p">:</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;NaN&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;nan&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="s2">&quot;-1&quot;</span><span class="p">)</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">split</span><span class="p">:</span>
-                <span class="n">info</span> <span class="o">=</span> <span class="nb">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">info</span></div>
 
 
 <div class="viewcode-block" id="lowpass"><a class="viewcode-back" href="../functions.html#functions.lowpass">[docs]</a><span class="k">def</span> <span class="nf">lowpass</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">fs</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">nyq</span><span class="o">=</span><span class="mf">0.75</span><span class="p">):</span>
@@ -269,7 +262,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>  <span class="c1"># so it does not change the input list</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
     
@@ -343,7 +336,7 @@
     <span class="k">return</span> <span class="n">y</span></div>
 
 
-<div class="viewcode-block" id="alsbaseline"><a class="viewcode-back" href="../functions.html#functions.alsbaseline">[docs]</a><span class="k">def</span> <span class="nf">alsbaseline</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="viewcode-block" id="alsbaseline"><a class="viewcode-back" href="../functions.html#functions.alsbaseline">[docs]</a><span class="k">def</span> <span class="nf">alsbaseline</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">lam</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">niter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculation of the baseline using Asymmetric Least Squares Smoothing. This</span>
 <span class="sd">    script only makes the calculation but it does not remove it. Original idea of</span>
@@ -361,6 +354,10 @@
 <span class="sd">    :type niter: int</span>
 <span class="sd">    :param niter: Niter. The default is 10.</span>
 
+<span class="sd">    :type remove: True</span>
+<span class="sd">    :param remove: If `True`, calculates and returns `data - baseline`. If </span>
+<span class="sd">        `False`, then it returns the `baseline`.</span>
+
 <span class="sd">    :returns: Returns the calculated baseline.</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -373,18 +370,24 @@
     <span class="n">l</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">diags</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">l</span> <span class="o">-</span> <span class="mi">2</span><span class="p">))</span>
     <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+    
+    <span class="n">resolve</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">niter</span><span class="p">):</span>
             <span class="n">W</span> <span class="o">=</span> <span class="n">sparse</span><span class="o">.</span><span class="n">spdiags</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
             <span class="n">Z</span> <span class="o">=</span> <span class="n">W</span> <span class="o">+</span> <span class="n">lam</span> <span class="o">*</span> <span class="n">d</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>       
             <span class="n">z</span> <span class="o">=</span> <span class="n">spsolve</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">w</span> <span class="o">*</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="n">w</span> <span class="o">=</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">z</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">z</span><span class="p">)</span>
-        <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">z</span>  
+        <span class="c1"># y[i] = y[i] - z</span>
+        <span class="k">if</span> <span class="n">remove</span><span class="p">:</span>
+            <span class="n">resolve</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">resolve</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
                 
     <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">resolve</span> <span class="o">=</span> <span class="n">resolve</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     
-    <span class="k">return</span> <span class="n">y</span></div>
+    <span class="k">return</span> <span class="n">resolve</span></div>
 
 
 <div class="viewcode-block" id="bspbaseline"><a class="viewcode-back" href="../functions.html#functions.bspbaseline">[docs]</a><span class="k">def</span> <span class="nf">bspbaseline</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">avg</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -428,7 +431,7 @@
         <span class="n">pos</span> <span class="o">=</span> <span class="p">[[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">]</span>
         <span class="n">points</span> <span class="o">=</span> <span class="p">[[</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">points</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
     
     <span class="n">baseline</span> <span class="o">=</span> <span class="p">[]</span>
@@ -461,7 +464,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
     
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">result</span></div>
@@ -608,16 +611,20 @@
     <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">limits</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">limits</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">limits</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">limits</span> <span class="o">=</span> <span class="p">[</span><span class="n">limits</span><span class="p">]</span>
+
     <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
 
     <span class="n">areas</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">limits</span><span class="p">))]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))]</span>  <span class="c1"># final values of areas</span>
+    
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>  <span class="c1"># calculate the areas for all the points</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">limits</span><span class="p">)):</span>  <span class="c1"># for all the areas</span>
             <span class="n">areas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">limits</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]:</span><span class="n">limits</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>  <span class="c1"># calculate the sum</span>
             <span class="k">if</span> <span class="n">norm</span><span class="p">:</span>
                 <span class="n">areas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">areas</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-        
+
     <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">areas</span> <span class="o">=</span> <span class="n">areas</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     
@@ -677,10 +684,12 @@
 <span class="sd">    Normalizes the sum under the curve to 1, for single or multiple spectras.</span>
 
 <span class="sd">    :type y: list[float]</span>
-<span class="sd">    :param y: Single spectra or a list of them.</span>
+<span class="sd">    :param y: Single spectra or a list of them to normalize.</span>
 
 <span class="sd">    :type lims: list[float, float]</span>
-<span class="sd">    :param lims: Limits of the vector to nomrlize the sum. Default is `None`.</span>
+<span class="sd">    :param lims: Limits of the vector to normalize the sum. Default is `None`.</span>
+<span class="sd">        For example, if ´lims = [N, M]´, the the sum under the curve betwween</span>
+<span class="sd">        N and M is normalized to 1.</span>
 
 <span class="sd">    :returns: Normalized data</span>
 <span class="sd">    :rtype: list[float]</span>
@@ -742,8 +751,8 @@
         <span class="n">r2</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">r2</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
     
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
-        <span class="n">a1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">r1</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">r1</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
-        <span class="n">a2</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">r2</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">r2</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">a1</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">r1</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">r1</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">a2</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">r2</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">r2</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
         <span class="n">ratio</span> <span class="o">=</span> <span class="n">a1</span><span class="o">/</span><span class="p">(</span><span class="n">a1</span><span class="o">+</span><span class="n">a2</span><span class="p">)</span>
         <span class="n">m</span> <span class="o">=</span> <span class="n">ratio</span><span class="o">/</span><span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
         <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">*</span><span class="n">m</span>
@@ -764,6 +773,7 @@
 <span class="sd">    :type globalmin: Bool</span>
 <span class="sd">    :param globalmin: If `True`, the global minimum is reescaled to 0. Default</span>
 <span class="sd">        is `False`.</span>
+
 
 <span class="sd">    :returns: Normalized data</span>
 <span class="sd">    :rtype: list[float]</span>
@@ -796,6 +806,34 @@
     <span class="k">return</span> <span class="n">y</span></div>
 
 
+<div class="viewcode-block" id="normtoglobalsum"><a class="viewcode-back" href="../functions.html#functions.normtoglobalsum">[docs]</a><span class="k">def</span> <span class="nf">normtoglobalsum</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Normalizes a list of spectras to the global max sum under the curve. In </span>
+<span class="sd">        other words, looks to the largest sum under the curve and sets it to 1,</span>
+<span class="sd">        then the other areas are scaled in relation to that one.</span>
+
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: List of spectras.</span>
+
+<span class="sd">    :returns: Normalized data</span>
+<span class="sd">    :rtype: list[float]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">sums</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span>
+            <span class="n">sums</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+        <span class="n">maxsum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">sums</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+            <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">maxsum</span>
+        
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># if s single vector, then is the same as normtomax (local)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">normsum</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">y</span></div>
+
+
 <div class="viewcode-block" id="interpolation"><a class="viewcode-back" href="../functions.html#functions.interpolation">[docs]</a><span class="k">def</span> <span class="nf">interpolation</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">finish</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Interpolates data to a new axis.</span>
@@ -812,8 +850,7 @@
 <span class="sd">    :returns: Interpolated data and the new axis</span>
 <span class="sd">    :rtype: list[float], list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">temp_y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-    <span class="n">axis</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">temp_y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
     <span class="c1"># NEW AXIS</span>
@@ -824,10 +861,10 @@
         <span class="n">new_start</span> <span class="o">=</span> <span class="n">start</span>
         <span class="n">new_end</span> <span class="o">=</span> <span class="n">finish</span>
         
-    <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">new_start</span><span class="p">:</span>
-        <span class="n">new_start</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span>
-    <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">new_end</span><span class="p">:</span>
-        <span class="n">new_end</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">axis</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">new_start</span><span class="p">:</span>
+        <span class="n">new_start</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">new_end</span><span class="p">:</span>
+        <span class="n">new_end</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 
     <span class="n">x_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">new_start</span><span class="p">,</span> <span class="n">new_end</span> <span class="o">+</span> <span class="n">step</span><span class="p">,</span> <span class="n">step</span><span class="p">)</span>
 
@@ -835,10 +872,10 @@
     
     <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>   
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">temp_y</span><span class="p">)):</span>
-            <span class="n">this</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">temp_y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">this</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">temp_y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="n">master_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">this</span><span class="p">(</span><span class="n">x_new</span><span class="p">))</span>            
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">this</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">temp_y</span><span class="p">)</span>
+        <span class="n">this</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">temp_y</span><span class="p">)</span>
         <span class="n">master_y</span> <span class="o">=</span> <span class="n">this</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
         
     <span class="k">return</span> <span class="n">master_y</span><span class="p">,</span> <span class="n">x_new</span></div>
@@ -1090,7 +1127,7 @@
     <span class="k">return</span> <span class="n">y</span></div>
 
 
-<div class="viewcode-block" id="peakfinder"><a class="viewcode-back" href="../functions.html#functions.peakfinder">[docs]</a><span class="k">def</span> <span class="nf">peakfinder</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">between</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ranges</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<div class="viewcode-block" id="peakfinder"><a class="viewcode-back" href="../functions.html#functions.peakfinder">[docs]</a><span class="k">def</span> <span class="nf">peakfinder</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ranges</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Finds the location of the peaks in a single vector.</span>
 
@@ -1100,9 +1137,6 @@
 <span class="sd">    :type x: list[float]</span>
 <span class="sd">    :param x: X axis of the data. If no axis is passed then the axis goes </span>
 <span class="sd">        from 0 to N, where N is the length of the spectras. Default is `None`.</span>
-
-<span class="sd">    :type between: list[float]</span>
-<span class="sd">    :param between: Range in x values </span>
 
 <span class="sd">    :type ranges: list[[float, float]]</span>
 <span class="sd">    :param ranges: Aproximate ranges of known peaks, if any. If no ranges are </span>
@@ -1120,58 +1154,24 @@
     <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>
     
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))]</span>
-        
-    <span class="c1"># if between:</span>
-    <span class="c1">#     between = valtoind(between, x)</span>
 
-    <span class="k">if</span> <span class="n">between</span><span class="p">:</span>
-        <span class="n">start</span><span class="p">,</span> <span class="n">finish</span> <span class="o">=</span> <span class="n">between</span>
+    <span class="k">if</span> <span class="n">ranges</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">ranges</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">start</span><span class="p">,</span> <span class="n">finish</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-    
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">ranges</span><span class="p">:</span>
-        <span class="n">is_max</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
-        <span class="n">is_min</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">look</span><span class="p">,</span> <span class="n">finish</span> <span class="o">-</span> <span class="n">look</span><span class="p">):</span>  <span class="c1"># start at &quot;look&quot; to avoid o.o.r</span>
-            <span class="n">lower</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># negative if lower, positive if higher</span>
-            <span class="n">higher</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">look</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">look</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="ow">and</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]:</span>  <span class="c1"># search all range lower</span>
-                    <span class="n">lower</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># +1 if lower</span>
-                <span class="k">elif</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">look</span> <span class="o">+</span> <span class="n">j</span><span class="p">]</span> <span class="ow">and</span>
-                      <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">]):</span>  <span class="c1"># search all range higher</span>
-                    <span class="n">higher</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># +1 if higher</span>
-            <span class="k">if</span> <span class="n">higher</span> <span class="o">==</span> <span class="n">look</span><span class="p">:</span>  <span class="c1"># if all higher then its local max</span>
-                <span class="n">is_max</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-                <span class="n">is_min</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-            <span class="k">elif</span> <span class="n">lower</span> <span class="o">==</span> <span class="n">look</span><span class="p">:</span>  <span class="c1"># if all lower then its local min</span>
-                <span class="n">is_max</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">is_min</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">is_max</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-                <span class="n">is_min</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-                
-    <span class="k">elif</span> <span class="n">ranges</span><span class="p">:</span>
         <span class="n">ranges</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ranges</span><span class="p">:</span>
-                <span class="n">section</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-                <span class="n">m</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-                    <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="p">:</span>
-                        <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">m</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">ranges</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">ranges</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
-            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ranges</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ranges</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-                <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="p">:</span>
-                    <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>            
+        
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">ranges</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranges</span><span class="p">]</span>
+        
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ranges</span><span class="p">:</span>
+        <span class="n">section</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="p">:</span>
+                <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
 
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No peak was detected using the defined criteria. Change the parameters and try again.&#39;</span><span class="p">)</span> 
-        <span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">peaks</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">peaks</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -1179,8 +1179,8 @@
     <span class="k">return</span> <span class="n">peaks</span></div>
 
 
-<div class="viewcode-block" id="confusionmatrix"><a class="viewcode-back" href="../functions.html#functions.confusionmatrix">[docs]</a><span class="k">def</span> <span class="nf">confusionmatrix</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span> <span class="n">tp</span><span class="p">,</span> <span class="n">gn</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">],</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-                    <span class="n">cmm</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Prediction&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="confusionmatrix"><a class="viewcode-back" href="../functions.html#functions.confusionmatrix">[docs]</a><span class="k">def</span> <span class="nf">confusionmatrix</span><span class="p">(</span><span class="n">tt</span><span class="p">,</span> <span class="n">tp</span><span class="p">,</span> <span class="n">gn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">ndw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmm</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span>
+                    <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="n">ylabel</span><span class="o">=</span><span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;Prediction&#39;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates and/or plots the confusion matrix for machine learning algorithm</span>
 <span class="sd">    results.</span>
@@ -1195,7 +1195,11 @@
 <span class="sd">    :param plot: If true, plots the matrix. The default is False</span>
 
 <span class="sd">    :type gn: list[str]</span>
-<span class="sd">    :param gn: Names, or lables , of the classification groups. Default is empty.</span>
+<span class="sd">    :param gn: Names, or lables , of the classification groups. Default is `None`.</span>
+
+<span class="sd">    :type ndw: bool</span>
+<span class="sd">    :param ndw: No data warning. If `True`, it warns about no havingdata to </span>
+<span class="sd">        evaluate. Default is True.</span>
 
 <span class="sd">    :type title: str</span>
 <span class="sd">    :param title: Name of the matrix. Default is empty.</span>
@@ -1206,6 +1210,9 @@
 
 <span class="sd">    :type fontsize: int</span>
 <span class="sd">    :param fontsize: Font size for the labels. The default is 20.</span>
+<span class="sd">    </span>
+<span class="sd">    :type figsize: Tuple</span>
+<span class="sd">    :param figsize: Size of the image. The default is (12, 15).</span>
 
 <span class="sd">    :type ylabel: str</span>
 <span class="sd">    :param ylabel: Label for y axis. Default is `True`.</span>
@@ -1219,6 +1226,11 @@
     <span class="n">tt</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tt</span><span class="p">)</span>
     <span class="n">tp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span>
     <span class="n">plot</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">gn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">tt</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">tp</span><span class="p">)))</span>
+        <span class="n">gn</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+    
     <span class="n">group_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">gn</span><span class="p">)</span>
     <span class="n">gn</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_names</span><span class="p">)</span>
     <span class="n">title</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
@@ -1226,12 +1238,13 @@
     <span class="n">fontsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fontsize</span><span class="p">)</span>
 
     <span class="n">m</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gn</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gn</span><span class="p">)]</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gn</span><span class="p">)]</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">gn</span><span class="p">)]</span> <span class="c1"># number in each class</span>
 
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)):</span> <span class="c1"># count them</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">tt</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">j</span><span class="p">:</span>
                 <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tt</span><span class="p">)):</span>
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)):</span>
             <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)):</span>
@@ -1240,12 +1253,14 @@
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">m</span><span class="p">)):</span>
         <span class="k">if</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No data with label (class) &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; where found when making the confusion matrix. Check if the count is out of bounds or none samples of the class where included in the sample.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="c1"># if ndw == True:</span>
+            <span class="k">if</span> <span class="n">ndw</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No data with label (class) &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; where found when making the confusion matrix. Check if the count is out of bounds or none samples of the class where included in the sample.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
-        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">tight_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">))</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">tight_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="n">figsize</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s1">&#39;font&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">fontsize</span><span class="p">)</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">()</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmm</span><span class="p">)</span>
@@ -1428,7 +1443,7 @@
     <span class="k">return</span> <span class="n">fit</span></div>
 
 
-<div class="viewcode-block" id="gaussfit"><a class="viewcode-back" href="../functions.html#functions.gaussfit">[docs]</a><span class="k">def</span> <span class="nf">gaussfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">4.4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="gaussfit"><a class="viewcode-back" href="../functions.html#functions.gaussfit">[docs]</a><span class="k">def</span> <span class="nf">gaussfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">4.4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fits peak as an optimization problem or manual fit. A curve `y` is only </span>
 <span class="sd">    mandatory if the optimixzation is needed (manual=False, default). If no</span>
@@ -1461,6 +1476,10 @@
 <span class="sd">    :param manual: If `True`, 1 curve will be generated using the declared </span>
 <span class="sd">        parameter `sigma` and perform a manual fit. Default is `False`.</span>
 
+<span class="sd">    :type params: boolean</span>
+<span class="sd">    :param params: If `True`, it returns the parameters of the fit in the</span>
+<span class="sd">        order of `alpha`, `sigma` and `peak position`. Default is `False`.</span>
+
 <span class="sd">    :returns: Fitted curve.</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1468,7 +1487,7 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># from now foreward, x is the variable for the optimization.</span>
     
     <span class="k">if</span> <span class="n">manual</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="c1"># if no axis is passed</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># if no axis is passed</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)]</span>
 
         <span class="n">fit</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1476,18 +1495,24 @@
             <span class="n">fit</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">alpha</span><span class="o">/</span><span class="p">(</span><span class="n">sigma</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))))</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(((</span><span class="n">i</span><span class="o">-</span><span class="n">pos</span><span class="p">)</span><span class="o">/</span><span class="n">sigma</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))))</span>    
         
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="c1"># if no axis is passed</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># if no axis is passed</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))]</span>
             
         <span class="n">y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        
         <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">valtoind</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="p">))</span>
+        
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         
         <span class="n">s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">shift</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="n">look</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">look</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">s</span><span class="p">,</span> <span class="n">pos</span> <span class="o">+</span> <span class="n">s</span><span class="p">):</span>
-                <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">[</span><span class="n">pos</span><span class="p">]:</span>
-                    <span class="n">pos</span> <span class="o">=</span> <span class="n">k</span>
+            <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">[</span><span class="n">pos</span><span class="p">]:</span>
+                <span class="n">pos</span> <span class="o">=</span> <span class="n">k</span>
+                
         <span class="n">p</span> <span class="o">=</span> <span class="n">ax</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span>
     
         <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -1515,7 +1540,10 @@
         <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ax</span><span class="p">)):</span>  <span class="c1"># for all the points</span>
             <span class="n">fit</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))))</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(((</span><span class="n">ax</span><span class="p">[</span><span class="n">l</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">/</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)))))</span>
         
-    <span class="k">return</span> <span class="n">fit</span></div>
+    <span class="k">if</span> <span class="n">params</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fit</span></div>
 
 
 <div class="viewcode-block" id="studentfit"><a class="viewcode-back" href="../functions.html#functions.studentfit">[docs]</a><span class="k">def</span> <span class="nf">studentfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -1605,8 +1633,6 @@
         <span class="n">cons</span> <span class="o">=</span> <span class="p">([</span><span class="n">con1</span><span class="p">])</span>
         <span class="n">solution</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;SLSQP&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bnds</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="n">cons</span><span class="p">)</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">x</span>
-    
-        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">solution</span><span class="o">.</span><span class="n">fun</span><span class="p">)</span>
     
         <span class="n">fit</span> <span class="o">=</span> <span class="p">[]</span>
     
@@ -2599,9 +2625,11 @@
 <span class="sd">        </span>
 <span class="sd">    :returns: Plot</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">marker</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">,</span>
-              <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="s1">&#39;^&#39;</span><span class="p">,</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">]</span>
-    <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="s1">&#39;olive&#39;</span><span class="p">,</span> <span class="s1">&#39;lime&#39;</span><span class="p">,</span>
+    <span class="c1"># marker = [&#39;o&#39;, &#39;v&#39;, &#39;s&#39;, &#39;d&#39;, &#39;*&#39;, &#39;^&#39;, &#39;x&#39;, &#39;+&#39;, &#39;.&#39;,</span>
+    <span class="c1">#           &#39;o&#39;, &#39;v&#39;, &#39;s&#39;, &#39;d&#39;, &#39;*&#39;, &#39;^&#39;, &#39;x&#39;, &#39;+&#39;, &#39;.&#39;]</span>
+    <span class="n">marker</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">]</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;olive&#39;</span><span class="p">,</span> <span class="s1">&#39;lime&#39;</span><span class="p">,</span>
              <span class="s1">&#39;springgreen&#39;</span><span class="p">,</span> <span class="s1">&#39;mediumspringgreen&#39;</span><span class="p">,</span> <span class="s1">&#39;cyan&#39;</span><span class="p">,</span> <span class="s1">&#39;teal&#39;</span><span class="p">,</span> <span class="s1">&#39;royalblue&#39;</span><span class="p">,</span> 
              <span class="s1">&#39;turquoise&#39;</span><span class="p">,</span> <span class="s1">&#39;indigo&#39;</span><span class="p">,</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;deeppink&#39;</span><span class="p">,</span> <span class="s1">&#39;crimson&#39;</span><span class="p">]</span>
     
@@ -3033,11 +3061,11 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compares both sides of a peak, or list of peaks, and checks how similar </span>
 <span class="sd">    they are. It does this by calculating the MRSE and indicating which side is </span>
-<span class="sd">    larger or smaller bya area. If it is a negative (-), then left side is</span>
+<span class="sd">    larger or smaller by area. If it is a negative (-), then left side is</span>
 <span class="sd">    smaller.</span>
 <span class="sd">    </span>
 <span class="sd">    :type y: list</span>
-<span class="sd">    :param y: spectrocopic data to calculate the fwhm from. Single vector or</span>
+<span class="sd">    :param y: spectrocopic data to calculate the asymmetry from. Single vector or</span>
 <span class="sd">        list of vectors.    </span>
 <span class="sd">         </span>
 <span class="sd">    :type x: list</span>
@@ -3246,7 +3274,7 @@
     <span class="k">return</span> <span class="n">reptve</span></div>
 
 
-<div class="viewcode-block" id="voigtfit"><a class="viewcode-back" href="../functions.html#functions.voigtfit">[docs]</a><span class="k">def</span> <span class="nf">voigtfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="voigtfit"><a class="viewcode-back" href="../functions.html#functions.voigtfit">[docs]</a><span class="k">def</span> <span class="nf">voigtfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Fits peak as an optimization problem or manual fit for Voigt distirbution,</span>
 <span class="sd">    also known as a convoluted Gaussian-Lorentz curve. A curve `y` is only</span>
@@ -3286,14 +3314,14 @@
 <span class="sd">    :returns: Fitted curve.</span>
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>      
-    <span class="n">s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">shift</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-    <span class="n">look</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">look</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-    
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">x</span>
+    <span class="c1"># y = list(y)      </span>
+        
     <span class="k">if</span> <span class="n">manual</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="c1"># if no axis is passed</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># if no axis is passed</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)]</span>
+        
+        <span class="n">s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">shift</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         
         <span class="n">fit</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ax</span><span class="p">:</span>
@@ -3302,8 +3330,11 @@
             <span class="n">fit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gau</span><span class="o">*</span><span class="n">lor</span><span class="o">*</span><span class="n">alpha</span><span class="p">)</span>
         
     <span class="k">else</span><span class="p">:</span>        
-        <span class="k">if</span> <span class="n">ax</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="c1"># if no axis is passed</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="c1"># if no axis is passed</span>
             <span class="n">ax</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))]</span>
+        
+        <span class="n">s</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">shift</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="n">look</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">look</span><span class="o">/</span><span class="nb">abs</span><span class="p">(</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         
         <span class="n">pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">valtoind</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">ax</span><span class="p">))</span>
         
@@ -3507,7 +3538,7 @@
     <span class="k">return</span> <span class="n">fd</span></div>
 
 
-<div class="viewcode-block" id="peaksimilarity"><a class="viewcode-back" href="../functions.html#functions.peaksimilarity">[docs]</a><span class="k">def</span> <span class="nf">peaksimilarity</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmm</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Peak similarity&#39;</span><span class="p">):</span>    
+<div class="viewcode-block" id="peaksimilarity"><a class="viewcode-back" href="../functions.html#functions.peaksimilarity">[docs]</a><span class="k">def</span> <span class="nf">peaksimilarity</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">cmm</span><span class="o">=</span><span class="s1">&#39;inferno&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Peak similarity&#39;</span><span class="p">):</span>    
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the similarity matrix as described in ´doi:10.1142/S021972001350011X´.</span>
 <span class="sd">    It quantifyes the difference of the derivative function of the peaks and </span>
@@ -3617,8 +3648,210 @@
     
     <span class="k">return</span> <span class="n">rev</span></div>
         
+
+<div class="viewcode-block" id="count"><a class="viewcode-back" href="../functions.html#functions.count">[docs]</a><span class="k">def</span> <span class="nf">count</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Counts the number of values that coincide with `value`.</span>
+<span class="sd">    </span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: vector or list of vectors to search for values.</span>
+<span class="sd">    </span>
+<span class="sd">    :type value: float</span>
+<span class="sd">    :param value: Value or list of values to search in `y`. If many values are</span>
+<span class="sd">        passed, then it rteturns a list with the counted equalities. Default is 0.</span>
+
+<span class="sd">    :rtype: list[float]</span>
+<span class="sd">    :returns: Reversed data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">dims_val</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">dims_y</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="n">dims_y</span><span class="p">,</span> <span class="n">dims_val</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">dims_val</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="n">value</span><span class="p">]</span>
         
+    <span class="k">if</span> <span class="n">dims_y</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+    
+    <span class="n">count</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">))]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))]</span>
+    
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">value</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                    <span class="n">count</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="k">if</span> <span class="n">dims_val</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">count</span><span class="p">]</span>
+    
+    <span class="k">if</span> <span class="n">dims_y</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">count</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">count</span></div>
+
+<div class="viewcode-block" id="vectortoimg"><a class="viewcode-back" href="../functions.html#functions.vectortoimg">[docs]</a><span class="k">def</span> <span class="nf">vectortoimg</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">negatives</span><span class="o">=</span><span class="s1">&#39;remove&#39;</span><span class="p">,</span> <span class="n">inverted</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Transforms 1-D vecctors into an image. Useful for more insightful results</span>
+<span class="sd">        when performing deep learning.</span>
+
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: vector or list of vectors.</span>
+
+<span class="sd">    :type negatives: str</span>
+<span class="sd">    :param negatives: Specify what to do with negative values. If `remove` then negative values are set to `0`. If</span>
+<span class="sd">        `globalmin` then all the data is shifted up so the global minimum is `0`. Default it `remove`.</span>
+
+<span class="sd">    :type inverted: boolean</span>
+<span class="sd">    :param inverted: If `True`, inverts the process to take an image to a vector. Default is `False`.</span>
+
+<span class="sd">    :rtype: list[list[list[int]]]</span>
+<span class="sd">    :returns: 3-D list containing 0 or 1.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">y_dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">y_dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+
+    <span class="n">gm</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">negatives</span> <span class="o">==</span> <span class="s1">&#39;globalmin&#39;</span><span class="p">:</span>
+        <span class="n">gm</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">y</span> <span class="o">=</span> <span class="n">normtoglobalmax</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">globalmin</span><span class="o">=</span><span class="n">gm</span><span class="p">)</span>
+    <span class="n">y_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">imgs</span> <span class="o">=</span> <span class="p">[[[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y_len</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y_len</span><span class="p">)]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">y_len</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">negatives</span> <span class="o">==</span> <span class="s1">&#39;remove&#39;</span> <span class="ow">and</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.00</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="n">y_len</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">imgs</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.00</span>
+
+    <span class="k">if</span> <span class="n">y_dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">imgs</span> <span class="o">=</span> <span class="n">imgs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">imgs</span></div>
+
+
+<div class="viewcode-block" id="deconvolution"><a class="viewcode-back" href="../functions.html#functions.deconvolution">[docs]</a><span class="k">def</span> <span class="nf">deconvolution</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;gauss&#39;</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pp</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    BETA: Deconvolutes a spectra into a defined number of distributions. This will</span>
+<span class="sd">        fit dsitributions on the declared positions `pos` of peaks and change </span>
+<span class="sd">        their shape acoording to the difference betwwen the spectra and the </span>
+<span class="sd">        sum (convoilution) of the fittings.</span>
+<span class="sd">        </span>
+<span class="sd">    :type y: list[float]</span>
+<span class="sd">    :param y: vector to deconvolute.</span>
+
+<span class="sd">    :type x: list[float]</span>
+<span class="sd">    :param x: axis.</span>
+<span class="sd">    </span>
+<span class="sd">    :type pos: list[float]</span>
+<span class="sd">    :param pos: positions of peaks in x values </span>
+<span class="sd">    </span>
+<span class="sd">    :type method: string</span>
+<span class="sd">    :param method: The selected shape of the fittings. Options include: `gauss`,</span>
+<span class="sd">        `lorentz`, and `voigt`.</span>
+<span class="sd">    </span>
+<span class="sd">    :type pp: boolean</span>
+<span class="sd">    :param pp: If `True`, it prints parameters of the fittings. Default</span>
+<span class="sd">         is `False`.</span>
+<span class="sd">         </span>
+<span class="sd">    :rtype: list[list[float]]</span>
+<span class="sd">    :returns: 2-D list of the fittings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">look</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">look</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">look</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">look</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="p">[</span><span class="n">pos</span><span class="p">]</span>
+    
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+    <span class="n">gamma</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">pos</span><span class="p">]</span>
+
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">x</span> <span class="c1"># x becomes the optimization variables</span>
+    
+    <span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    
+        <span class="n">fit</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;voigt&#39;</span><span class="p">:</span>
+                <span class="n">fit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">voigtfit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">gamma</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">n</span><span class="o">+</span><span class="n">i</span><span class="p">],</span> <span class="n">sigma</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="n">i</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="n">i</span><span class="p">],</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;lorentz&#39;</span><span class="p">:</span>
+                <span class="n">fit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lorentzfit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">gamma</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="n">i</span><span class="p">],</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;gauss&#39;</span><span class="p">:</span>
+                <span class="n">fit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gaussfit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sigma</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="o">+</span><span class="n">i</span><span class="p">],</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    
+        <span class="n">error</span> <span class="o">=</span> <span class="mi">0</span>
         
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">look</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">look</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fit</span><span class="p">)):</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="n">fit</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            
+            <span class="n">error</span> <span class="o">+=</span> <span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">s</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        
+        <span class="k">return</span> <span class="n">error</span><span class="o">**</span><span class="mf">0.5</span> 
+    
+    <span class="k">def</span> <span class="nf">constraint1</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="c1"># is_zero=0</span>
+        <span class="c1"># fit = []</span>
+        <span class="c1"># for i in range(n):</span>
+        <span class="c1">#     # fit.append(spep.voigtfit(x=ax, pos=pos[i], gamma=x[i], sigma=x[n+i], alpha=x[2*n+i], manual=True))</span>
+        <span class="c1">#     # fit.append(spep.lorentzfit(x=ax, pos=pos[i], gamma=x[i], alpha=x[n+i], manual=True))</span>
+        <span class="c1">#     fit.append(spep.gaussfit(x=ax, pos=x[i], sigma=x[i+n], alpha=x[2*n+i], manual=True))</span>
+        
+        <span class="c1"># for i in range(look[0], look[1]):</span>
+        <span class="c1">#     s = 0</span>
+        <span class="c1">#     for j in range(len(fit)):</span>
+        <span class="c1">#         s += fit[j][i]</span>
+        <span class="c1">#     return y[i]-s</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    
+    
+    <span class="n">initial</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">bnds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">bnds</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="n">shift</span><span class="p">,</span> <span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="n">shift</span><span class="p">])</span>
+        <span class="n">initial</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;voigt&#39;</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">bnds</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mf">0.001</span><span class="p">,</span> <span class="mi">999</span><span class="p">])</span>
+            <span class="n">initial</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">gamma</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">bnds</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mf">0.001</span><span class="p">,</span> <span class="mi">999</span><span class="p">])</span>
+        <span class="n">initial</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sigma</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">bnds</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mf">0.001</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="mi">99999</span><span class="p">])</span>
+        <span class="n">initial</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alpha</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    
+    <span class="n">x0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">initial</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;object&#39;</span><span class="p">)</span>  <span class="c1"># master vector to optimize, initial values</span>
+    <span class="n">con1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;ineq&#39;</span><span class="p">,</span> <span class="s1">&#39;fun&#39;</span><span class="p">:</span> <span class="n">constraint1</span><span class="p">}</span>
+    <span class="n">cons</span> <span class="o">=</span> <span class="p">([</span><span class="n">con1</span><span class="p">])</span>
+    <span class="n">solution</span> <span class="o">=</span> <span class="n">minimize</span><span class="p">(</span><span class="n">objective</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;SLSQP&#39;</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bnds</span><span class="p">,</span> <span class="n">constraints</span><span class="o">=</span><span class="n">cons</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">solution</span><span class="o">.</span><span class="n">x</span>
+    
+    <span class="k">if</span> <span class="n">pp</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    
+    <span class="n">y0</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">ax</span><span class="p">]</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;gauss&#39;</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">gaussfit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">sigma</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">],</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;lorentz&#39;</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">lorentzfit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">gamma</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">],</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;voigt&#39;</span><span class="p">:</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">voigtfit</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">gamma</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">n</span><span class="p">],</span> <span class="n">sigma</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">n</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">n</span><span class="p">],</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ax</span><span class="p">)):</span>
+            <span class="n">y0</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+=</span> <span class="n">temp</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
 </pre></div>
 
            </div>
