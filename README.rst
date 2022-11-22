@@ -8,8 +8,8 @@ spectrapepper
         :target: https://anaconda.org/conda-forge/spectrapepper
 .. image:: https://img.shields.io/badge/License-MIT-yellow.svg
         :target: https://opensource.org/licenses/MIT
-.. image:: https://img.shields.io/lgtm/grade/python/g/spectrapepper/spectrapepper.svg?logo=lgtm&logoWidth=18
-        :target: https://lgtm.com/projects/g/spectrapepper/spectrapepper/context:python
+.. image:: https://github.com/spectrapepper/spectrapepper/actions/workflows/codeql.yml/badge.svg
+        :target: https://github.com/spectrapepper/spectrapepper/actions/workflows/codeql.yml
 .. image:: https://github.com/spectrapepper/spectrapepper/workflows/docs/badge.svg
         :target: https://spectrapepper.github.io/spectrapepper
 .. image:: https://codecov.io/gh/spectrapepper/spectrapepper/branch/main/graph/badge.svg?token=DC0QIwuYel

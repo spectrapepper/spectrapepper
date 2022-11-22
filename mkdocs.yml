@@ -1,12 +1,9 @@
-
-
 site_name: spectrapepper
 
 site_url: https://spectrapepper.github.io/spectrapepper
 
 repo_url: https://github.com/spectrapepper/spectrapepper
-
- # theme produces error. It is because custom_dir:"docs/overrides" is not on the library. Docs work properly.
+# theme produces error. It is because custom_dir:"docs/overrides" is not on the library. Docs work properly.
 theme:
     palette:
         scheme: preference
