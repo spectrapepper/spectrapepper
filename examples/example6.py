@@ -7,6 +7,12 @@ import spectrapepper as spep
 # load data set
 x, y = spep.load_spectras()
 
+# remove baseline
+y = spep.bspbaseline(y, x, points=[155, 243, 315, 450, 530])
+
+# Normalize the spectra to the maximum value.
+y = spep.normtoratio(y, r1=[190, 220], r2=[165, 190], x=x)
+
 # Calculate the averge spectra of the set.
 avg = spep.avg(y)
 
@@ -32,15 +38,17 @@ mis, mas = spep.minmax(y)
 # visualiz the results
 import matplotlib.pyplot as plt
 
+curves = [avg, med, sdv, typ, rep, mis, mas]
+titles = ['Average', 'Median', 'St. Dev.', 'Typical',
+          'Representative', 'Minimum', 'Maximum']
+
 for i in y:
     plt.plot(x, i, lw=0.5, alpha=0.2, c='black')
-plt.plot(x, avg, label='Average')
-plt.plot(x, med, label='Median')
-plt.plot(x, sdv, label='St. dev.')
-plt.plot(x, typ, label='Typical')
-plt.plot(x, rep, label='Representative')
-plt.plot(x, mis, label='Minimum')
-plt.plot(x, mas, label='Maximum')
+for i,j in zip(curves, titles):
+    plt.plot(x, i, label=j)
 plt.legend()
 plt.ylabel('Intensity (a.u.)')
 plt.xlabel('Shift ($cm^{-1}$)')
+plt.xlim(100, 600)
+plt.ylim(-0.3, 0.9)
+plt.show()

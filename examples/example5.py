@@ -35,7 +35,6 @@ plt.title('Automatic fit')
 plt.legend()
 plt.show()
 
-
 # manually fit the distributions to the peak.
 gauss = spep.gaussfit(y=y, x=x, pos=peak, sigma=4.4, manual=True)
 lorentz = spep.lorentzfit(y=y, x=x, pos=peak, gamma=5, manual=True)
@@ -54,7 +53,6 @@ plt.title('Manual fit')
 plt.legend()
 plt.show()
 
-
 # show how the distribution changes by the change in the parameters
 gauss = []
 lorentz = []
@@ -65,7 +63,6 @@ for i in range(10):
     lorentz.append(spep.lorentzfit(gamma=(5+i*2), manual=True))
     student.append(spep.studentfit(v=0.1*(1+1*i), manual=True))
     voigt.append(spep.voigtfit(gamma=(5+i*3), sigma=4*(i+3), manual=True))
-
 
 # the stackplot fuinction is a nice tool to show the evolution of data
 for i, j in zip([gauss, lorentz, student, voigt], ['Gauss', 'Lorentz', 'Student', 'Voigt']):

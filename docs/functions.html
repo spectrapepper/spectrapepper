@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Functions &mdash; spectrapepper  documentation</title>
@@ -11,11 +11,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> spectrapepper
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            spectrapepper
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -41,7 +45,75 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">spectrapepper</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#functions.alsbaseline"><code class="docutils literal notranslate"><span class="pre">alsbaseline()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.areacalculator"><code class="docutils literal notranslate"><span class="pre">areacalculator()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.asymmetry"><code class="docutils literal notranslate"><span class="pre">asymmetry()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.autocorrelation"><code class="docutils literal notranslate"><span class="pre">autocorrelation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.avg"><code class="docutils literal notranslate"><span class="pre">avg()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.bincombs"><code class="docutils literal notranslate"><span class="pre">bincombs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.bspbaseline"><code class="docutils literal notranslate"><span class="pre">bspbaseline()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.classify"><code class="docutils literal notranslate"><span class="pre">classify()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.cmscore"><code class="docutils literal notranslate"><span class="pre">cmscore()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.confusionmatrix"><code class="docutils literal notranslate"><span class="pre">confusionmatrix()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.cosmicdd"><code class="docutils literal notranslate"><span class="pre">cosmicdd()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.cosmicmed"><code class="docutils literal notranslate"><span class="pre">cosmicmed()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.cosmicmp"><code class="docutils literal notranslate"><span class="pre">cosmicmp()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.count"><code class="docutils literal notranslate"><span class="pre">count()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.crosscorrelation"><code class="docutils literal notranslate"><span class="pre">crosscorrelation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.decbound"><code class="docutils literal notranslate"><span class="pre">decbound()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.decdensity"><code class="docutils literal notranslate"><span class="pre">decdensity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.deconvolution"><code class="docutils literal notranslate"><span class="pre">deconvolution()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.derivative"><code class="docutils literal notranslate"><span class="pre">derivative()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.evalgrau"><code class="docutils literal notranslate"><span class="pre">evalgrau()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.fwhm"><code class="docutils literal notranslate"><span class="pre">fwhm()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.gaussfit"><code class="docutils literal notranslate"><span class="pre">gaussfit()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.grau"><code class="docutils literal notranslate"><span class="pre">grau()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.groupscores"><code class="docutils literal notranslate"><span class="pre">groupscores()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.interpolation"><code class="docutils literal notranslate"><span class="pre">interpolation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.isaxis"><code class="docutils literal notranslate"><span class="pre">isaxis()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.issinglevalue"><code class="docutils literal notranslate"><span class="pre">issinglevalue()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.lorentzfit"><code class="docutils literal notranslate"><span class="pre">lorentzfit()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.lowpass"><code class="docutils literal notranslate"><span class="pre">lowpass()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.mahalanobis"><code class="docutils literal notranslate"><span class="pre">mahalanobis()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.makeaxisdivs"><code class="docutils literal notranslate"><span class="pre">makeaxisdivs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.makeaxisstep"><code class="docutils literal notranslate"><span class="pre">makeaxisstep()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.mdscore"><code class="docutils literal notranslate"><span class="pre">mdscore()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.median"><code class="docutils literal notranslate"><span class="pre">median()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.mergedata"><code class="docutils literal notranslate"><span class="pre">mergedata()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.minmax"><code class="docutils literal notranslate"><span class="pre">minmax()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.moveavg"><code class="docutils literal notranslate"><span class="pre">moveavg()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.normsum"><code class="docutils literal notranslate"><span class="pre">normsum()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.normtoglobalmax"><code class="docutils literal notranslate"><span class="pre">normtoglobalmax()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.normtoglobalsum"><code class="docutils literal notranslate"><span class="pre">normtoglobalsum()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.normtomax"><code class="docutils literal notranslate"><span class="pre">normtomax()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.normtopeak"><code class="docutils literal notranslate"><span class="pre">normtopeak()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.normtoratio"><code class="docutils literal notranslate"><span class="pre">normtoratio()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.normtovalue"><code class="docutils literal notranslate"><span class="pre">normtovalue()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.peakfinder"><code class="docutils literal notranslate"><span class="pre">peakfinder()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.peaksimilarity"><code class="docutils literal notranslate"><span class="pre">peaksimilarity()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.pearson"><code class="docutils literal notranslate"><span class="pre">pearson()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.plot2dml"><code class="docutils literal notranslate"><span class="pre">plot2dml()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.polybaseline"><code class="docutils literal notranslate"><span class="pre">polybaseline()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.regression"><code class="docutils literal notranslate"><span class="pre">regression()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.representative"><code class="docutils literal notranslate"><span class="pre">representative()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.reverse"><code class="docutils literal notranslate"><span class="pre">reverse()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.rwm"><code class="docutils literal notranslate"><span class="pre">rwm()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.sdev"><code class="docutils literal notranslate"><span class="pre">sdev()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.shiftref"><code class="docutils literal notranslate"><span class="pre">shiftref()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.shuffle"><code class="docutils literal notranslate"><span class="pre">shuffle()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.spearman"><code class="docutils literal notranslate"><span class="pre">spearman()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.stackplot"><code class="docutils literal notranslate"><span class="pre">stackplot()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.studentfit"><code class="docutils literal notranslate"><span class="pre">studentfit()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.subtractref"><code class="docutils literal notranslate"><span class="pre">subtractref()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.trim"><code class="docutils literal notranslate"><span class="pre">trim()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.typical"><code class="docutils literal notranslate"><span class="pre">typical()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.valtoind"><code class="docutils literal notranslate"><span class="pre">valtoind()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.vectortoimg"><code class="docutils literal notranslate"><span class="pre">vectortoimg()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.voigtfit"><code class="docutils literal notranslate"><span class="pre">voigtfit()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
 </ul>
@@ -59,8 +131,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Functions</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Functions</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/functions.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -81,7 +153,7 @@ use the search function to look up specific functionalities and keywords.</p>
 script only makes the calculation but it does not remove it. Original idea of
 this algorithm by P. Eilers and H. Boelens (2005):</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Spectra to calculate the baseline from.</p></li>
 <li><p><strong>lam</strong> (<em>int</em>) – Lambda, smoothness. The default is 100.</p></li>
@@ -91,10 +163,10 @@ this algorithm by P. Eilers and H. Boelens (2005):</p>
 <cite>False</cite>, then it returns the <cite>baseline</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Returns the calculated baseline.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -106,7 +178,7 @@ this algorithm by P. Eilers and H. Boelens (2005):</p>
 <dd><p>Area calculator using the data (x_data) and the limits in position, not
 values.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to calculate area from.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – X axis of the data.</p></li>
@@ -114,10 +186,10 @@ values.</p>
 <li><p><strong>norm</strong> (<em>bool</em>) – If True, normalized the area to the sum under all the curve.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list of areas according to the requested limits.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -131,7 +203,7 @@ they are. It does this by calculating the MRSE and indicating which side is
 larger or smaller by area. If it is a negative (-), then left side is
 smaller.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em>) – spectrocopic data to calculate the asymmetry from. Single vector or
 list of vectors.</p></li>
@@ -144,12 +216,12 @@ them.</p></li>
 <li><p><strong>limit</strong> (<em>int</em>) – Comparison limits to each side of the peak. Default is 10.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>R2 value comparing both sides of the peak and a sign to tell if
 either left side is smaller (negative) or tight side is smaller
 (positive, no sign included).</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -162,7 +234,7 @@ either left side is smaller (negative) or tight side is smaller
 function of the lag. In other words, it calculates the PEarsoon coefficient 
 for a vector with itself shifted by <cite>lag</cite> positions.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to fit. Single or list of vectors.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis.</p></li>
@@ -175,10 +247,10 @@ the standard deviation of the series in <cite>t</cite> and <cite>t+lag</cite>.</
 signal.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>autocorrelation values, either in a list or single value.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float, list[float]</p>
 </dd>
 </dl>
@@ -189,13 +261,13 @@ signal.</p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.avg" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the average vector from a list of vectors.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The average of the vectors in the list.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -206,17 +278,17 @@ signal.</p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">bincombs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#bincombs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.bincombs" title="Permalink to this definition"></a></dt>
 <dd><p>Returns all possible unique combinations.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>n</strong> (<em>int</em>) – Amount of positions.</p></li>
 <li><p><strong>s_min</strong> (<em>int</em>) – Minimum amount of 1s.</p></li>
 <li><p><strong>s_max</strong> (<em>int</em>) – Maximum amount of 1s.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of unique combinations.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[tuple]</p>
 </dd>
 </dl>
@@ -227,7 +299,7 @@ signal.</p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">bspbaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#bspbaseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.bspbaseline" title="Permalink to this definition"></a></dt>
 <dd><p>Calcuates the baseline using b-spline.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single or several spectras to remove the baseline from.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis of the data, to interpolate the baseline function.</p></li>
@@ -240,10 +312,10 @@ are axis ranges, then it is set to 0 and will not have any effect.</p></li>
 <li><p><strong>plot</strong> (<em>bool</em>) – If True, calculates and returns (data - baseline).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The baseline.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -255,7 +327,7 @@ are axis ranges, then it is set to 0 and will not have any effect.</p></li>
 <dd><p>Classifies targets according to either defined limits or number of groups.
 The latter depends on the defined parameters.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Vector with target values to be classified.</p></li>
 <li><p><strong>gnumber</strong> (<em>int</em>) – Number of groups to create. The default is 3 and is the default technique.</p></li>
@@ -263,10 +335,10 @@ The latter depends on the defined parameters.</p>
 <li><p><strong>glimits</strong> – Name of the variable that is being classified.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Vector with the classification from 0 to N. A list with strings with the name of the groups, useful for plotting.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[list,list]</p>
 </dd>
 </dl>
@@ -279,51 +351,30 @@ The latter depends on the defined parameters.</p>
 clusters and sets the prediction to the closest CM. This score may be
 higher or lower than the algorithm score.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x_points</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Coordinates of x-axis.</p></li>
 <li><p><strong>y_points</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Coordinates of y-axis.</p></li>
 <li><p><strong>target</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – Targets of each point.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Score by comparing CM distances. Prediction using CM distances.
 X-axis coords of ths CMs. Y-axis coords of the Cms.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float, list[int],list[float],list[float]]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="functions.colormap">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">colormap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'my_name'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#colormap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.colormap" title="Permalink to this definition"></a></dt>
-<dd><p>Simplify the creation of colormaps.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>colors</strong> (<em>list</em>) – List of colors thaat you ant on the colormap</p></li>
-<li><p><strong>name</strong> (<em>string</em><em>, </em><em>optional</em>) – Name of the colormap. The default is ‘my_name’.</p></li>
-<li><p><strong>n</strong> (<em>int</em><em>, </em><em>optional</em>) – Divisions. The default is 100.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Colormap in Matplotlib format.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>cmap</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="functions.confusionmatrix">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">confusionmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Blues'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'True'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Prediction'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#confusionmatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.confusionmatrix" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">confusionmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Blues'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fontsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'True'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Prediction'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cm.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(45,</span> <span class="pre">0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#confusionmatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.confusionmatrix" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates and/or plots the confusion matrix for machine learning algorithm
 results.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>tt</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Real targets.</p></li>
 <li><p><strong>tp</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Predicted targets.</p></li>
@@ -340,10 +391,10 @@ is Blue.</p></li>
 <li><p><strong>xlabel</strong> (<em>str</em>) – Label for x axis. Default is <cite>Prediction</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The confusion matrix</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -355,7 +406,7 @@ is Blue.</p></li>
 <dd><p>It identifies CRs by detrended differences, the differences between a
 value and the next (D. A. Whitaker and K. Hayes, <a class="reference external" href="https://doi.org/10.1016/j.chemolab.2018.06.009">https://doi.org/10.1016/j.chemolab.2018.06.009</a>).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of spectras to remove cosmic rays.</p></li>
 <li><p><strong>th</strong> (<em>float</em>) – Factor to modify the criteria to identify a cosmic ray.</p></li>
@@ -363,10 +414,10 @@ value and the next (D. A. Whitaker and K. Hayes, <a class="reference external" h
 <li><p><strong>m</strong> (<em>float</em>) – Number of neighbor values to use for average.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Data with removed cosmic rays.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -378,17 +429,17 @@ value and the next (D. A. Whitaker and K. Hayes, <a class="reference external" h
 <dd><p>Precise cosmic ray elimination for measurements of the same point or very
 similar spectras.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of spectras to remove cosmic rays.</p></li>
 <li><p><strong>sigma</strong> (<em>float</em>) – Factor to modify the criteria to identify a cosmic ray.
 Multiplies the median of each bin.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Data with removed cosmic rays.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -400,17 +451,17 @@ Multiplies the median of each bin.</p></li>
 <dd><p>It identifies CRs by comparing similar spectras and paring in matching
 pairs. Uses randomnes of CRs (S. J. Barton, B. M. Hennelly, <a class="reference external" href="https://doi.org/10.1177/0003702819839098">https://doi.org/10.1177/0003702819839098</a>)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of spectras to remove cosmic rays.</p></li>
 <li><p><strong>alpha</strong> (<em>float</em>) – Factor to modify the criteria to identify a cosmic ray.</p></li>
 <li><p><strong>avg</strong> (<em>int</em>) – Moving average window.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Data with removed cosmic rays.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -421,17 +472,17 @@ pairs. Uses randomnes of CRs (S. J. Barton, B. M. Hennelly, <a class="reference 
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.count" title="Permalink to this definition"></a></dt>
 <dd><p>Counts the number of values that coincide with <cite>value</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – vector or list of vectors to search for values.</p></li>
 <li><p><strong>value</strong> (<em>float</em>) – Value or list of values to search in <cite>y</cite>. If many values are
-passed, then it rteturns a list with the counted equalities. Default is 0.</p></li>
+passed, then it returns a list with the counted equalities. Default is 0.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list[float]</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Reversed data.</p>
 </dd>
 </dl>
@@ -444,7 +495,7 @@ passed, then it rteturns a list with the counted equalities. Default is 0.</p></
 signal in function of the lag. In other words, measures the similarity
 between two series that are displaced relative to each other.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to fit. Single or list of vectors.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis.</p></li>
@@ -457,10 +508,10 @@ the standard deviation of the series in <cite>t</cite> and <cite>t+lag</cite>.</
 signals.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>autocorrelation values, either in a list or single value.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float, list[float]</p>
 </dd>
 </dl>
@@ -471,7 +522,7 @@ signals.</p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">decbound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#decbound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.decbound" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the Decision Boundaries.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x_points</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – X coordinates of each point.</p></li>
 <li><p><strong>y_points</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Y coordinates of each point.</p></li>
@@ -480,10 +531,10 @@ signals.</p></li>
 <li><p><strong>divs</strong> (<em>float</em>) – Resolution. The default is 0.01.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The decision boundaries.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -494,7 +545,7 @@ signals.</p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">decdensity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">th</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#decdensity"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.decdensity" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the density decision map from a cluster mapping.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – X coordinates of each point.</p></li>
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Y coordinates of each point.</p></li>
@@ -504,10 +555,10 @@ signals.</p></li>
 <li><p><strong>th</strong> (<em>int</em>) – Threshold from where a area is defined as a certain group.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The density decision map.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -523,7 +574,7 @@ sum (convoilution) of the fittings.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – vector to deconvolute.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – axis.</p></li>
@@ -534,10 +585,10 @@ sum (convoilution) of the fittings.</p>
 is <cite>False</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list[list[float]]</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>2-D list of the fittings.</p>
 </dd>
 </dl>
@@ -549,7 +600,7 @@ is <cite>False</cite>.</p></li>
 <dd><p>Calculates the derivative function of a vector. It does so by calculating
 the slope on a point using the position of the neighboring points.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to fit. Single or list of vectors.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis. If <cite>None</cite>, an axis will be created from 1..N, where N is
@@ -561,10 +612,10 @@ will be derivated. In other words, if <cite>deg=2</cite>, will calculate the
 second derivative. Default is <cite>1</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>derivative values, either in a list or single value.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float, list[float]</p>
 </dd>
 </dl>
@@ -576,13 +627,13 @@ second derivative. Default is <cite>1</cite>.</p></li>
 <dd><p>This function evaluates the MSE in 3 dimensions (x,y,z) for a set of
 data vectors.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – A list of lists of variables to compare.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list with each combination and the R2 score obtained.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -594,7 +645,7 @@ data vectors.</p>
 <dd><p>Calculates the Full Width Half Maximum of specific peak or list of
 peaks for a single or multiple spectras.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em>) – spectrocopic data to calculate the fwhm from. Single vector or
 list of vectors.</p></li>
@@ -611,10 +662,10 @@ basically find the <cite>full width quarter maximum</cite>. <cite>alpha</cite> s
 <li><p><strong>interpolate</strong> (<em>boolean</em>) – If True, will interpolte according to <cite>step</cite> and <cite>s</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list, or single float value, of the fwhm.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float or list[float]</p>
 </dd>
 </dl>
@@ -622,12 +673,12 @@ basically find the <cite>full width quarter maximum</cite>. <cite>alpha</cite> s
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.gaussfit">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">gaussfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#gaussfit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.gaussfit" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">gaussfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4.4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#gaussfit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.gaussfit" title="Permalink to this definition"></a></dt>
 <dd><p>Fits peak as an optimization problem or manual fit. A curve <cite>y</cite> is only 
 mandatory if the optimixzation is needed (manual=False, default). If no
 axis ‘ax’ is defined, then a default axis is generated for both options.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to fit. Single vector.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis.</p></li>
@@ -644,10 +695,10 @@ parameter <cite>sigma</cite> and perform a manual fit. Default is <cite>False</c
 order of <cite>alpha</cite>, <cite>sigma</cite> and <cite>peak position</cite>. Default is <cite>False</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted curve.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -658,7 +709,7 @@ order of <cite>alpha</cite>, <cite>sigma</cite> and <cite>peak position</cite>. 
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">grau</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'seismic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(25,</span> <span class="pre">15)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tfs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Grau</span> <span class="pre">(Beta)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">marks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#grau"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.grau" title="Permalink to this definition"></a></dt>
 <dd><p>Performs Grau correlation matrix and plots it.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to be correlated.</p></li>
 <li><p><strong>labels</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Labels of the data to be ploted.</p></li>
@@ -672,10 +723,10 @@ order of <cite>alpha</cite>, <cite>sigma</cite> and <cite>peak position</cite>. 
 <li><p><strong>marks</strong> (<em>int</em>) – Marker size. The default is 100.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Grau plot in a 2d list.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -686,7 +737,7 @@ order of <cite>alpha</cite>, <cite>sigma</cite> and <cite>peak position</cite>. 
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">groupscores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">used_targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predicted_targets</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#groupscores"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.groupscores" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the individual scores for a ML algorithm (i.e.: LDA, PCA, etc).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>all_targets</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – List of all real targets (making sure all groups are 
 here).</p></li>
@@ -694,10 +745,10 @@ here).</p></li>
 <li><p><strong>predicted_targets</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – Prediction of used_targets.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of scores for each group.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -708,17 +759,17 @@ here).</p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">interpolation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#interpolation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.interpolation" title="Permalink to this definition"></a></dt>
 <dd><p>Interpolates data to a new axis.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of data to interpolate</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – list of the axises of the data</p></li>
 <li><p><strong>step</strong> (<em>float</em>) – new step for the new axis</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Interpolated data and the new axis</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float], list[float]</p>
 </dd>
 </dl>
@@ -726,16 +777,16 @@ here).</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.isaxis">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">isaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#isaxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.isaxis" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">isaxis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#isaxis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.isaxis" title="Permalink to this definition"></a></dt>
 <dd><p>Detects if there is an axis in the data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data containing spectras an possible axis.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if there is axis.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
@@ -748,15 +799,15 @@ here).</p></li>
 (single value vector). Not to be confused with a single element vector 
 were the length of the vector is 1.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>y</strong> (<em>list</em>) – Vector, or list of vectors, that needs to be checked.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>True if contains the same value. False if there are different. If
 <cite>y</cite> is a list of vectors then it returns a list of booleans with the 
 respective answer.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
@@ -764,32 +815,33 @@ respective answer.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.load">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromline=0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transpose=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'float'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split=False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.load" title="Permalink to this definition"></a></dt>
-<dd><p>Load data from a standard text file obtained from LabSpec and other
-spectroscopy instruments. Normally, when single measurement these come in 
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">file,</span> <span class="pre">fromline=0,</span> <span class="pre">toline=None,</span> <span class="pre">line=None,</span> <span class="pre">transpose=False,</span> <span class="pre">dtype=&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">separators=[';'],</span> <span class="pre">blanks=['NaN',</span> <span class="pre">'nan',</span> <span class="pre">'--'],</span> <span class="pre">replacewith='0'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load data from a text file obtained from LabSpec and other
+spectroscopy software. Normally, single measurements come in 
 columns with the first one being the x-axis. When it is a mapping, the
 first row is the x-axis and the following are the measurements. It can also
-perofrm random access toa particular ´line´.</p>
+peroform random access to a particular ´line´ and also it is possibel to define
+specific range to load with ‘fromline’ and ‘toline’.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>file</strong> (<em>str</em>) – Url of data file. Must not have headers and separated by 
 ‘spaces’ (LabSpec).</p></li>
 <li><p><strong>fromline</strong> (<em>int</em>) – Line of file from which to start loading data. The default
 is 0.</p></li>
+<li><p><strong>fromline</strong> – Line of file to which to end loading data. The default
+is ‘None’ which idicates the full range of data.</p></li>
 <li><p><strong>line</strong> (<em>int</em>) – Random access to file. Loads a specific line in a file. Default
 is ´None´.</p></li>
 <li><p><strong>transpose</strong> (<em>boolean</em>) – If True transposes the data. Default is False.</p></li>
 <li><p><strong>dtype</strong> (<em>str</em>) – Type of data. If its numeric then ‘float’, if text then ‘string’.
 Default is ‘float’.</p></li>
-<li><p><strong>split</strong> (<em>boolean</em>) – True to make a list of strings when ‘dtype’ is ‘string’, 
-separated by space. The default is False.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of the data.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -803,7 +855,7 @@ also known as Cauchy. A curve <cite>y</cite> is only mandatory if the optimixzat
 needed (manual=False, default). If no axis ‘x’ is defined, then a default 
 axis is generated for both options.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to fit. Single vector.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis.</p></li>
@@ -818,10 +870,10 @@ default is 1.</p></li>
 parameter <cite>gamma</cite> and perform a manual fit. Default is <cite>False</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted curve.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -832,7 +884,7 @@ parameter <cite>gamma</cite> and perform a manual fit. Default is <cite>False</c
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">lowpass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nyq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.75</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#lowpass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.lowpass" title="Permalink to this definition"></a></dt>
 <dd><p>Butter low pass filter for a single or spectra or a list of them.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors in line format (each line is a vector).</p></li>
 <li><p><strong>cutoff</strong> (<em>float</em>) – Desired cutoff frequency of the filter. The default is 0.25.</p></li>
@@ -841,10 +893,10 @@ parameter <cite>gamma</cite> and perform a manual fit. Default is <cite>False</c
 <li><p><strong>nyq</strong> (<em>float</em>) – Nyquist frequency, 0.75*fs is a good value to start. The default is 0.75*30.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Filtered data</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -856,13 +908,13 @@ parameter <cite>gamma</cite> and perform a manual fit. Default is <cite>False</c
 <dd><p>Calculates the Mahalanobis distance for a groups of vectors to the center 
 of mass, or average coordinates.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>v</strong> (<em>list</em>) – vectors to calculate the distance</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of the respectve distances.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list</p>
 </dd>
 </dl>
@@ -870,10 +922,10 @@ of mass, or average coordinates.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.makeaxisdivs">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">makeaxisdivs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rounded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#makeaxisdivs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.makeaxisdivs" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">makeaxisdivs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">divs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rounded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#makeaxisdivs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.makeaxisdivs" title="Permalink to this definition"></a></dt>
 <dd><p>Creates an axis, or vector, from ‘start’ to ‘finish’ with ‘divs’ divisions.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>start</strong> (<em>float</em>) – First value of the axis.</p></li>
 <li><p><strong>finish</strong> (<em>float</em>) – Last value of the axis.</p></li>
@@ -882,10 +934,10 @@ of mass, or average coordinates.</p>
 performed.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Axis with the set parameters.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -893,11 +945,11 @@ performed.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.makeaxisstep">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">makeaxisstep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rounded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#makeaxisstep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.makeaxisstep" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">makeaxisstep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjust</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rounded</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#makeaxisstep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.makeaxisstep" title="Permalink to this definition"></a></dt>
 <dd><p>Creates an axis, or vector, from ‘start’ with bins of length ‘step’ 
 for a distance of ‘length’.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>start</strong> (<em>float</em>) – first value of the axis. Default is 0.</p></li>
 <li><p><strong>step</strong> (<em>float</em>) – Step size for the axis. Default is 1.00.</p></li>
@@ -908,10 +960,10 @@ as the step has. Default is False.</p></li>
 performed.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Axis with the set parameters.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -924,18 +976,18 @@ performed.</p></li>
 clusters and sets the prediction to the closest MD. This score may be
 higher or lower than the algorithm score.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x_p</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Coordinates of x-axis.</p></li>
 <li><p><strong>y_p</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Coordinates of y-axis.</p></li>
 <li><p><strong>tar</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – Targets of each point.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Score by comparing MD distances. Prediction using MD distances. 
 X-axis coords of ths CMs. Y-axis coords of the Cms.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float, list[int],list[float],list[float]]</p>
 </dd>
 </dl>
@@ -946,13 +998,13 @@ X-axis coords of ths CMs. Y-axis coords of the Cms.</p>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">median</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#median"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.median" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the median vector of a list of vectors.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>median curve</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -964,13 +1016,13 @@ X-axis coords of ths CMs. Y-axis coords of the Cms.</p>
 <dd><p>Merges data, it can merge large vectors. Useful to merge features
 before performing ML algorithms.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – List of arrays.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List with the merged data.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -982,13 +1034,13 @@ before performing ML algorithms.</p>
 <dd><p>Calculates the vectors that contain the minimum and maximum values of each
 bin from a list of vectors.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>y</strong> (<em>list</em>) – List of vectors to calculate the minimum and maximum vectors.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>minimum and maximum vectors.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -999,16 +1051,16 @@ bin from a list of vectors.</p>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">moveavg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">move</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#moveavg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.moveavg" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the moving average of a single or multiple vectors.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to calculate the moving average. Single or multiple vectors.</p></li>
 <li><p><strong>move</strong> (<em>int</em>) – Average range to each side (total average = move + 1).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Smoothed vector(s).</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1019,7 +1071,7 @@ bin from a list of vectors.</p>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normsum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normsum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normsum" title="Permalink to this definition"></a></dt>
 <dd><p>Normalizes the sum under the curve to 1, for single or multiple spectras.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single spectra or a list of them to normalize.</p></li>
 <li><p><strong>lims</strong> (<em>list</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Limits of the vector to normalize the sum. Default is <cite>None</cite>.
@@ -1027,10 +1079,10 @@ For example, if ´lims = [N, M]´, the the sum under the curve betwween
 N and M is normalized to 1.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Normalized data</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1041,17 +1093,17 @@ N and M is normalized to 1.</p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtoglobalmax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globalmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtoglobalmax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtoglobalmax" title="Permalink to this definition"></a></dt>
 <dd><p>Normalizes a list of spectras to the global max.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of spectras.</p></li>
 <li><p><strong>globalmin</strong> (<em>Bool</em>) – If <cite>True</cite>, the global minimum is reescaled to 0. Default
 is <cite>False</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Normalized data</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1066,13 +1118,13 @@ then the other areas are scaled in relation to that one.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of spectras.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Normalized data</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1081,22 +1133,22 @@ then the other areas are scaled in relation to that one.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.normtomax">
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtomax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zeromin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtomax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtomax" title="Permalink to this definition"></a></dt>
-<dd><p>Normalizes spectras to the maximum value of each, in other words, the
-maximum value of each spectras is set to 1.</p>
+<dd><p>Normalizes spectra to the maximum value of each, in other words, the
+maximum value of each spectra is set to the specified value.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single or multiple vectors to normalize.</p></li>
+<li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em><em>, </em><em>numpy.ndarray</em>) – Single or multiple vectors to normalize.</p></li>
 <li><p><strong>to</strong> (<em>float</em>) – value to which normalize to. Default is 1.</p></li>
-<li><p><strong>zeromin</strong> (<em>boolean</em>) – If <cite>True</cite>, the minimum value is traslated to 0. Default
-values is <cite>False</cite></p></li>
+<li><p><strong>zeromin</strong> (<em>boolean</em>) – If <cite>True</cite>, the minimum value is translated to 0. Default
+value is <cite>False</cite></p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Normalized data.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>list[float]</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[float], numpy.ndarray</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1106,18 +1158,18 @@ values is <cite>False</cite></p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">normtopeak</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">peak</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#normtopeak"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.normtopeak" title="Permalink to this definition"></a></dt>
 <dd><p>Normalizes the spectras to a particular peak.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to be normalized.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis of the data</p></li>
-<li><p><strong>peak</strong> (<em>int</em>) – Peak position in x-axis values.</p></li>
+<li><p><strong>peak</strong> (<em>float</em>) – Peak position in x-axis values.</p></li>
 <li><p><strong>shift</strong> (<em>int</em>) – Range to look for the real peak. The default is 10.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Normalized data.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1129,7 +1181,7 @@ values is <cite>False</cite></p></li>
 <dd><p>Normalizes a peak to the ratio value respect to another. That is, the peak
 found in the range of r1 is normalized to the ratio r1/(r1+r2).</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single spectra or a list of them.</p></li>
 <li><p><strong>r1</strong> (<em>list</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Range of the first area according to the axis.</p></li>
@@ -1138,10 +1190,10 @@ found in the range of r1 is normalized to the ratio r1/(r1+r2).</p>
 N is the length of the spectras.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Normalized data</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1153,16 +1205,16 @@ N is the length of the spectras.</p></li>
 <dd><p>Normalizes the spectras to a set value, in other words, the defined value
 will be reescaled to 1 in all the spectras.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single or multiple vectors to normalize.</p></li>
 <li><p><strong>val</strong> (<em>float</em>) – Value to normalize to.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Normalized data.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1173,7 +1225,7 @@ will be reescaled to 1 in all the spectras.</p>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">peakfinder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ranges</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#peakfinder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.peakfinder" title="Permalink to this definition"></a></dt>
 <dd><p>Finds the location of the peaks in a single vector.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to find a peak in. Single spectra.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – X axis of the data. If no axis is passed then the axis goes 
@@ -1186,10 +1238,10 @@ but just for the absolute maximum within the range. Default is <cite>None</cite>
 maximum. The default is 10.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A list of the index of the peaks found.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[int]</p>
 </dd>
 </dl>
@@ -1202,7 +1254,7 @@ maximum. The default is 10.</p></li>
 It quantifyes the difference of the derivative function of the peaks and 
 puts them into a matrix. This can be used for peak alignment.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y1</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – First vector to compare.</p></li>
 <li><p><strong>y2</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Second vector to compare.</p></li>
@@ -1220,10 +1272,10 @@ the slope. Default is 5.</p></li>
 <li><p><strong>title</strong> (<em>string</em>) – Title of the plot. Default is ´´.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>similarity matrix in the form of a 2-d list.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1234,7 +1286,7 @@ the slope. Default is 5.</p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">pearson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'seismic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">17)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tfs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Pearson'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#pearson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.pearson" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates Pearson matrix and plots it.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to correlate.</p></li>
 <li><p><strong>labels</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Labels of the data.</p></li>
@@ -1246,10 +1298,10 @@ the slope. Default is 5.</p></li>
 <li><p><strong>ti</strong> (<em>str</em>) – Plot title/name. The default is “spearman”.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Pearson plot in a 2d list.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1261,7 +1313,7 @@ the slope. Default is 5.</p></li>
 <dd><p>Plots 2-dimensional results from LDA, PCA, NCA, or similar machine learning
 algoruthms where the output has 2 features per sample.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>train</strong> (<em>pandas frame</em>) – Results for the training set. Pandas frame with the 2 dimensions
 and target columns.</p></li>
@@ -1283,7 +1335,7 @@ D1, D2 and T.</p></li>
 <li><p><strong>plot</strong> (<em>bool</em>) – If True it plot. Only for test purposes.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Plot</p>
 </dd>
 </dl>
@@ -1294,7 +1346,7 @@ D1, D2 and T.</p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">polybaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#polybaseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.polybaseline" title="Permalink to this definition"></a></dt>
 <dd><p>Calcuates the baseline using polynomial fit.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Single or several spectras to remove the baseline from.</p></li>
 <li><p><strong>axis</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis of the data, to interpolate the baseline function.</p></li>
@@ -1305,10 +1357,10 @@ D1, D2 and T.</p></li>
 <li><p><strong>plot</strong> (<em>bool</em>) – if True, calculates and returns (y - baseline).</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The baseline.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1319,17 +1371,17 @@ D1, D2 and T.</p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">regression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cov</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#regression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.regression" title="Permalink to this definition"></a></dt>
 <dd><p>Performs an N dimensional regression.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>target</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Y-axis values, values to predict.</p></li>
 <li><p><strong>variable</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – X-axis values.</p></li>
 <li><p><strong>cov</strong> (<em>int</em>) – If 1 is regression with covariance, like spearman. The default is 0.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Prediction of the fitting and the Fitting parameters.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[list[float],list[float]]</p>
 </dd>
 </dl>
@@ -1342,13 +1394,13 @@ D1, D2 and T.</p></li>
 the median spectra and looks for the one that is closer to it in relation
 to standard deviation. Do not confuse with a <cite>Typical</cite> spectra.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – A list of spectras.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The representative spectra of the set.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1359,13 +1411,13 @@ to standard deviation. Do not confuse with a <cite>Typical</cite> spectra.</p>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">reverse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#reverse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.reverse" title="Permalink to this definition"></a></dt>
 <dd><p>Reverses a vector or a list of vectors.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – list of vectors to reverse. Single or multiple.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list[float]</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Reversed data.</p>
 </dd>
 </dl>
@@ -1379,17 +1431,17 @@ The window size needs to be a 2D tuple or list, with the first element being the
 length of the spectra and the second the total width that will be taken into account
 for the statistics.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>numpy array</em>) – The spectras</p></li>
 <li><p><strong>ws</strong> (<em>tuple/list</em>) – Window size parameters</p></li>
 <li><p><strong>plot</strong> (<em>boolean</em>) – If you want to plot the new spectra change to True</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Array containing the computed 1D spectra.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>numpy array[float]</p>
 </dd>
 </dl>
@@ -1400,13 +1452,13 @@ for the statistics.</p>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">sdev</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#sdev"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.sdev" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates the standard deviation for each bin from a list of vectors.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of vectors.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Standard deviation curve</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1417,7 +1469,7 @@ for the statistics.</p>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">shiftref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ref_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_peak</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">520</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#shiftref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.shiftref" title="Permalink to this definition"></a></dt>
 <dd><p>Shifts the x-axis according to a shift calculated prior.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ref_data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Reference measurement.</p></li>
 <li><p><strong>ref_axis</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – X-axis of the reference measurement.</p></li>
@@ -1426,10 +1478,10 @@ for the statistics.</p>
 <li><p><strong>plot</strong> (<em>bool</em>) – If True plots a visual aid. The default is True.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Shift amount</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>float</p>
 </dd>
 </dl>
@@ -1440,16 +1492,16 @@ for the statistics.</p>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">shuffle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arrays</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#shuffle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.shuffle" title="Permalink to this definition"></a></dt>
 <dd><p>Merges and shuffles data and then separates it so it is shuffles together.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>arrays</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – List of arrays of data.</p></li>
 <li><p><strong>delratio</strong> (<em>float</em>) – Ratio of the data to be deleted, 0 &lt; delratio &lt; 1</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of the shuffled arrays.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[list[float]]</p>
 </dd>
 </dl>
@@ -1460,7 +1512,7 @@ for the statistics.</p>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">spearman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'seismic'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fons</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">17)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tfs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ti</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Spearman'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#spearman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.spearman" title="Permalink to this definition"></a></dt>
 <dd><p>Calculates Pearson matrix and plots it.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to correlate.</p></li>
 <li><p><strong>labels</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – Labels of the data.</p></li>
@@ -1472,10 +1524,10 @@ for the statistics.</p>
 <li><p><strong>ti</strong> (<em>str</em>) – Plot title/name. The default is “spearman”.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Spearman plot in a 2d list.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1486,7 +1538,7 @@ for the statistics.</p>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">stackplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Spectral'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(6,</span> <span class="pre">9)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlimits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#stackplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.stackplot" title="Permalink to this definition"></a></dt>
 <dd><p>Plots a stack plot of selected spectras.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to plot. Must be more than 1 vector.</p></li>
 <li><p><strong>offset</strong> (<em>float</em>) – displacement, or difference, between each curve.</p></li>
@@ -1503,10 +1555,10 @@ is the order as they appear in the list.</p></li>
 <li><p><strong>plot</strong> (<em>bool</em>) – If True it plot. Only for test purposes.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>plot</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
@@ -1517,7 +1569,7 @@ is the order as they appear in the list.</p></li>
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">studentfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#studentfit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.studentfit" title="Permalink to this definition"></a></dt>
 <dd><p>Fits peak as an optimization problem.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to fit. Single vector.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis.</p></li>
@@ -1532,10 +1584,10 @@ default is 1.</p></li>
 parameter <cite>sigma</cite> and perform a manual fit. Default is <cite>False</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted curve.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1546,7 +1598,7 @@ parameter <cite>sigma</cite> and perform a manual fit. Default is <cite>False</c
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">subtractref</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lims</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#subtractref"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.subtractref" title="Permalink to this definition"></a></dt>
 <dd><p>Subtracts a reference spectra from the measurements.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of or single vector.</p></li>
 <li><p><strong>ref</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – reference data to remove.</p></li>
@@ -1557,10 +1609,10 @@ parameter <cite>sigma</cite> and perform a manual fit. Default is <cite>False</c
 <li><p><strong>plot</strong> (<em>bool</em>) – To plot or not a visual aid. The default is True.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Data with the subtracted reference.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1571,17 +1623,17 @@ parameter <cite>sigma</cite> and perform a manual fit. Default is <cite>False</c
 <span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">trim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">finish</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#trim"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.trim" title="Permalink to this definition"></a></dt>
 <dd><p>Deletes columns in a list from start to finish.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em>) – Data to be trimmed.</p></li>
 <li><p><strong>start</strong> (<em>int</em><em>, </em><em>optional</em>) – Poistion of the starting point. The default is 0.</p></li>
 <li><p><strong>finish</strong> (<em>int</em><em>, </em><em>optional</em>) – Position of the ending point (not included). The default is 0.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Trimmed data.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[]</p>
 </dd>
 </dl>
@@ -1594,13 +1646,13 @@ parameter <cite>sigma</cite> and perform a manual fit. Default is <cite>False</c
 the average spectra and looks for the one that is closer to it in relation
 to standard deviation. Do not confuse with a <cite>Representative</cite> spectra.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>y</strong> (<em>list</em><em>[</em><em>list</em><em>[</em><em>float</em><em>]</em><em>]</em>) – A list of spectras.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The typical spectra of the set.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>
@@ -1612,16 +1664,16 @@ to standard deviation. Do not confuse with a <cite>Representative</cite> spectra
 <dd><p>To translate the value in an axis to its index in the axis, basically
 searches for the position of the value. It approximates to the closest.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vals</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – List of values to be searched and translated.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Axis.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Index, or position, in the axis of the values in vals</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[int], int</p>
 </dd>
 </dl>
@@ -1635,7 +1687,7 @@ searches for the position of the value. It approximates to the closest.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – vector or list of vectors.</p></li>
 <li><p><strong>negatives</strong> (<em>str</em>) – Specify what to do with negative values. If <cite>remove</cite> then negative values are set to <cite>0</cite>. If
@@ -1643,10 +1695,10 @@ searches for the position of the value. It approximates to the closest.</p>
 <li><p><strong>inverted</strong> (<em>boolean</em>) – If <cite>True</cite>, inverts the process to take an image to a vector. Default is <cite>False</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list[list[list[int]]]</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>3-D list containing 0 or 1.</p>
 </dd>
 </dl>
@@ -1654,13 +1706,14 @@ searches for the position of the value. It approximates to the closest.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.voigtfit">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">voigtfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#voigtfit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.voigtfit" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">voigtfit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">look</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#voigtfit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.voigtfit" title="Permalink to this definition"></a></dt>
 <dd><p>Fits peak as an optimization problem or manual fit for Voigt distirbution,
 also known as a convoluted Gaussian-Lorentz curve. A curve <cite>y</cite> is only
 needed for the optimization (manual=False, default). If no axis <cite>x</cite> is 
-defined, then a default axis is generated for both options.</p>
+defined, then a default axis is generated for both options. It is reccomended to
+Normalize the data before fitting.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>y</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – Data to fit. Single vector.</p></li>
 <li><p><strong>x</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – x axis.</p></li>
@@ -1676,10 +1729,10 @@ default is 1.</p></li>
 parameter <cite>gamma</cite> and perform a manual fit. Default is <cite>False</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Fitted curve.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float]</p>
 </dd>
 </dl>

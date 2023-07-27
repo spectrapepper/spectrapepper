@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Examples &mdash; spectrapepper  documentation</title>
@@ -11,11 +11,11 @@
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> spectrapepper
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            spectrapepper
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -68,8 +72,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Examples</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Examples</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -329,6 +333,12 @@
 <span class="c1"># load data set</span>
 <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()</span>
 
+<span class="c1"># remove baseline</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">bspbaseline</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="p">[</span><span class="mi">155</span><span class="p">,</span> <span class="mi">243</span><span class="p">,</span> <span class="mi">315</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">530</span><span class="p">])</span>
+
+<span class="c1"># Normalize the spectra to the maximum value.</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtoratio</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="p">[</span><span class="mi">190</span><span class="p">,</span> <span class="mi">220</span><span class="p">],</span> <span class="n">r2</span><span class="o">=</span><span class="p">[</span><span class="mi">165</span><span class="p">,</span> <span class="mi">190</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
 <span class="c1"># Calculate the averge spectra of the set.</span>
 <span class="n">avg</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">avg</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
 
@@ -366,14 +376,16 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity (a.u.)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
 <section id="example-7-deconvolution-of-a-spectra">
 <h2>Example 7: Deconvolution of a spectra<a class="headerlink" href="#example-7-deconvolution-of-a-spectra" title="Permalink to this heading"></a></h2>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This examples shows an application of a simple deconvolution with Voigt </span>
-<span class="sd">fittings of some of the peaks shown in the spectra. </span>
+<span class="sd">This examples shows an application of a manual and self-resolved </span>
+<span class="sd">deconvolution with Voigt fittings of some of the peaks shown in the</span>
+<span class="sd">spectra. </span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -386,7 +398,7 @@
 <span class="n">y_b</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">bspbaseline</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="p">[</span><span class="mi">155</span><span class="p">,</span> <span class="mi">243</span><span class="p">,</span> <span class="mi">315</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">530</span><span class="p">])</span>
 
 <span class="c1"># define peak positions and fitting ranges</span>
-<span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">95</span><span class="p">,</span> <span class="mi">170</span><span class="p">,</span> <span class="mi">205</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">290</span><span class="p">]</span>
+<span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">95</span><span class="p">,</span> <span class="mi">175</span><span class="p">,</span> <span class="mi">205</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">285</span><span class="p">]</span>
 <span class="n">ranges</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 
 <span class="c1"># calculate and save the fittings</span>
@@ -418,6 +430,10 @@
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">330</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">deconv</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">deconvolution</span><span class="p">(</span><span class="n">y_b</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="mi">205</span><span class="p">],</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;voigt&#39;</span><span class="p">,</span> <span class="n">pp</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">deconv</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Residual&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>

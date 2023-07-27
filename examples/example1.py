@@ -17,34 +17,17 @@ norm2 = spep.normtovalue(y, val=10)
 # normalize to the global maximum of all the data
 norm3 = spep.normtoglobalmax(y)
 
-
 # visualization
 import matplotlib.pyplot as plt
 
-for i in y:
-    plt.plot(x, i)
-plt.title('Raw Spectras')
-plt.xlabel('Shift ($cm^{-1}$)')
-plt.ylabel('Counts (a.u.)')
-plt.show()
+sets = [y, norm1, norm2, norm3]
+titles = ['Raw Spectras', 'Spectras with maximum normalized to 1', 'Spectras with 10 normalized to 1',
+          'Spectras with global maximum normalized to 1']
 
-for i in norm1:
-    plt.plot(x, i)
-plt.title('Spectras with maximum normalized to 1')
-plt.xlabel('Shift ($cm^{-1}$)')
-plt.ylabel('Counts (a.u.)')
-plt.show()
-
-for i in norm2:
-    plt.plot(x, i)
-plt.title('Spectras with 10 normalized to 1')
-plt.xlabel('Shift ($cm^{-1}$)')
-plt.ylabel('Counts (a.u.)')
-plt.show()
-
-for i in norm3:
-    plt.plot(x, i)
-plt.title('Spectras with global maximum normalized to 1')
-plt.xlabel('Shift ($cm^{-1}$)')
-plt.ylabel('Counts (a.u.)')
-plt.show()
+for i,j in zip(sets, titles):
+    for k in i:
+        plt.plot(x, k)
+    plt.title(j)
+    plt.xlabel('Shift ($cm^{-1}$)')
+    plt.ylabel('Counts (a.u.)')
+    plt.show()

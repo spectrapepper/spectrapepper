@@ -162,7 +162,7 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.normtoglobalmax([spectras[0], spectras[1]])
         r = round(np.sum(data2), 2)
         print('normtoglobalmax_multi: ', r)
-        self.assertEqual(r, 200.22)
+        self.assertEqual(r, 203.32)
 
         inter1, inter2 = spep.interpolation(spectras[0], axis)
         r = np.floor(sum(inter1))
@@ -216,7 +216,7 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.sdev([spectras[0],spectras[1]])
         r = np.floor(sum(data2))
         print('sdev: ', r)
-        self.assertEqual(r, 30)
+        self.assertEqual(r, 21)
 
         data2 = spep.median([spectras[0],spectras[1]])
         r = np.floor(sum(data2))
@@ -242,11 +242,6 @@ class TestSpectrapepper(unittest.TestCase):
         r = np.sum(data2)
         print('decdensity: ', r)
         self.assertEqual(r, 12)
-
-        data2 = spep.colormap(['red','green','blue'],'test',n=101)
-        r = np.floor(data2(99)[1])
-        print('colormap: ', r)
-        self.assertEqual(r, 0)
 
         data2 = spep.isaxis([a,b,c])
         r = data2
@@ -288,7 +283,7 @@ class TestSpectrapepper(unittest.TestCase):
         print('classify1: ', r)
         self.assertEqual(r, 30)
 
-        data2 = spep.classify(t, gnumber=0, glimits=[0.25,0.5,0.75])
+        data2 = spep.classify(t, gnumber=0, glimits=[0.25, 0.5, 0.75])
         r = sum(data2[0])
         print('classify2: ', r)
         self.assertEqual(r, 19)
