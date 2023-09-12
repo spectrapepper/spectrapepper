@@ -71,6 +71,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#functions.grau"><code class="docutils literal notranslate"><span class="pre">grau()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#functions.groupscores"><code class="docutils literal notranslate"><span class="pre">groupscores()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#functions.interpolation"><code class="docutils literal notranslate"><span class="pre">interpolation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions.intersections"><code class="docutils literal notranslate"><span class="pre">intersections()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#functions.isaxis"><code class="docutils literal notranslate"><span class="pre">isaxis()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#functions.issinglevalue"><code class="docutils literal notranslate"><span class="pre">issinglevalue()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#functions.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
@@ -174,7 +175,7 @@ this algorithm by P. Eilers and H. Boelens (2005):</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="functions.areacalculator">
-<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">areacalculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#areacalculator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.areacalculator" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">areacalculator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#areacalculator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.areacalculator" title="Permalink to this definition"></a></dt>
 <dd><p>Area calculator using the data (x_data) and the limits in position, not
 values.</p>
 <dl class="field-list simple">
@@ -771,6 +772,26 @@ here).</p></li>
 </dd>
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>list[float], list[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="functions.intersections">
+<span class="sig-prename descclassname"><span class="pre">functions.</span></span><span class="sig-name descname"><span class="pre">intersections</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/functions.html#intersections"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#functions.intersections" title="Permalink to this definition"></a></dt>
+<dd><p>Find approximate intersection points of two curves.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y1</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – first curve.</p></li>
+<li><p><strong>y2</strong> (<em>list</em><em>[</em><em>float</em><em>]</em>) – second curve.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list[list[float]]</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>coordinates of aproiximate intersecctions.</p>
 </dd>
 </dl>
 </dd></dl>

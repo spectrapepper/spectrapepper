@@ -479,7 +479,7 @@ def valtoind(vals, x):
     return pos
 
 
-def areacalculator(y, x, limits, norm=False):
+def areacalculator(y, x=None, limits=None, norm=False):
     """
     Area calculator using the data (x_data) and the limits in position, not
     values.
@@ -500,13 +500,17 @@ def areacalculator(y, x, limits, norm=False):
     :rtype: list[float]
     """
     dims = len(np.array(y).shape)
+
+    if dims == 1:
+        y = [y]
+
+    if x is None:
+        x = [i for i in range(len(y[0]))]
+
     limits = valtoind(limits, x)
 
     if len(np.array(limits).shape) == 1:
         limits = [limits]
-
-    if dims == 1:
-        y = [y]
 
     areas = np.zeros((len(y), len(limits)))
     y = np.array(y)
@@ -670,11 +674,15 @@ def normtoglobalmax(y, globalmin=False):
     """
     y = np.array(y, copy=True)
     dims = y.ndim
+
     if dims > 1:
-        y_min, y_max = y.min(), y.max()
+        # y_min, y_max = y.min(), y.max()
+        y_min, y_max = np.min(y), np.max(y)
         if globalmin:
             y = y - y_min
-        y = y / (y_max - y_min)
+            y_max -= y_min 
+        # y /= y_max
+        y = y/y_max
     else:
         y_min, y_max = y.min(), y.max()
         if globalmin:
@@ -697,6 +705,7 @@ def normtoglobalsum(y):
     """
     y = np.array(y, copy=True)
     dims = y.ndim
+
     if dims > 1:
         sums = y.sum(axis=1)
         maxsum = sums.max()
@@ -1022,7 +1031,6 @@ def peakfinder(y, x=None, ranges=None, look=10):
     :returns: A list of the index of the peaks found.
     :rtype: list[int]
     """
-    y = copy.deepcopy(y)
     peaks = []
     
     if x is None:
@@ -1032,13 +1040,14 @@ def peakfinder(y, x=None, ranges=None, look=10):
         ranges = [0, len(y)]
     else:
         ranges = valtoind(ranges, x)
-        
+
     if len(np.array(ranges).shape) == 1:
         ranges = [ranges]
         
     for i in ranges:
         section = y[i[0]:i[1]]
-        m = max(section)
+
+        m = np.max(section)
         for j in range(i[0], i[1]):
             if y[j] == m:
                 peaks.append(int(j))
@@ -1117,7 +1126,6 @@ def confusionmatrix(tt, tp, gn=None, plot=False, save=False, title='', ndw=True,
                 print(f'No data with label (class) {i} was found when making the confusion matrix. '
                       'Check if the count is out of bounds or none samples of the class were included in the sample.\n')
         else:
-
             m[i] = np.bincount(tp[tt == i], minlength=gn) / p[i]
 
     if plot or save:
@@ -3011,12 +3019,9 @@ def issinglevalue(y):
     :rtype: bool
     """
     dims = len(np.shape(y))
-    print(dims)
     if 1 < dims: # checks if y is a list of lists
-        print('dsa')
         isequal = [len(set(i))==1 for i in y] # applies the check to each list in y
     elif dims == 1:
-        print('what')
         isequal = len(set(y))==1 # checks if all elements in the list are equal
     return isequal
 
@@ -3640,3 +3645,30 @@ def deconvolution(y, x, pos, method='gauss', shift=5, look=None, pp=False):
     
     return f[0]
     
+
+def intersections(y1, y2):
+    """
+    Find approximate intersection points of two curves.
+
+    :type y1: list[float]
+    :param y1: first curve.
+
+    :type y2: list[float]
+    :param y2: second curve.
+
+    :rtype: list[list[float]]
+    :returns: coordinates of aproiximate intersecctions.
+    """
+    
+    intersections = []
+    
+    # Ensure both curves have the same length.
+    assert len(y1) == len(y2), "Both curves should have the same length."
+    
+    for i in range(len(y1) - 1):
+        # Check if y1[i] is below y2[i] and y1[i+1] is above y2[i+1] (indicating a crossing)
+        # or if y1[i] is above y2[i] and y1[i+1] is below y2[i+1] (indicating another crossing)
+        if (y1[i] < y2[i] and y1[i+1] > y2[i+1]) or (y1[i] > y2[i] and y1[i+1] < y2[i+1]):
+            intersections.append(i)  # Record the x-value where the intersection occurs.
+    
+    return intersections

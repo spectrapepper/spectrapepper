@@ -553,7 +553,7 @@
     <span class="k">return</span> <span class="n">pos</span></div>
 
 
-<div class="viewcode-block" id="areacalculator"><a class="viewcode-back" href="../functions.html#functions.areacalculator">[docs]</a><span class="k">def</span> <span class="nf">areacalculator</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">limits</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="areacalculator"><a class="viewcode-back" href="../functions.html#functions.areacalculator">[docs]</a><span class="k">def</span> <span class="nf">areacalculator</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Area calculator using the data (x_data) and the limits in position, not</span>
 <span class="sd">    values.</span>
@@ -574,13 +574,17 @@
 <span class="sd">    :rtype: list[float]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]))]</span>
+
     <span class="n">limits</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">limits</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">limits</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">limits</span> <span class="o">=</span> <span class="p">[</span><span class="n">limits</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">]</span>
 
     <span class="n">areas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">limits</span><span class="p">)))</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
@@ -744,11 +748,15 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">ndim</span>
+
     <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="c1"># y_min, y_max = y.min(), y.max()</span>
+        <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">globalmin</span><span class="p">:</span>
             <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">y_min</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">/</span> <span class="p">(</span><span class="n">y_max</span> <span class="o">-</span> <span class="n">y_min</span><span class="p">)</span>
+            <span class="n">y_max</span> <span class="o">-=</span> <span class="n">y_min</span> 
+        <span class="c1"># y /= y_max</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">/</span><span class="n">y_max</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">y_min</span><span class="p">,</span> <span class="n">y_max</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">globalmin</span><span class="p">:</span>
@@ -771,6 +779,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">ndim</span>
+
     <span class="k">if</span> <span class="n">dims</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">sums</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">maxsum</span> <span class="o">=</span> <span class="n">sums</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
@@ -1096,7 +1105,6 @@
 <span class="sd">    :returns: A list of the index of the peaks found.</span>
 <span class="sd">    :rtype: list[int]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
     <span class="n">peaks</span> <span class="o">=</span> <span class="p">[]</span>
     
     <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1106,13 +1114,14 @@
         <span class="n">ranges</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ranges</span> <span class="o">=</span> <span class="n">valtoind</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-        
+
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">ranges</span> <span class="o">=</span> <span class="p">[</span><span class="n">ranges</span><span class="p">]</span>
         
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ranges</span><span class="p">:</span>
         <span class="n">section</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
+
+        <span class="n">m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">section</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
             <span class="k">if</span> <span class="n">y</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">==</span> <span class="n">m</span><span class="p">:</span>
                 <span class="n">peaks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">j</span><span class="p">))</span>
@@ -1191,7 +1200,6 @@
                 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;No data with label (class) </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1"> was found when making the confusion matrix. &#39;</span>
                       <span class="s1">&#39;Check if the count is out of bounds or none samples of the class were included in the sample.</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-
             <span class="n">m</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">tp</span><span class="p">[</span><span class="n">tt</span> <span class="o">==</span> <span class="n">i</span><span class="p">],</span> <span class="n">minlength</span><span class="o">=</span><span class="n">gn</span><span class="p">)</span> <span class="o">/</span> <span class="n">p</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">plot</span> <span class="ow">or</span> <span class="n">save</span><span class="p">:</span>
@@ -2405,7 +2413,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">xtick_labels</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">))</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_fontweight</span><span class="p">(</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;90&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y_ticks</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">y_ticks</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">y_ticks</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">ytick_labels</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
@@ -3085,12 +3093,9 @@
 <span class="sd">    :rtype: bool</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dims</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">dims</span><span class="p">)</span>
     <span class="k">if</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">dims</span><span class="p">:</span> <span class="c1"># checks if y is a list of lists</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;dsa&#39;</span><span class="p">)</span>
         <span class="n">isequal</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="o">==</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span> <span class="c1"># applies the check to each list in y</span>
     <span class="k">elif</span> <span class="n">dims</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;what&#39;</span><span class="p">)</span>
         <span class="n">isequal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">y</span><span class="p">))</span><span class="o">==</span><span class="mi">1</span> <span class="c1"># checks if all elements in the list are equal</span>
     <span class="k">return</span> <span class="n">isequal</span></div>
 
@@ -3714,6 +3719,33 @@
     
     <span class="k">return</span> <span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
     
+
+<div class="viewcode-block" id="intersections"><a class="viewcode-back" href="../functions.html#functions.intersections">[docs]</a><span class="k">def</span> <span class="nf">intersections</span><span class="p">(</span><span class="n">y1</span><span class="p">,</span> <span class="n">y2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Find approximate intersection points of two curves.</span>
+
+<span class="sd">    :type y1: list[float]</span>
+<span class="sd">    :param y1: first curve.</span>
+
+<span class="sd">    :type y2: list[float]</span>
+<span class="sd">    :param y2: second curve.</span>
+
+<span class="sd">    :rtype: list[list[float]]</span>
+<span class="sd">    :returns: coordinates of aproiximate intersecctions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">intersections</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="c1"># Ensure both curves have the same length.</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">y1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">y2</span><span class="p">),</span> <span class="s2">&quot;Both curves should have the same length.&quot;</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y1</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="c1"># Check if y1[i] is below y2[i] and y1[i+1] is above y2[i+1] (indicating a crossing)</span>
+        <span class="c1"># or if y1[i] is above y2[i] and y1[i+1] is below y2[i+1] (indicating another crossing)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">y1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">y2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">y1</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">y2</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="ow">or</span> <span class="p">(</span><span class="n">y1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">y2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">y1</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">y2</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">intersections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>  <span class="c1"># Record the x-value where the intersection occurs.</span>
+    
+    <span class="k">return</span> <span class="n">intersections</span></div>
 </pre></div>
 
            </div>

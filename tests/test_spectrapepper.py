@@ -3,7 +3,8 @@
 """Tests for `spectrapepper` package."""
 
 import unittest
-import spectrapepper as spep
+import functions as spep
+# import spectrapepper as spep
 import numpy as np
 import pandas as pd
 
@@ -162,7 +163,7 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.normtoglobalmax([spectras[0], spectras[1]])
         r = round(np.sum(data2), 2)
         print('normtoglobalmax_multi: ', r)
-        self.assertEqual(r, 203.32)
+        self.assertEqual(r, 200.22)
 
         inter1, inter2 = spep.interpolation(spectras[0], axis)
         r = np.floor(sum(inter1))
@@ -445,6 +446,7 @@ class TestSpectrapepper(unittest.TestCase):
         data2 = spep.count(y=a, value=[0,1])
         print('count: ', data2)
         self.assertEqual(data2, [1, 4])
+
         
         data2 = spep.vectortoimg(y=a)
         print('vectortoimg: ', np.array(data2).shape)

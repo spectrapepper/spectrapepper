@@ -36,7 +36,7 @@ colors = ['orange', 'purple', 'cyan', 'magenta', 'grey']
 for i,j in zip(fittings, colors):
     plt.fill_between(x, i, 0, color=j, alpha=0.2)
 
-plot all the other things
+# plot all the other things
 plt.plot(x, y, c='black', ls=':', label='Raw')
 plt.plot(x, y_b, c='b', label='Baseline removed')
 plt.plot(x, convolution, c='g', label='Convolution')
