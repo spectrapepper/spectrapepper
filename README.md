@@ -3,7 +3,7 @@
 </center>
 
 [![image](https://img.shields.io/pypi/v/spectrapepper.svg)](https://pypi.python.org/pypi/spectrapepper)
-[![image](https://img.shields.io/conda/vn/conda-forge/spectrapepper.svg)](https://anaconda.org/conda-forge/spectrapepper)
+[![Anaconda-Server Badge](https://anaconda.org/conda-forge/spectrapepper/badges/version.svg)](https://anaconda.org/conda-forge/spectrapepper)
 [![image](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![CodeQL](https://github.com/spectrapepper/spectrapepper/actions/workflows/codeql.yml/badge.svg)](https://github.com/spectrapepper/spectrapepper/actions/workflows/codeql.yml)
 [![image](https://github.com/spectrapepper/spectrapepper/workflows/docs/badge.svg)](https://spectrapepper.github.io/spectrapepper)

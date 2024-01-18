@@ -4,7 +4,7 @@ spectrapepper
 
 .. image:: https://img.shields.io/pypi/v/spectrapepper.svg
         :target: https://pypi.python.org/pypi/spectrapepper
-.. image:: https://img.shields.io/conda/vn/conda-forge/spectrapepper.svg
+.. image:: https://anaconda.org/conda-forge/spectrapepper/badges/version.svg   
         :target: https://anaconda.org/conda-forge/spectrapepper
 .. image:: https://img.shields.io/badge/License-MIT-yellow.svg
         :target: https://opensource.org/licenses/MIT
