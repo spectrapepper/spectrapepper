@@ -8,7 +8,9 @@ import spectrapepper as spep
 x, y = spep.load_spectras()
 
 # remove baseline
-y = spep.bspbaseline(y, x, points=[155, 243, 315, 450, 530])
+y = spep.bspbaseline(y, x, points=[158, 243, 315, 450, 530], plot=False)
+
+exit()
 
 # Normalize the spectra to the maximum value.
 y = spep.normtoratio(y, r1=[190, 220], r2=[165, 190], x=x)
