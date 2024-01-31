@@ -135,7 +135,6 @@ def load(file, format="row", fromspectra=0, tospectra=None, spectra=None,
     """
 
     new_data = []
-
     def process_row(row, dtype):
         for i in separators:
             row = row.replace(i, " ")
@@ -717,8 +716,12 @@ def normtoratio(y, r1, r2, x=None):
 
     a1 = y[:, r1[0]:r1[1]].sum(axis=1)
     a2 = y[:, r2[0]:r2[1]].sum(axis=1)
-    ratio = a1/(a1+a2)
-    m = ratio[:, np.newaxis]/y.max(axis=1)[:, np.newaxis]
+    total_areas = a1 + a2
+    # To avoid nan results in the 0/0, it divides using np.where
+    ratio = np.where(total_areas != 0, a1 / total_areas, 0)
+    y_max = y.max(axis=1)[:, np.newaxis]
+    # To avoid nan results in the 0/0, it divides using np.where
+    m = np.where(y_max != 0, ratio[:, np.newaxis] / y_max, 0)
     y = y * m
 
     if dims == 1:
@@ -757,7 +760,7 @@ def normtoglobalmax(y, globalmin=False):
         if globalmin:
             y = y - y_min
         y = y / y_max
-    return y
+    return y.tolist()
 
 
 def normtoglobalsum(y):
@@ -2215,7 +2218,7 @@ def pearson(data, labels=[], cm="seismic", fons=20, figs=(20, 17), tfs=25,
 def spearman(data, labels=[], cm="seismic", fons=20, figs=(20, 17),
              tfs=25, ti="Spearman", plot=True):
     """
-    Calculates Pearson matrix and plots it.
+    Calculates Spearman matrix and plots it.
 
     :type data: list[float]
     :param data: Data to correlate.
