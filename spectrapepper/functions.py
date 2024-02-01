@@ -374,12 +374,12 @@ def alsbaseline(y, lam=100, p=0.001, niter=10, remove=True):
     return resolve
 
 
-def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
+def bspbaseline(y, x, points, avg=5, remove=True, plot=False, plot_ind=0):
     """
     Calcuates the baseline using b-spline.
 
     :type y: list[float]
-    :param y: Single or several spectras to remove the baseline from.
+    :param y: Single or several spectra to remove the baseline from.
 
     :type x: list[float]
     :param x: x axis of the data, to interpolate the baseline function.
@@ -388,9 +388,11 @@ def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
     :param points: Axis values of points to calculate the bspline. Axis ranges
         are also acepted. In this case, the `avg` value will be `0`.
 
-    :type avg: int
-    :param avg: Points to each side to make average. Default is 5. If `points`
-        are axis ranges, then it is set to 0 and will not have any effect.
+    :type avg: int or list[int]
+    :param avg: Points to each side to make average. It can be the same value
+        for all points or a different value for each point. Default is 5.
+        If `points` are axis ranges, then it is set to 0 and will not have
+        any effect.
 
     :type remove: True
     :param remove: If `True`, calculates and returns `data - baseline`. If
@@ -398,6 +400,9 @@ def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
 
     :type plot: bool
     :param plot: If True, calculates and returns (data - baseline).
+
+    :type plot_ind: int
+    :param plot_ind: Index corresponding to the spectrum to be plotted.
 
     :returns: The baseline.
     :rtype: list[float]
@@ -414,37 +419,74 @@ def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
         pos = [[i, i] for i in pos]
         points = [[i, i] for i in points]
 
+    # Convert 'avg' to a list if it wasn't, and raise an error if it doesn't
+    # have the correct length.
+    if not isinstance(avg, list):
+        avg = [avg] * len(points)
+    elif len(avg) != len(points):
+        raise ValueError("The length of the 'avg' list has to be equal to "
+                         "the length of the 'points' list")
+
     if dims == 1:
         data = [data]
 
-    baseline = []
-    result = []
-    for j in range(len(data)):
+    # Calculations for the 'plot_ind' index are performed first, allowing
+    # quick review for potential adjustments and avoiding potential extended
+    # computational time
+    if plot:
         y_p = []
         for i in range(len(pos)):
-            temp = np.mean(data[j][pos[i][0] - avg: pos[i][1] + avg + 1])
+            temp = np.mean(data[plot_ind][pos[i][0] - avg[i]:
+                                          pos[i][1] + avg[i] + 1])
             y_p.append(temp)
 
         points = [np.mean(i) for i in points]
         spl = splrep(points, y_p)
-        baseline.append(splev(x, spl))
+        baseline_plot_ind = splev(x, spl)
 
-        if len(np.array(baseline[j]).shape) == 2:
-            #sometime this happends when doing preprocesing
-            baseline[j] = [h[0] for h in baseline[j]]
+        if len(np.array(baseline_plot_ind).shape) == 2:
+            # sometimes this happends when doing preprocesing
+            baseline_plot_ind = [h[0] for h in baseline_plot_ind]
 
         if remove:
-            result.append(np.array(data[j]) - np.array(baseline[j]))
+            result_plot_ind = (np.array(data[plot_ind]) -
+                               np.array(baseline_plot_ind))
         else:
-            result.append(baseline[j])
+            result_plot_ind = copy.deepcopy(baseline_plot_ind)
 
-        if plot and j == 0:
-            plt.plot(x, data[0], label='Original')
-            plt.plot(x, baseline[0], label='Baseline')
-            plt.plot(points, y_p, 'o', color='red')
-            plt.ylim(min(data[0]), max(data[0]))
-            plt.legend()
-            plt.show()
+        plt.plot(x, data[plot_ind], label='Original')
+        plt.plot(x, baseline_plot_ind, label='Baseline')
+        plt.plot(points, y_p, 'o', color='red')
+        plt.ylim(min(data[plot_ind]), max(data[plot_ind]))
+        plt.legend()
+        plt.show()
+
+    # Calculations for the rest of spectra
+    baseline = []
+    result = []
+    for j in range(len(data)):
+        if plot and j == plot_ind:
+            baseline.append(baseline_plot_ind)
+            result.append(result_plot_ind)
+        else:
+            y_p = []
+            for i in range(len(pos)):
+                temp = np.mean(data[j][pos[i][0] - avg[i]:
+                                       pos[i][1] + avg[i] + 1])
+                y_p.append(temp)
+
+            points = [np.mean(i) for i in points]
+            spl = splrep(points, y_p)
+            baseline.append(splev(x, spl))
+
+            if len(np.array(baseline[j]).shape) == 2:
+                # sometimes this happends when doing preprocesing
+                baseline[j] = [h[0] for h in baseline[j]]
+
+            if remove:
+                result.append(np.array(data[j]) - np.array(baseline[j]))
+            else:
+                result.append(baseline[j])
 
     if dims == 1:
         result = result[0]
@@ -452,7 +494,8 @@ def bspbaseline(y, x, points, avg=5, remove=True, plot=False):
     return result
 
 
-def polybaseline(y, axis, points, deg=2, avg=5, remove=True, plot=False):
+def polybaseline(y, axis, points, deg=2, avg=5, remove=True, plot=False,
+                 plot_ind=0):
     """
     Calcuates the baseline using polynomial fit.
 
@@ -468,14 +511,20 @@ def polybaseline(y, axis, points, deg=2, avg=5, remove=True, plot=False):
     :type deg: int
     :param deg: Polynomial degree of the fit.
 
-    :type avg: int
-    :param avg: points to each side to make average.
+    :type avg: int or list[int]
+    :param avg: Points to each side to make average. It can be the same value
+        for all points or a different value for each point. Default is 5.
+        If `points` are axis ranges, then it is set to 0 and will not have
+        any effect.
 
     :type remove: True
     :param remove: if True, calculates and returns (y - baseline).
 
     :type plot: bool
     :param plot: if True, calculates and returns (y - baseline).
+
+    :type plot_ind: int
+    :param plot_ind: Index corresponding to the spectrum to be plotted.
 
     :returns: The baseline.
     :rtype: list[float]
@@ -485,30 +534,59 @@ def polybaseline(y, axis, points, deg=2, avg=5, remove=True, plot=False):
     axis = list(axis)
     points = list(points)
     pos = valtoind(points, axis)
-    avg = int(avg)
+    # Convert 'avg' to a list if it wasn't, and raise an error if it doesn't
+    # have the correct length.
+    if not isinstance(avg, list):
+        avg = [avg] * len(points)
+    elif len(avg) != len(points):
+        raise ValueError("The length of the 'avg' list has to be equal to "
+                         "the length of the 'points' list")
 
     if dims == 1:
         y = [y]
 
-    baseline = []
-    for j in range(len(y)):
+    # Calculations for the 'plot_ind' index are performed first, allowing
+    # quick review for potential adjustments and avoiding potential extended
+    # computational time
+
+    if plot:
         averages = []
         for i in range(len(pos)):
-            averages.append(np.mean(y[j][pos[i] - avg: pos[i] + avg + 1]))
+            averages.append(np.mean(y[plot_ind][pos[i] - avg[i]:
+                                                pos[i] + avg[i] + 1]))
 
         z = np.polyfit(points, averages, deg)  # polinomial fit
         f = np.poly1d(z)  # 1d polinomial
         fit = f(axis)
-        if plot and j == 0:
-            plt.plot(axis, y[j])
-            plt.plot(axis, fit)
-            plt.plot(points, averages, 'o', color='red')
-            plt.show()
-
         if remove:
-            baseline.append(y[j] - fit)
+            baseline_plot_ind = y[plot_ind] - fit
         else:
-            baseline.append(fit)
+            baseline_plot_ind = copy.deepcopy(fit)
+
+        plt.plot(axis, y[plot_ind])
+        plt.plot(axis, fit)
+        plt.plot(points, averages, 'o', color='red')
+        plt.show()
+
+    # Calculations for the rest of spectra
+    baseline = []
+    for j in range(len(y)):
+        if plot and j == plot_ind:
+            baseline.append(baseline_plot_ind)
+        else:
+            averages = []
+            for i in range(len(pos)):
+                averages.append(np.mean(y[j][pos[i] - avg[i]:
+                                             pos[i] + avg[i] + 1]))
+
+            z = np.polyfit(points, averages, deg)  # polinomial fit
+            f = np.poly1d(z)  # 1d polinomial
+            fit = f(axis)
+
+            if remove:
+                baseline.append(y[j] - fit)
+            else:
+                baseline.append(fit)
 
     if dims == 1:
         baseline = baseline[0]
