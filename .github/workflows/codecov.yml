@@ -20,5 +20,11 @@ jobs:
         pip install --user -r requirements.txt
         pip install --user -r requirements_dev.txt
         coverage run -m unittest
-    - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v3.1.1
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+    #- name: Upload Coverage to Codecov
+    #  uses: codecov/codecov-action@v3.1.1

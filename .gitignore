@@ -108,5 +108,5 @@ ENV/
 .vscode//docs/_build
 
 # Files in tests
-tests/my_functions.py
+tests/functions.py
 tests/datasets/
