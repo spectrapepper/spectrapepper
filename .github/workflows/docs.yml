@@ -7,10 +7,13 @@ jobs:
     deploy:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3.1.0
-            - uses: actions/setup-python@v4.3.0
+            - uses: actions/checkout@v4
+            - uses: actions/setup-python@v4.3.1
+            # - uses: actions/checkout@v3.1.0
+            # - uses: actions/setup-python@v4.3.0
               with:
-                  python-version: 3.8
+                  python-version: 3.9
+                  ython-version: 3.8
             - name: Install dependencies
               run: |
                   python -m pip install --upgrade pip
@@ -20,7 +23,9 @@ jobs:
             - name: SPECTRAPEPPER-TEST
               run: |
                   python -m unittest discover tests/
-            - run: pip install mkdocs-material mkdocstrings mkdocs-git-revision-date-plugin mkdocs-jupyter mkdocs-pdf-export-plugin
+            - run: python -m pip install --upgrade pip
+            # - run: pip install mkdocs-material mkdocstrings mkdocs-git-revision-date-plugin mkdocs-jupyter mkdocs-pdf-export-plugin
+            - run: pip install mkdocs-material mkdocstrings mkdocstrings-python-legacy mkdocs-git-revision-date-plugin mkdocs-jupyter ipykernel
             - run: mkdocs gh-deploy --force
-              env:
-                  USE_FOLIUM: ${{ secrets.USE_FOLIUM }}
+            #   env:
+            #       USE_FOLIUM: ${{ secrets.USE_FOLIUM }}

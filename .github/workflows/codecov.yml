@@ -15,6 +15,7 @@ jobs:
       uses: actions/setup-python@v4.3.1
       with:
         python-version: 3.9
+        
     - name: Generate Report
       run: |
         pip install --user -r requirements.txt
