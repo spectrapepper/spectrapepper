@@ -5,8 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       OS: ubuntu-latest
-      PYTHON: '3.10'
-      # PYTHON: '3.9'
+      PYTHON: '3.9'
     steps:
     - uses: actions/checkout@v4
     # - uses: actions/checkout@v3.1.0
