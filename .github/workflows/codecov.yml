@@ -8,16 +8,13 @@ jobs:
       PYTHON: '3.9'
     steps:
     - uses: actions/checkout@v4
-    # - uses: actions/checkout@v3.1.0
       with:
         fetch-depth: ‘2’
 
     - name: Setup Python
       uses: actions/setup-python@v4.3.1
-      # uses: actions/setup-python@v4.3.0
       with:
         python-version: 3.9
-        # python-version: 3.7
     - name: Generate Report
       run: |
         pip install --user -r requirements.txt
@@ -28,6 +25,3 @@ jobs:
       uses: codecov/codecov-action@v3
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-    #- name: Upload Coverage to Codecov
-    #  uses: codecov/codecov-action@v3.1.1
