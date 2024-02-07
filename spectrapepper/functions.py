@@ -2606,6 +2606,8 @@ def plot2dml(train, test=[], names=['D1', 'D2', 'T'], train_pred=[],
     #           'o', 'v', 's', 'd', '*', '^', 'x', '+', '.']
     marker = ['o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o',
               'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o', 'o']
+    marker_test = ["D", "D", "D", "D", "D", "D", "D", "D", "D",
+                   "D", "D", "D", "D", "D", "D", "D", "D", "D"]
     color = ['red', 'green', 'blue', 'grey', 'orange', 'olive', 'lime',
              'springgreen', 'mediumspringgreen', 'cyan', 'teal', 'royalblue',
              'turquoise', 'indigo', 'purple', 'deeppink', 'crimson']
@@ -2639,9 +2641,9 @@ def plot2dml(train, test=[], names=['D1', 'D2', 'T'], train_pred=[],
                 ec = 'fuchsia'
 
         if plot:
-            plt.scatter(test[names[0]][i], test[names[1]][i], alpha=0.5, s=size,
-                        linewidths=1, color=color[group], marker=marker[group],
-                        edgecolor=ec)
+            plt.scatter(test[names[0]][i], test[names[1]][i], alpha=0.7,
+                        s=size-1, linewidths=0.75, color=color[group],
+                        marker=marker_test[group], edgecolor=ec)
 
     if plot:
         plt.rc('font', size=fs)
