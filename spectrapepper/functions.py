@@ -2547,7 +2547,8 @@ def moveavg(y, move=2):
 
 def plot2dml(train, test=[], names=['D1', 'D2', 'T'], train_pred=[],
              test_pred=[], labels=[], title='', xax='x', yax='y', fs=15,
-             lfs=10, loc='best', size=20, xlim=[], ylim=[], plot=True):
+             lfs=10, loc='best', size=20, xlim=[], ylim=[], plot=True, save=False,
+             filename='lda.png'):
     """
     Plots 2-dimensional results from LDA, PCA, NCA, or similar machine learning
     algoruthms where the output has 2 features per sample.
@@ -2597,8 +2598,15 @@ def plot2dml(train, test=[], names=['D1', 'D2', 'T'], train_pred=[],
     :type ylim: list
     :param ylim: Limits of the y axis.
 
-    :type plot: bool
+    :type plot: boolean
     :param plot: If True it plot. Only for test purposes.
+
+    :type save: boolean
+    :param save: If true, it saves the plot in the filename directory.
+    The default is False.
+
+    :type filename: str
+    :param filename: Directory provided to save the plot.
 
     :returns: Plot
     """
@@ -2655,8 +2663,10 @@ def plot2dml(train, test=[], names=['D1', 'D2', 'T'], train_pred=[],
         if len(ylim) > 0:
             plt.ylim(ylim[0],ylim[1])
         plt.legend(handles=legend_elements, loc=loc, fontsize=lfs)
+        plt.tight_layout()
+        if save:
+            plt.savefig(filename)
         plt.show()
-
     return plot
 
 
