@@ -2191,9 +2191,9 @@ def subtractref(data, ref, axis=0, alpha=0.9, sample=0, lims=[0, 0], plot=False)
         else:
             axis = list(axis)
 
-        plt.plot(axis, data_sub[sample], linewidth=1, label='Original', linestyle='--')
+        plt.plot(axis, data_sub[sample], linewidth=1, label='Corrected')
         plt.plot(axis, np.array(ref)*alpha, linewidth=1, label='Air*Alpha', linestyle='--')
-        plt.plot(axis, data[sample], linewidth=1, label='Final')
+        plt.plot(axis, data[sample], linewidth=1, label='Original', linestyle='--')
         if lims[0] < lims[1]:
             plt.gca().set_xlim(lims[0], lims[1])
         plt.legend(loc=0)
