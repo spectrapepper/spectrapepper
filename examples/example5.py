@@ -23,11 +23,13 @@ lorentz = spep.lorentzfit(y=y, x=x, pos=peak, look=5)
 student = spep.studentfit(y=y, x=x, pos=peak, look=5)
 voigt = spep.voigtfit(y=y, x=x, pos=peak, look=5)
 
-plt.plot(x, y, label='Spectra', lw=2, c='black')
-plt.plot(x, gauss, lw=1, label='Gauss fit')
-plt.plot(x, lorentz, lw=1, label='Lorentz fit')
-plt.plot(x, student, lw=1, label='Student fit')
-plt.plot(x, voigt, lw=1, label='Voigt fit')
+curves = [y, gauss, lorentz, student, voigt]
+labels = ['Spectras', 'Gauss fit', 'Lorentz fit', 'Student fit', 'Voigt fit']
+colors = ['black', 'blue', 'orange', 'green', 'red']
+linewd = [2, 1, 1, 1, 1]
+
+for curve, label, color, linew in zip(curves, labels, colors, linewd):
+    plt.plot(x, curve, label=label, lw=linew, c=color)
 plt.xlim(150, 260)
 plt.xlabel('Shift ($cm^{-1}$)')
 plt.ylabel('Intensity (a.u.)')
@@ -41,11 +43,10 @@ lorentz = spep.lorentzfit(y=y, x=x, pos=peak, gamma=5, manual=True)
 student = spep.studentfit(y=y, x=x, pos=peak, v=0.1, manual=True)
 voigt = spep.voigtfit(y=y, x=x, pos=peak, sigma=4.4, gamma=5, manual=True)
 
-plt.plot(x, y, label='Spectra', lw=2, c='black')
-plt.plot(x, spep.normtomax(gauss), lw=1, label='Gauss fit')
-plt.plot(x, spep.normtomax(lorentz), lw=1, label='Lorentz fit')
-plt.plot(x, spep.normtomax(student), lw=1, label='Student fit')
-plt.plot(x, spep.normtomax(voigt), lw=1, label='Voigt fit')
+curves = [y, gauss, lorentz, student, voigt]
+
+for curve, label, color, linew in zip(curves, labels, colors, linewd):
+    plt.plot(x, spep.normtomax(curve), label=label, lw=linew, c=color)
 plt.xlim(150, 260)
 plt.xlabel('Shift ($cm^{-1}$)')
 plt.ylabel('Intensity (a.u.)')
@@ -54,10 +55,7 @@ plt.legend()
 plt.show()
 
 # show how the distribution changes by the change in the parameters
-gauss = []
-lorentz = []
-student = []
-voigt = []
+gauss,lorentz, student, voigt = [], [], [], []
 for i in range(10):
     gauss.append(spep.gaussfit(sigma=4*(i+1), manual=True))
     lorentz.append(spep.lorentzfit(gamma=(5+i*2), manual=True))

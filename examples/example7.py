@@ -33,15 +33,19 @@ for i in fittings:
 
 # plot of all the fittings
 colors = ['orange', 'purple', 'cyan', 'magenta', 'grey']
-for i,j in zip(fittings, colors):
-    plt.fill_between(x, i, 0, color=j, alpha=0.2)
+for curve, color in zip(fittings, colors):
+    plt.fill_between(x, curve, 0, color=color, alpha=0.2)
 
 # plot all the other things
-plt.plot(x, y, c='black', ls=':', label='Raw')
-plt.plot(x, y_b, c='b', label='Baseline removed')
-plt.plot(x, convolution, c='g', label='Convolution')
-plt.plot(x, residual, c='r', ls='--', label='Residual')
-plt.title('Deconvolutiuon example using Voigt fitting')
+curves = [y, y_b, convolution, residual]
+colors = ['black', 'blue', 'green', 'red']
+lineseg = [':', '-', '-', '--']
+labels = ['Raw','Baseline removed', 'Convolution','Residual']
+
+for curve, color, line, label in zip(curves, colors, lineseg, labels):
+    plt.plot(x, curve, c=color, ls=line, label=label)
+    
+plt.title('Deconvolution example using Voigt fitting')
 plt.xlabel('Shift ($cm^{-1}$)')
 plt.ylabel('Intensity ($a.u.$)')
 plt.xlim(50, 330)
