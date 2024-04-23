@@ -12,7 +12,7 @@ jobs:
         fetch-depth: ‘2’
 
     - name: Setup Python
-      uses: actions/setup-python@v4.3.1
+      uses: actions/setup-python@v5
       with:
         python-version: 3.9
         
@@ -23,6 +23,6 @@ jobs:
         coverage run -m unittest
 
     - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
