@@ -3,9 +3,9 @@ This main module contains all the functions available in spectrapepper. Please
 use the search function to look up specific functionalities and keywords.
 """
 
+from scipy.signal import butter, filtfilt, medfilt, savgol_filter
 from matplotlib.colors import LinearSegmentedColormap
 from scipy.interpolate import splev, splrep
-from scipy.signal import butter, filtfilt
 from scipy.sparse.linalg import spsolve
 import matplotlib.gridspec as gridspec
 from matplotlib.lines import Line2D
@@ -3834,3 +3834,151 @@ def intersections(y1, y2):
             intersections.append(i)  # Record the x-value where the intersection occurs.
 
     return intersections
+
+
+def remove_spikes(y, threshold_spike=0.002, savgol_filter_window=30,
+                  window_factor=2, window_size=None, region=None):
+    """
+    Remove the spikes in all spectra or in a specific region of the spectum.
+
+    :type y: list[float]
+    :param y: List of spectra to remove cosmic rays.
+
+    :type threshold_spike: float
+    :param threshold_spike: Threshold for the derivative, above this threshold
+        value the point is considered a spike. The default value is 0.002
+        because the spectra have been normalized to reduce the differences
+        between them
+
+    :type savgol_filter_window: int
+    :param savgol_filter_window: Parameter for the smoothed function. Lenght of
+        the filter window.
+
+    :type window_factor: float
+    :param window_factor: Multiplier factor to compute the window size
+        automatically from the spike lenght. The bigger it is the more it
+        softens the spike.
+
+    :type window_size: int
+    :param window_size: Number of points used to correct the spike, it has to
+        be an odd value. The default is None because it is computed
+        automatically from the size of the spike detected.
+
+    :type region: list[int] or None
+    :param region: Region to compute the function, for example: [1000,2500]. If
+    it is None, the function is computed in all the spectrum.
+
+    :returns: Data without spikes.
+    :rtype: list[float]
+    """
+    solved = copy.deepcopy(y)
+    acq = len(solved)
+    if acq == 1:
+        length = acq
+    else:
+        length = len(solved[0])
+
+    # To execute the function in a specific region it trims the spectra
+    if region is not None:
+        # Trim the unwanted region
+        if region[0] == 0:
+            trim_spectra = trim(y, region[1], length)
+        elif region[1] == length:
+            trim_spectra = trim(y, 0, region[0])
+        else:
+            trim_spectra = trim(y, region[1], length)
+            trim_spectra = trim(trim_spectra, 0, region[0])
+    else:
+        trim_spectra = copy.deepcopy(y)
+
+    # Normalize the spectrum so that the threshold works for all them
+    trim_spectra_norm = normtomax(trim_spectra)
+    # Smooth the spectra and compute the derivative to obtain the spikes
+    smoothed = savgol_filter(trim_spectra_norm, savgol_filter_window, 2)
+    smoothed_spep = [smoothed[i, :] for i in range(0, smoothed.shape[0])]
+    derivative_sample = derivative(smoothed_spep)
+
+    # Correct the spikes of each spectrum
+    for i in range(acq):
+        sample = trim_spectra[i]
+        sample_filtered = copy.deepcopy(sample)
+        spike_points = np.where(np.abs(
+            derivative_sample[i]) > threshold_spike)[0]
+        # Filter the spike points in each spectrum to obtain the true spikes
+        # To avoid individual points where the derivate is large
+        stops = np.where(np.diff(spike_points) != 1)[0]
+        segments = np.split(spike_points, stops + 1)
+        # Filter the segments with 5 or more consecutive points
+        filtered_segments = [segment for segment in segments
+                             if len(segment) >= 5]
+        # If there are no filtered_segments, there is no spike
+        if len(filtered_segments) > 0:
+            spike_points = np.concatenate(filtered_segments).tolist()
+            spike_points_corrected = []
+            window_size_list = []
+            # Select the points to perform the correction and compute the
+            # windows size, there is no need to compute the correction on each
+            # spike point
+            for segment in filtered_segments:
+                window_size1 = int(len(segment) * window_factor) + (
+                    1 if len(segment) * window_factor % 2 == 0 else 0)
+                if len(segment) < 20:
+                    spike_points_corrected.extend(
+                        [segment[0], segment[len(segment) // 2], segment[-1]])
+
+                    window_size_list.extend([window_size1]*3)
+
+                else:
+                    spike_points_corrected.extend(
+                        [segment[0], segment[len(segment) // 4],
+                         segment[len(segment) // 2],
+                         segment[3 * len(segment) // 4], segment[-1]])
+                    window_size_list.extend([window_size1]*5)
+
+            sp_ind = 0
+            for spike_point in spike_points_corrected:
+                # The window_size is the one computed automatically
+                if window_size is None:
+                    initial = max(0, spike_point -
+                                  window_size_list[sp_ind] // 2)
+                    end = min(len(sample), spike_point +
+                              window_size_list[sp_ind] // 2)
+                    if window_size_list[sp_ind] < end-initial:
+                        # Correct the spike points
+                        sample_filtered[initial:end] = medfilt(
+                            sample_filtered[initial:end],
+                            window_size_list[sp_ind])
+                        sample_filtered_smooth = savgol_filter(
+                            sample_filtered, window_size_list[sp_ind], 2)
+                    else:
+                        # The windows_size cannot be larger than the region
+                        # initial-end
+                        window_end_initial = end-initial
+                        if window_end_initial % 2 == 0:
+                            window_end_initial -= 1
+                        # Correct the spike points
+                        sample_filtered[initial:end] = medfilt(
+                            sample_filtered[initial:end], window_end_initial)
+                        sample_filtered_smooth = savgol_filter(
+                            sample_filtered, window_end_initial, 2)
+                # The windows size is set manually
+                else:
+                    initial = max(0, spike_point - window_size // 2)
+                    end = min(len(sample), spike_point + window_size // 2)
+                    # Correct the spike points
+                    sample_filtered[initial:end] = medfilt(
+                        sample_filtered[initial:end], window_size)
+                    sample_filtered_smooth = savgol_filter(
+                        sample_filtered, window_size, 2)
+
+                sample_filtered[initial:end] = (
+                    sample_filtered_smooth[initial:end])
+
+                sp_ind += 1
+
+            if region is not None:
+                solved[i][region[0]:region[1]] = sample_filtered
+            else:
+                solved[i] = sample_filtered
+
+    return solved
