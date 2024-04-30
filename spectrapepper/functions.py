@@ -3,7 +3,7 @@ This main module contains all the functions available in spectrapepper. Please
 use the search function to look up specific functionalities and keywords.
 """
 
-from scipy.signal import butter, filtfilt, medfilt, savgol_filter
+from scipy.signal import butter, filtfilt, medfilt, savgol_filter, find_peaks
 from matplotlib.colors import LinearSegmentedColormap
 from scipy.interpolate import splev, splrep
 from scipy.sparse.linalg import spsolve
@@ -3982,3 +3982,83 @@ def remove_spikes(y, threshold_spike=0.002, savgol_filter_window=30,
                 solved[i] = sample_filtered
 
     return solved
+
+
+def peakfinder_v2(y, ranges=None, window_smooth=300, threshold_prominence=30,
+                  minimum_width=30):
+    """
+    Finds the approximate location of the peaks in all spectra or a signle one,
+    it can find peaks in the entire spectrum or one peak for each provided
+    range (if there are ranges provided, it will understand that there is only
+    one peak in the entire range).
+
+    :type y: list[float]
+    :param y: Data to find a peak in. All spectra or single spectrum.
+
+    :type ranges: list[[float, float]]
+    :param ranges: Aproximate ranges of known peaks. If no ranges are
+        known or defined, it will return all the peaks found in the spectra.
+        But is more prone to errors, it is better to define the ranges to
+        determine the number of real peaks. Default is `None`. Example:
+        ranges=[[100, 1500], [1800, 3500]]
+
+    :type window_smooth: int
+    :param window_smooth: Lenght of the filter window for the smooth, it is
+        better to be large to obtain a very smoothed spectra. Default is 300.
+
+    :type threshold_prominence: int
+    :param threshold_prominence: Parameter for determining the peaks, the
+        prominance is the height of the peak with respect his baseline between
+        the adjacent peaks. Default is 30.
+
+    :type minimum_width: int
+    :param minimum_width: Parameter for determining the peaks, minimum widht to
+    consider a peak. Default is 30.
+
+    :returns: A list of list of the index of the approximate peaks found for
+        each spectrum.
+    :rtype: list[list[int]]
+    """
+    # Smooth the spectra, not to find fake peaks
+    smooth_spectra = savgol_filter(y, window_smooth, 2, axis=1)
+    # Find the peaks in each smoothed spectrum
+    peaks = []
+    for spectrum in smooth_spectra:
+        peaks_1, _ = find_peaks(spectrum, prominence=threshold_prominence,
+                                width=minimum_width)
+        peaks.append(list(peaks_1))
+
+    # If there are ranges provided, it find a peak for each range
+    if ranges is not None:
+        peaks_ranges = []
+
+        num_spectrum = 0
+        # Filter the peaks to the provided ranges
+        for peaks_spectrum in peaks:
+            peaks_filtered = [[] for _ in range(len(ranges))]
+            for peak in peaks_spectrum:
+                for i, range1 in enumerate(ranges):
+                    if range1[0] <= peak <= range1[1]:
+                        peaks_filtered[i].append(peak)
+                        break
+            # Only remains one peaks in each range
+            peaks_ranges_spectrum = []
+            for peaks_filtered_range in peaks_filtered:
+                if len(peaks_filtered_range) > 1:
+                    peak_values = []
+                    for peak_filt in peaks_filtered_range:
+                        peak_values.append(y[num_spectrum][peak_filt])
+                    ind_max = peak_values.index(max(peak_values))
+                    peak1 = peaks_filtered_range[ind_max]
+                elif len(peaks_filtered_range) == 0:
+                    peak1 = np.nan
+                else:
+                    peak1 = peaks_filtered_range[0]
+                peaks_ranges_spectrum.append(peak1)
+
+            peaks_ranges.append(peaks_ranges_spectrum)
+            num_spectrum += 1
+
+        peaks = peaks_ranges
+
+    return peaks
