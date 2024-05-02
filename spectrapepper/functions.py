@@ -1120,18 +1120,19 @@ def mdscore(x_p, y_p, tar):
     return score, p, a, b
 
 
-def normtopeak(y, x, peak, shift=10):
+def normtopeak(y, peak, x=None, shift=10):
     """
     Normalizes the spectras to a particular peak.
 
     :type y: list[float]
     :param y: Data to be normalized.
 
+    :type peak: list[float] or list[ind]
+    :param peak: List of the peak position in x-axis values if x is provided
+    or in index position of the y vector, for each spectrum.
+
     :type x: list[float]
     :param x: x axis of the data
-
-    :type peak: float
-    :param peak: Peak position in x-axis values.
 
     :type shift: int
     :param shift: Range to look for the real peak. The default is 10.
@@ -1142,13 +1143,16 @@ def normtopeak(y, x, peak, shift=10):
     y = copy.deepcopy(y)
     dims = len(np.array(y).shape)
     shift = int(shift)
-    pos = valtoind(peak, x)
+    if x is not None:
+        pos = valtoind(peak, x)
+    else:
+        pos = peak
 
     if dims == 1:
         y = [y]
 
     for j in range(len(y)):
-        section = y[j][pos - shift:pos + shift]
+        section = y[j][pos[j] - shift:pos[j] + shift]
         y[j] = y[j] / max(section)
 
     if dims == 1:
@@ -3837,7 +3841,7 @@ def intersections(y1, y2):
 
 
 def remove_spikes(y, threshold_spike=0.002, savgol_filter_window=30,
-                  window_factor=2, window_size=None, region=None):
+                  window_factor=2, window_size=None, region=None, noise=0.01):
     """
     Remove the spikes in all spectra or in a specific region of the spectum.
 
@@ -3866,7 +3870,12 @@ def remove_spikes(y, threshold_spike=0.002, savgol_filter_window=30,
 
     :type region: list[int] or None
     :param region: Region to compute the function, for example: [1000,2500]. If
-    it is None, the function is computed in all the spectrum.
+        it is None, the function is computed in all the spectrum.
+
+    :type noise: float or None
+    :param noise: Multiplier factor to compute the noise of the corrected
+        spike, if it is None it do not add noise to the correction. Default is
+        0.01.
 
     :returns: Data without spikes.
     :rtype: list[float]
@@ -3877,6 +3886,9 @@ def remove_spikes(y, threshold_spike=0.002, savgol_filter_window=30,
         length = acq
     else:
         length = len(solved[0])
+
+    if noise is not None:
+        noise_level = np.std(np.array(y), axis=1)
 
     # To execute the function in a specific region it trims the spectra
     if region is not None:
@@ -3943,6 +3955,12 @@ def remove_spikes(y, threshold_spike=0.002, savgol_filter_window=30,
                                   window_size_list[sp_ind] // 2)
                     end = min(len(sample), spike_point +
                               window_size_list[sp_ind] // 2)
+                    if noise is not None:
+                        add_noise = np.random.normal(
+                            scale=noise_level[i]*noise, size=(end-initial))
+                    else:
+                        add_noise = 0
+
                     if window_size_list[sp_ind] < end-initial:
                         # Correct the spike points
                         sample_filtered[initial:end] = medfilt(
@@ -3972,7 +3990,7 @@ def remove_spikes(y, threshold_spike=0.002, savgol_filter_window=30,
                         sample_filtered, window_size, 2)
 
                 sample_filtered[initial:end] = (
-                    sample_filtered_smooth[initial:end])
+                    sample_filtered_smooth[initial:end]) + add_noise
 
                 sp_ind += 1
 
