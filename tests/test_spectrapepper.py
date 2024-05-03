@@ -190,12 +190,13 @@ class TestSpectrapepper(unittest.TestCase):
         print('mdscores: ', r)
         self.assertEqual(r, 11)
 
-        data2 = spep.normtopeak(spectras[0], axis, 205)
+        data2 = spep.normtopeak(spectras[0], x=axis, peak=[205])
         r = round(sum(data2), 2)
         print('normtopeak: ', r)
         self.assertEqual(r, 105.12)
 
-        data2 = spep.normtopeak([spectras[0], spectras[1]], axis, 205)
+        data2 = spep.normtopeak([spectras[0], spectras[1]], x=axis, 
+                                peak=[205]*2)
         r = round(np.sum(data2), 2)
         print('normtopeak_multi: ', r)
         self.assertEqual(r, 205.14)
