@@ -1161,6 +1161,64 @@ def normtopeak(y, peak, x=None, shift=10):
     return y
 
 
+def normtoglobalmaxpeak(y, peak, x=None, shift=10):
+    """
+    Normalizes the spectras to the global max of a particular peak.
+
+    :type y: list[float]
+    :param y: Data to be normalized.
+
+    :type peak: list[float] or list[ind]
+    :param peak: List of the peak position in x-axis values if x is provided
+    or in index position of the y vector, for each spectrum.
+
+    :type x: list[float]
+    :param x: x axis of the data
+
+    :type shift: int
+    :param shift: Range to look for the real peak. The default is 10.
+
+    :returns: Normalized data.
+    :rtype: list[float]
+    """
+    y = copy.deepcopy(y)
+    dims = len(np.array(y).shape)
+    shift = int(shift)
+    if x is not None:
+        pos = valtoind(peak, x)
+    else:
+        pos = peak
+
+    if dims == 1:
+        y = [y]
+
+    y_array = np.array(y)
+    pos_peak_array = np.array(pos)
+
+    indices = np.arange(y_array.shape[1])
+    peak_indices = pos_peak_array[:, np.newaxis]
+
+    # Compute the bounds
+    lower_bounds = peak_indices - shift
+    upper_bounds = peak_indices + shift
+
+    # Check the bounds are inside the spectrum range
+    lower_bounds = np.clip(lower_bounds, 0, y_array.shape[1] - 1)
+    upper_bounds = np.clip(upper_bounds, 0, y_array.shape[1] - 1)
+
+    # Mask for the peak area
+    mask = (indices >= lower_bounds) & (indices <= upper_bounds)
+
+    # Maximum values inside the mask
+    max_values_in_ranges = np.max(np.where(mask, y_array, -np.inf), axis=1)
+    # Global max inside the mask
+    global_max_peak = np.max(max_values_in_ranges)
+
+    y_array = y_array / global_max_peak
+
+    return y_array.tolist()
+
+
 def peakfinder(y, x=None, ranges=None, look=10):
     """
     Finds the location of the peaks in a single vector.
