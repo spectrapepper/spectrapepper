@@ -1152,8 +1152,11 @@ def normtopeak(y, peak, x=None, shift=10):
         y = [y]
 
     for j in range(len(y)):
-        section = y[j][pos[j] - shift:pos[j] + shift]
-        y[j] = y[j] / max(section)
+        if shift==0:
+            y[j] = y[j] / y[j][pos[j]]
+        else:
+            section = y[j][pos[j] - shift:pos[j] + shift]
+            y[j] = y[j] / max(section)
 
     if dims == 1:
         y = y[0]
