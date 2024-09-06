@@ -70,12 +70,12 @@ class TestSpectrapepper(unittest.TestCase):
         print('normtovalue_multi: ', r)
         self.assertEqual(r, 29)
 
-        data2 = spep.alsbaseline(spectras[0])
+        data2 = spep.alsbaseline(spectras[0],lam=100)
         r = (np.floor(sum(data2)))
         print('alsbaseline: ', r)
         self.assertEqual(r, 252)
 
-        data2 = spep.alsbaseline([spectras[0], spectras[1]])
+        data2 = spep.alsbaseline([spectras[0], spectras[1]],lam=100)
         r = (np.floor(np.sum(data2)))
         print('alsbaseline_multi: ', r)
         self.assertEqual(r, 515)
