@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Examples &mdash; spectrapepper  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributions.html" />
+    <link rel="prev" title="Functions" href="functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            spectrapepper
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">spectrapepper</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-1-normalization-methods">Example 1: Normalization methods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-2-spectral-pre-processing">Example 2: Spectral pre-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-3-pearson-spearman-and-grau-analyses">Example 3: Pearson, Spearman, and Grau analyses</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-4-machine-learning-preparation">Example 4: Machine learning preparation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-5-curve-fittings">Example 5: Curve fittings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-6-spectroscopic-data-set-macro-analysis">Example 6: Spectroscopic data set macro analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-7-deconvolution-of-a-spectra">Example 7: Deconvolution of a spectra</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributions.html">Contributing</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">spectrapepper</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="examples">
+<h1>Examples<a class="headerlink" href="#examples" title="Permalink to this heading"></a></h1>
+<section id="example-1-normalization-methods">
+<h2>Example 1: Normalization methods<a class="headerlink" href="#example-1-normalization-methods" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This example shows some of the normalization functions available.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># import the library</span>
+<span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+
+<span class="c1"># load data</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()</span>
+
+<span class="c1"># normalize each spectra to its maximum value</span>
+<span class="n">norm1</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># normalize to 10, that is, 10 will become 1.</span>
+<span class="n">norm2</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtovalue</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">val</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># normalize to the global maximum of all the data</span>
+<span class="n">norm3</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtoglobalmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># visualization</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">sets</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">norm1</span><span class="p">,</span> <span class="n">norm2</span><span class="p">,</span> <span class="n">norm3</span><span class="p">]</span>
+<span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Raw Spectras&#39;</span><span class="p">,</span> <span class="s1">&#39;Spectras with maximum normalized to 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Spectras with 10 normalized to 1&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;Spectras with global maximum normalized to 1&#39;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">sets</span><span class="p">,</span> <span class="n">titles</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">i</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts (a.u.)&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex1_img1.png"><img alt="" src="_images/ex1_img1.png" style="width: 320.0px; height: 240.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex1_img2.png"><img alt="" src="_images/ex1_img2.png" style="width: 320.0px; height: 240.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex1_img3.png"><img alt="" src="_images/ex1_img3.png" style="width: 320.0px; height: 240.0px;" /></a>
+</figure>
+</section>
+<section id="example-2-spectral-pre-processing">
+<h2>Example 2: Spectral pre-processing<a class="headerlink" href="#example-2-spectral-pre-processing" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This example shows simple processing of Raman spectras.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># import the library</span>
+<span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+
+<span class="c1"># load data</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()</span>
+
+<span class="c1"># remove baseline</span>
+<span class="n">newdata</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">alsbaseline</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># remove noise with moving average</span>
+<span class="n">newdata</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">moveavg</span><span class="p">(</span><span class="n">newdata</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># norm the sum to 1</span>
+<span class="n">newdata</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normsum</span><span class="p">(</span><span class="n">newdata</span><span class="p">)</span>
+
+<span class="c1"># visualization</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Original spectras&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">newdata</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Processed spectras&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Counts (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex2_img1.png"><img alt="" src="_images/ex2_img1.png" style="width: 320.0px; height: 240.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex2_img2.png"><img alt="" src="_images/ex2_img2.png" style="width: 320.0px; height: 240.0px;" /></a>
+</figure>
+</section>
+<section id="example-3-pearson-spearman-and-grau-analyses">
+<h2>Example 3: Pearson, Spearman, and Grau analyses<a class="headerlink" href="#example-3-pearson-spearman-and-grau-analyses" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This example shows how to use pearson and spearman matrices and grau plot.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># import the library</span>
+<span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+
+<span class="c1"># load data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_params</span><span class="p">()</span>
+
+<span class="c1"># labels</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="s1">&#39;A1&#39;</span><span class="p">,</span> <span class="s1">&#39;A2&#39;</span><span class="p">,</span> <span class="s1">&#39;A3&#39;</span><span class="p">,</span> <span class="s1">&#39;A4&#39;</span><span class="p">,</span> <span class="s1">&#39;A5&#39;</span><span class="p">,</span> <span class="s1">&#39;S1&#39;</span><span class="p">,</span> <span class="s1">&#39;R1&#39;</span><span class="p">,</span> <span class="s1">&#39;R2&#39;</span><span class="p">,</span> <span class="s1">&#39;ETA&#39;</span><span class="p">,</span> <span class="s1">&#39;FF&#39;</span><span class="p">,</span> <span class="s1">&#39;JSC&#39;</span><span class="p">,</span> <span class="s1">&#39;ISC&#39;</span><span class="p">,</span> <span class="s1">&#39;VOC&#39;</span><span class="p">]</span>
+
+<span class="c1"># plot spearman</span>
+<span class="n">spep</span><span class="o">.</span><span class="n">spearman</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+
+<span class="c1"># plot pearson</span>
+<span class="n">spep</span><span class="o">.</span><span class="n">pearson</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+
+<span class="c1"># plot grau.</span>
+<span class="n">spep</span><span class="o">.</span><span class="n">grau</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-4-machine-learning-preparation">
+<h2>Example 4: Machine learning preparation<a class="headerlink" href="#example-4-machine-learning-preparation" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This example shows how to use Scikit-learn for spectral data with spectrapepper.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># import libraries</span>
+<span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+
+<span class="c1"># load data</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()</span>
+
+<span class="c1"># load targets</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_targets</span><span class="p">()</span>
+
+<span class="c1"># shuffle data</span>
+<span class="n">features</span><span class="p">,</span> <span class="n">targets</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">shuffle</span><span class="p">([</span><span class="n">y</span><span class="p">,</span> <span class="n">targets</span><span class="p">],</span> <span class="n">delratio</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># target classification</span>
+<span class="n">classtargets</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">targets</span><span class="p">,</span> <span class="n">glimits</span><span class="o">=</span><span class="p">[</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">1.15</span><span class="p">],</span> <span class="n">gnumber</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># machine learning</span>
+<span class="kn">from</span> <span class="nn">sklearn.discriminant_analysis</span> <span class="kn">import</span> <span class="n">LinearDiscriminantAnalysis</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="n">lda</span> <span class="o">=</span> <span class="n">LinearDiscriminantAnalysis</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">LDs</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">features</span><span class="p">,</span> <span class="n">classtargets</span><span class="p">)</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+<span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">LDs</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="s1">&#39;D2&#39;</span><span class="p">])</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">classtargets</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;T&#39;</span><span class="p">])</span>
+<span class="n">final</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">prediction</span> <span class="o">=</span> <span class="n">lda</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">features</span><span class="p">)</span>
+
+<span class="c1"># visualization</span>
+<span class="n">spep</span><span class="o">.</span><span class="n">plot2dml</span><span class="p">(</span><span class="n">final</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;LDA&#39;</span><span class="p">,</span> <span class="n">xax</span><span class="o">=</span><span class="s1">&#39;D1&#39;</span><span class="p">,</span> <span class="n">yax</span><span class="o">=</span><span class="s1">&#39;D2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="example-5-curve-fittings">
+<h2>Example 5: Curve fittings<a class="headerlink" href="#example-5-curve-fittings" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This example shows how to use different distribution fittings on experimental</span>
+<span class="sd">spectroscopic data. Student distribution is shown just as example, but it is</span>
+<span class="sd">not suitable for the particular peak tested. It is also important to notice </span>
+<span class="sd">that the fit greatly depends on the resolution of the curve. If needed,</span>
+<span class="sd">it is possible to first extrapolate to a greater resolution.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># import libraries</span>
+<span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># load data to fit</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">(</span><span class="n">sample</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># load 1 single spectra from the data</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="c1"># Normalize the maximum value to 1</span>
+
+<span class="c1"># select peak to fit to</span>
+<span class="n">peak</span> <span class="o">=</span> <span class="mi">206</span> <span class="c1"># approximate position of the peak (in cm-1) to be evaluated</span>
+
+<span class="c1"># automatically fit the distributions to the peak in the data</span>
+<span class="n">gauss</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">gaussfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">lorentz</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">lorentzfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">student</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">studentfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">voigt</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">voigtfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">look</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">curves</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">gauss</span><span class="p">,</span> <span class="n">lorentz</span><span class="p">,</span> <span class="n">student</span><span class="p">,</span> <span class="n">voigt</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Spectras&#39;</span><span class="p">,</span> <span class="s1">&#39;Gauss fit&#39;</span><span class="p">,</span> <span class="s1">&#39;Lorentz fit&#39;</span><span class="p">,</span> <span class="s1">&#39;Student fit&#39;</span><span class="p">,</span> <span class="s1">&#39;Voigt fit&#39;</span><span class="p">]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">]</span>
+<span class="n">linewd</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">curve</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">linew</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">curves</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">linewd</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">curve</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">linew</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">260</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Automatic fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># manually fit the distributions to the peak.</span>
+<span class="n">gauss</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">gaussfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">4.4</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">lorentz</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">lorentzfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">student</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">studentfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">voigt</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">voigtfit</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">peak</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">4.4</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">curves</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">gauss</span><span class="p">,</span> <span class="n">lorentz</span><span class="p">,</span> <span class="n">student</span><span class="p">,</span> <span class="n">voigt</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">curve</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">linew</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">curves</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">linewd</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">curve</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">linew</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">150</span><span class="p">,</span> <span class="mi">260</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Manual fit&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># show how the distribution changes by the change in the parameters</span>
+<span class="n">gauss</span><span class="p">,</span><span class="n">lorentz</span><span class="p">,</span> <span class="n">student</span><span class="p">,</span> <span class="n">voigt</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">gauss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spep</span><span class="o">.</span><span class="n">gaussfit</span><span class="p">(</span><span class="n">sigma</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">lorentz</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spep</span><span class="o">.</span><span class="n">lorentzfit</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="mi">2</span><span class="p">),</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">student</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spep</span><span class="o">.</span><span class="n">studentfit</span><span class="p">(</span><span class="n">v</span><span class="o">=</span><span class="mf">0.1</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="o">*</span><span class="n">i</span><span class="p">),</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="n">voigt</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spep</span><span class="o">.</span><span class="n">voigtfit</span><span class="p">(</span><span class="n">gamma</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="o">+</span><span class="n">i</span><span class="o">*</span><span class="mi">3</span><span class="p">),</span> <span class="n">sigma</span><span class="o">=</span><span class="mi">4</span><span class="o">*</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">3</span><span class="p">),</span> <span class="n">manual</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+
+<span class="c1"># the stackplot fuinction is a nice tool to show the evolution of data</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">gauss</span><span class="p">,</span> <span class="n">lorentz</span><span class="p">,</span> <span class="n">student</span><span class="p">,</span> <span class="n">voigt</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;Gauss&#39;</span><span class="p">,</span> <span class="s1">&#39;Lorentz&#39;</span><span class="p">,</span> <span class="s1">&#39;Student&#39;</span><span class="p">,</span> <span class="s1">&#39;Voigt&#39;</span><span class="p">]):</span>
+    <span class="n">spep</span><span class="o">.</span><span class="n">stackplot</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> <span class="n">xlabel</span><span class="o">=</span><span class="s1">&#39;$x$&#39;</span><span class="p">,</span>
+                    <span class="n">ylabel</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$\varphi (x)$&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">j</span><span class="p">)</span>
+ 
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex5_img1.png"><img alt="" src="_images/ex5_img1.png" style="width: 320.0px; height: 240.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex5_img2.png"><img alt="" src="_images/ex5_img2.png" style="width: 320.0px; height: 240.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex5_img3.png"><img alt="" src="_images/ex5_img3.png" style="width: 450.0px; height: 450.0px;" /></a>
+</figure>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex5_img4.png"><img alt="" src="_images/ex5_img4.png" style="width: 450.0px; height: 450.0px;" /></a>
+</figure>
+</section>
+<section id="example-6-spectroscopic-data-set-macro-analysis">
+<h2>Example 6: Spectroscopic data set macro analysis<a class="headerlink" href="#example-6-spectroscopic-data-set-macro-analysis" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This example shows basic analysis of a set of spectras.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+
+<span class="c1"># load data set</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">()</span>
+
+<span class="c1"># remove baseline</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">bspbaseline</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="p">[</span><span class="mi">158</span><span class="p">,</span> <span class="mi">243</span><span class="p">,</span> <span class="mi">315</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">530</span><span class="p">],</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">exit</span><span class="p">()</span>
+
+<span class="c1"># Normalize the spectra to the maximum value.</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtoratio</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">r1</span><span class="o">=</span><span class="p">[</span><span class="mi">190</span><span class="p">,</span> <span class="mi">220</span><span class="p">],</span> <span class="n">r2</span><span class="o">=</span><span class="p">[</span><span class="mi">165</span><span class="p">,</span> <span class="mi">190</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># Calculate the averge spectra of the set.</span>
+<span class="n">avg</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">avg</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Calculate the median spectra of the set. That is, a synthetic spectra</span>
+<span class="c1"># composed by the median value in each wavenumber.</span>
+<span class="n">med</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Calculate the standard deviation for each wavenumber.</span>
+<span class="n">sdv</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">sdev</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Obtain the typical sample of the set. That is, the spectra that is closer</span>
+<span class="c1"># to the average.</span>
+<span class="n">typ</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">typical</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Look for the representative spectra. In other words, the spectra that is</span>
+<span class="c1"># closest to the median.</span>
+<span class="n">rep</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">representative</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Calculate the minimum and maximum spectra. That is, the minimum and maximum</span>
+<span class="c1"># values for each wavenumber. They are calculated together.</span>
+<span class="n">mis</span><span class="p">,</span> <span class="n">mas</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">minmax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># visualiz the results</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">curves</span> <span class="o">=</span> <span class="p">[</span><span class="n">avg</span><span class="p">,</span> <span class="n">med</span><span class="p">,</span> <span class="n">sdv</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">rep</span><span class="p">,</span> <span class="n">mis</span><span class="p">,</span> <span class="n">mas</span><span class="p">]</span>
+<span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Average&#39;</span><span class="p">,</span> <span class="s1">&#39;Median&#39;</span><span class="p">,</span> <span class="s1">&#39;St. Dev.&#39;</span><span class="p">,</span> <span class="s1">&#39;Typical&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;Representative&#39;</span><span class="p">,</span> <span class="s1">&#39;Minimum&#39;</span><span class="p">,</span> <span class="s1">&#39;Maximum&#39;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">y</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">curves</span><span class="p">,</span> <span class="n">titles</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">j</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">600</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="example-7-deconvolution-of-a-spectra">
+<h2>Example 7: Deconvolution of a spectra<a class="headerlink" href="#example-7-deconvolution-of-a-spectra" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This examples shows an application of a manual and self-resolved </span>
+<span class="sd">deconvolution with Voigt fittings of some of the peaks shown in the</span>
+<span class="sd">spectra. </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">spectrapepper</span> <span class="k">as</span> <span class="nn">spep</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># load data</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">load_spectras</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">normtomax</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># some processing</span>
+<span class="n">y_b</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">bspbaseline</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">points</span><span class="o">=</span><span class="p">[</span><span class="mi">155</span><span class="p">,</span> <span class="mi">243</span><span class="p">,</span> <span class="mi">315</span><span class="p">,</span> <span class="mi">450</span><span class="p">,</span> <span class="mi">530</span><span class="p">])</span>
+
+<span class="c1"># define peak positions and fitting ranges</span>
+<span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="mi">95</span><span class="p">,</span> <span class="mi">175</span><span class="p">,</span> <span class="mi">205</span><span class="p">,</span> <span class="mi">270</span><span class="p">,</span> <span class="mi">285</span><span class="p">]</span>
+<span class="n">ranges</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># calculate and save the fittings</span>
+<span class="n">fittings</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">positions</span><span class="p">)):</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">spep</span><span class="o">.</span><span class="n">voigtfit</span><span class="p">(</span><span class="n">y_b</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">pos</span><span class="o">=</span><span class="n">positions</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">look</span><span class="o">=</span><span class="n">ranges</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">fittings</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
+
+<span class="c1"># residual and fitting convolution</span>
+<span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">y_b</span><span class="p">)</span>
+<span class="n">convolution</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">y</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">fittings</span><span class="p">:</span>
+    <span class="n">residual</span> <span class="o">-=</span> <span class="n">i</span>
+    <span class="n">convolution</span> <span class="o">+=</span> <span class="n">i</span>
+
+<span class="c1"># plot of all the fittings</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;cyan&#39;</span><span class="p">,</span> <span class="s1">&#39;magenta&#39;</span><span class="p">,</span> <span class="s1">&#39;grey&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">curve</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fittings</span><span class="p">,</span> <span class="n">colors</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">curve</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="c1"># plot all the other things</span>
+<span class="n">curves</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="p">,</span> <span class="n">y_b</span><span class="p">,</span> <span class="n">convolution</span><span class="p">,</span> <span class="n">residual</span><span class="p">]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">]</span>
+<span class="n">lineseg</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="s1">&#39;--&#39;</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Raw&#39;</span><span class="p">,</span><span class="s1">&#39;Baseline removed&#39;</span><span class="p">,</span> <span class="s1">&#39;Convolution&#39;</span><span class="p">,</span><span class="s1">&#39;Residual&#39;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">curve</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">curves</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">lineseg</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">curve</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">line</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Deconvolution example using Voigt fitting&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Shift ($cm^{-1}$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Intensity ($a.u.$)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">330</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<figure class="align-center">
+<a class="reference internal image-reference" href="_images/ex7_img1.png"><img alt="" src="_images/ex7_img1.png" style="width: 320.0px; height: 240.0px;" /></a>
+</figure>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="functions.html" class="btn btn-neutral float-left" title="Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributions.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Institut de Recerca en Energia de Catalunya.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
