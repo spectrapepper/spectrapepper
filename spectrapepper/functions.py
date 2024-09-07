@@ -4,8 +4,8 @@ use the search function to look up specific functionalities and keywords.
 """
 
 from scipy.signal import butter, filtfilt, medfilt, savgol_filter, find_peaks
+from scipy.interpolate import splev, splrep, CubicSpline
 from matplotlib.colors import LinearSegmentedColormap
-from scipy.interpolate import splev, splrep
 from scipy.sparse.linalg import spsolve
 import matplotlib.gridspec as gridspec
 from matplotlib.lines import Line2D
@@ -320,11 +320,13 @@ def normtovalue(y, val):
     return y
 
 
-def alsbaseline(y, lam=100, p=0.001, niter=10, remove=True):
+def alsbaseline(y, lam=5e6, p=0.001, niter=10, start_point=None,
+                end_point=None, remove=True):
     """
-    Calculation of the baseline using Asymmetric Least Squares Smoothing. This
-    script only makes the calculation but it does not remove it. Original idea of
-    this algorithm by P. Eilers and H. Boelens (2005):
+    Calculation of the baseline using Asymmetric Least Squares Smoothing
+    (ALSS). This script makes the calculation of the baseline and returns the
+    corrected spectra or baseline depending on `remove`. Original idea of this
+    algorithm by P. Eilers and H. Boelens (2005):
 
     :type y: list[float]
     :param y: Spectra to calculate the baseline from.
@@ -338,11 +340,19 @@ def alsbaseline(y, lam=100, p=0.001, niter=10, remove=True):
     :type niter: int
     :param niter: Niter. The default is 10.
 
+    :type start_point: int or None
+    :param start_point: Starting index to apply the baseline correction.
+        Default is 0.
+
+    :type end_point: int or None
+    :param end_point: Ending index to apply the baseline correction.
+        Default is the end of the signal.
+
     :type remove: True
     :param remove: If `True`, calculates and returns `data - baseline`. If
         `False`, then it returns the `baseline`.
 
-    :returns: Returns the calculated baseline.
+    :returns: Returns the corrected spectra or baseline depending on `remove`.
     :rtype: list[float]
     """
     y = copy.deepcopy(y)
@@ -351,22 +361,68 @@ def alsbaseline(y, lam=100, p=0.001, niter=10, remove=True):
     if dims == 1:
         y = [y]
 
-    l = len(y[0])
-    d = sparse.diags([1, -2, 1], [0, -1, -2], shape=(l, l - 2))
-    w = np.ones(l)
+    lenght_y = len(y[0])
+
+    # If `start_point` or `end_point` are not specified, correct the entire
+    # spectrum
+    if start_point is None:
+        start_point = 0
+    if end_point is None:
+        end_point = lenght_y
+
+    length_segment = end_point - start_point
+
+    d = sparse.diags([1, -2, 1], [0, -1, -2],
+                     shape=(length_segment, length_segment - 2))
+    w = np.ones(length_segment)
 
     resolve = []
+    # Process each individual spectrum (in case of multiple spectra)
     for i in range(len(y)):
-        for _ in range(niter):
-            W = sparse.spdiags(w, 0, l, l)
-            Z = W + lam * d.dot(d.transpose())
-            z = spsolve(Z, w * y[i])
-            w = p * (y[i] > z) + (1 - p) * (y[i] < z)
-        # y[i] = y[i] - z
-        if remove:
-            resolve.append(y[i] - z)
+        # Only keeps the corresponding segment of the spectrum
+        if dims == 1:
+            y_segment = y[0][start_point:end_point]
         else:
-            resolve.append(z)
+            y_segment = y[i][start_point:end_point]
+
+        for _ in range(niter):
+            W = sparse.spdiags(w, 0, length_segment, length_segment)
+            Z = W + lam * d.dot(d.transpose())
+            baseline_segment = spsolve(Z, w * y_segment)
+            w = (p * (y_segment > baseline_segment) +
+                 (1 - p) * (y_segment < baseline_segment))
+        # y[i] = y[i] - z
+
+        baseline = np.zeros(lenght_y)
+
+        # Cubic interpolation before `start_point`
+        if start_point > 0:
+            x_before = np.arange(0, start_point)
+            cs_before = CubicSpline([start_point-2, start_point-1],
+                                    [baseline_segment[0],
+                                     baseline_segment[1]],
+                                    extrapolate=True)
+            baseline[:start_point] = cs_before(x_before)
+
+        # Assign the corrected baseline segment
+        baseline[start_point:end_point] = baseline_segment
+
+        # Cubic interpolation after `end_point`
+        if end_point < lenght_y:
+            x_after = np.arange(end_point, lenght_y)
+            cs_after = CubicSpline([end_point, end_point+1],
+                                   [baseline_segment[-2],
+                                    baseline_segment[-1]],
+                                   extrapolate=True)
+            baseline[end_point:] = cs_after(x_after)
+
+        if remove:
+            if dims == 1:
+                resolve.append(np.array(y[0]) - baseline)
+            else:
+                resolve.append(np.array(y[i]) - baseline)
+        else:
+            resolve.append(baseline)
 
     if dims == 1:
         resolve = resolve[0]
